@@ -1,0 +1,391 @@
+openapi: 3.0.1
+info:
+  title: Comuni ITA
+  description: |-
+    Semplice API che permette di ottenere in formato JSON i comuni italiani.
+
+    *Logo ispired by: [Castle by Jasfart from the Noun Project](https://thenounproject.com/omataloon/)*
+  version: 3.0.0
+  x-logo:
+    url: ./assets/logo.png
+    altText: Comuni ITA Logo
+  contact:
+    name: Nicolò Rebaioli
+    email: niko.reba@gmail.com
+    url: https://rebaioli.altervista.org
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+externalDocs:
+  description: Github
+  url: https://github.com/Samurai016/Comuni-ITA
+servers:
+  - url: https://axqvoqvbfjpaamphztgd.functions.supabase.co
+tags:
+  - name: comuni
+    description: Endpoint che restituiscono comuni
+  - name: province
+    description: Endpoint che restituiscono province
+  - name: regioni
+    description: Endpoint che restituiscono regioni
+paths:
+  /comuni:
+    parameters:
+      - $ref: '#/components/parameters/onlyname'
+      - $ref: '#/components/parameters/onlyforeignname'
+      - $ref: '#/components/parameters/nome_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni italiani.
+      operationId: comuni
+      tags:
+        - comuni
+      responses:
+        '200':
+          description: L'operazione ha avuto successo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comune'
+        5XX:
+          description: Errore del server. **Contattare lo sviluppatore.**
+  /comuni/{regione}:
+    parameters:
+      - $ref: '#/components/parameters/regione'
+      - $ref: '#/components/parameters/onlyname'
+      - $ref: '#/components/parameters/onlyforeignname'
+      - $ref: '#/components/parameters/nome_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni della regione indicata.
+      operationId: comuni-regione
+      tags:
+        - comuni
+      responses:
+        '200':
+          description: L'operazione ha avuto successo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comune'
+        '400':
+          description: Richiesta errata. Probabilmente uno dei parametri è errato.
+        5XX:
+          description: Errore del server. **Contattare lo sviluppatore.**
+  /comuni/provincia/{provincia}:
+    parameters:
+      - $ref: '#/components/parameters/provincia'
+      - $ref: '#/components/parameters/onlyname'
+      - $ref: '#/components/parameters/onlyforeignname'
+      - $ref: '#/components/parameters/nome_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni della provincia indicata.
+      operationId: comuni-provincia
+      tags:
+        - comuni
+      responses:
+        '200':
+          description: L'operazione ha avuto successo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comune'
+        '400':
+          description: Richiesta errata. Probabilmente uno dei parametri è errato.
+        5XX:
+          description: Errore del server. **Contattare lo sviluppatore.**
+  /province:
+    parameters:
+      - $ref: '#/components/parameters/onlyname'
+      - $ref: '#/components/parameters/nome_provincia'
+      - $ref: '#/components/parameters/codice_provincia'
+      - $ref: '#/components/parameters/sigla_provincia'
+    get:
+      summary: Ottieni la lista di tutte le province italiane.
+      operationId: province
+      tags:
+        - province
+      responses:
+        '200':
+          description: L'operazione ha avuto successo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Provincia'
+        5XX:
+          description: Errore del server. **Contattare lo sviluppatore.**
+  /province/{regione}:
+    parameters:
+      - $ref: '#/components/parameters/onlyname'
+      - $ref: '#/components/parameters/regione'
+      - $ref: '#/components/parameters/nome_provincia'
+      - $ref: '#/components/parameters/codice_provincia'
+      - $ref: '#/components/parameters/sigla_provincia'
+    get:
+      summary: Ottieni la lista di tutte le province della regione indicata.
+      operationId: province-regione
+      tags:
+        - province
+      responses:
+        '200':
+          description: L'operazione ha avuto successo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Provincia'
+        '400':
+          description: Richiesta errata. Probabilmente uno dei parametri è errato.
+        5XX:
+          description: Errore del server. **Contattare lo sviluppatore.**
+  /regioni:
+    parameters:
+      - in: query
+        name: nome
+        schema:
+          type: string
+        description: |-
+          Nome della regione da cercare.  
+          Il parametro è case insensitive.  
+          L'API effettua la ricerca cercando regioni che abbiano nel nome la stringa indicata (fuzzy search). Inserendo ad esempio `b` verranno restituite tutte le regioni il cui nome contiene la stringa "b".
+    get:
+      summary: Ottieni la lista delle regioni italiane.
+      operationId: regioni
+      tags:
+        - regioni
+      responses:
+        '200':
+          description: L'operazione ha avuto successo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: Trentino Alto Adige
+        5XX:
+          description: Errore del server. **Contattare lo sviluppatore.**
+components:
+  parameters:
+    provincia:
+      in: path
+      name: provincia
+      required: true
+      schema:
+        type: string
+      description: |-
+        Nome della provincia di cui si vogliono i dati.
+        Il parametro è case insensitive. 
+      example: l'aquila
+    regione:
+      in: path
+      name: regione
+      required: true
+      schema:
+        type: string
+      description: |-
+        Nome della regione di cui si vogliono i dati.
+        Il parametro è case insensitive. 
+      example: valle d'aosta
+    onlyname:
+      in: query
+      name: onlyname
+      schema:
+        type: boolean
+      description: |-
+        Può essere un valore qualunque.  
+        In caso il parametro abbia un valore, il risultato della query sarà un array di stringhe, tali stringhe rappresentano i nomi dei comuni selezionati.
+      example: true
+    onlyforeignname:
+      in: query
+      name: onlyforeignname
+      schema:
+        type: boolean
+      description: |-
+        Può essere un valore qualunque.  
+        In caso il parametro abbia un valore, il risultato della query sarà un array di stringhe, tali stringhe rappresentano i nomi stranieri dei comuni selezionati.
+        Se il comune non ha un nome straniero verrà utilizzato il nome italiano.
+        Se usato insieme a onlyname, quest'ultimo viene ignorato.
+      example: true
+    nome_comune:
+      in: query
+      name: nome
+      schema:
+        type: string
+      description: |-
+        Nome del comune da cercare.  
+        Il parametro è case insensitive.  
+        L'API effettua la ricerca cercando comuni che abbiano nel nome la stringa indicata (fuzzy search). Inserendo ad esempio `mi` verranno restituiti tutti i comuni il cui nome contiene la stringa "mi".
+      example: bolzano
+    codice_comune:
+      in: query
+      name: codice
+      schema:
+        type: string
+      description: |-
+        Codice ISTAT del comune da cercare.  
+        L'API effettua la ricerca cercando comuni che abbiano esattamente lo stesso codice ISTAT indicato. Inserendo ad esempio `021008` verrà restituito il comune di Bolzano, ma inserendo solo `021` non verrà restituito nulla.
+      example: '021008'
+    codiceCatastale_comune:
+      in: query
+      name: codiceCatastale
+      schema:
+        type: string
+      description: |-
+        Codice catastale del comune da cercare.  
+        L'API effettua la ricerca cercando comuni che abbiano esattamente lo stesso codice catastale indicato. Inserendo ad esempio `A952` verrà restituito il comune di Bolzano, ma inserendo solo `A9` non verrà restituito nulla.
+      example: A952
+    cap_comune:
+      in: query
+      name: cap
+      schema:
+        type: string
+      description: |-
+        CAP del comune da cercare.  
+        L'API effettua la ricerca cercando comuni che esattamente lo stesso CAP indicato. Inserendo ad esempio `39100` verrà restituito il comune di Bolzano, ma inserendo solo `391` non verrà restituito nulla.
+        A differenza dei parametri `codice` e `codiceCatastale` si ricorda che vari comuni possono condividere lo stesso CAP.
+      example: '39100'
+    nome_provincia:
+      in: query
+      name: nome
+      schema:
+        type: string
+      description: |-
+        Nome della provincia da cercare.  
+        Il parametro è case insensitive.  
+        L'API effettua la ricerca cercando province che abbiano nel nome la stringa indicata (fuzzy search). Inserendo ad esempio `b` verranno restituite tutte le province il cui nome contiene la stringa "b".
+      example: bolzano
+    codice_provincia:
+      in: query
+      name: codice
+      schema:
+        type: string
+      description: |-
+        Codice ISTAT della provincia da cercare.  
+        L'API effettua la ricerca cercando province che abbiano esattamente lo stesso codice ISTAT indicato. Inserendo ad esempio `021` verrà restituita la provincia di Bolzano, ma inserendo solo `21` non verrà restituito nulla.
+      example: '021'
+    sigla_provincia:
+      in: query
+      name: sigla
+      schema:
+        type: string
+      description: |-
+        Sigla della provincia da cercare.  
+        Il parametro è case insensitive.  
+        L'API effettua la ricerca cercando province che abbiano esattamente la stessa sigla indicata. Inserendo ad esempio `bz` verrà restituita la provincia di Bolzano, ma inserendo solo `b` non verrà restituito nulla.
+      example: bz
+  schemas:
+    Comune:
+      type: object
+      properties:
+        codice:
+          type: string
+          description: Codice ISTAT del comune.
+          example: '021008'
+        nome:
+          type: string
+          description: Nome del comune.
+          example: Bolzano
+        nomeStraniero:
+          type: string
+          description: Nome straniero del comune.
+          example: Bozen
+        codiceCatastale:
+          type: string
+          description: Codice catastale del comune.
+          example: A952
+          pattern: '[A-Z]\d{3}'
+        cap:
+          type: string
+          description: Codice di Avviamento Postale (CAP) del comune.
+          example: '39100'
+          pattern: \d{5}
+        prefisso:
+          type: string
+          description: Prefisso telefonico del comune.
+          example: '0471'
+          pattern: \d{2,5}
+        provincia:
+          type: object
+          properties:
+            nome:
+              type: string
+              description: Nome della provincia.
+              example: Bolzano
+            regione:
+              type: string
+              description: Regione del provincia.
+              example: Trentino Alto Adige
+        email:
+          type: string
+          format: email
+          description: |-
+            Email ufficiale del comune (come comunicata al Ministero dell'Interno, il dato potrebbe essere malformato, questo a causa di dati errati inviate dalle amministrazioni al Ministero stesso, in caso di anomalia si prega di contattare direttamente lo sviluppatore che prevederà al ripristino dei valori esatti, grazie).   
+            Non si assicura la correttezza sintattica e/o semantica del dato in quanto fornito direttamente dal comune in questione.
+          example: 'urp@comune.bolzano.it'
+        pec:
+          type: string
+          format: email
+          description: |-
+            Email PEC (Posta Elettronica Certificata) del comune (come comunicata al Ministero dell'Interno, il dato potrebbe essere malformato, questo a causa di dati errati inviate dalle amministrazioni al Ministero stesso, in caso di anomalia si prega di contattare direttamente lo sviluppatore che prevederà al ripristino dei valori esatti, grazie).   
+            Non si assicura la correttezza sintattica e/o semantica del dato in quanto fornito direttamente dal comune in questione.
+          example: 'bolzano@legalmail.it'
+        telefono:
+          type: string
+          description: |-
+            Numero di telefono ufficiale del comune (come comunicata al Ministero dell'Interno, il dato potrebbe essere malformato, questo a causa di dati errati inviate dalle amministrazioni al Ministero stesso, in caso di anomalia si prega di contattare direttamente lo sviluppatore che prevederà al ripristino dei valori esatti, grazie).   
+            Non si assicura la correttezza sintattica e/o semantica del dato in quanto fornito direttamente dal comune in questione.
+          example: '+390471997111'
+        fax:
+          type: string
+          description: |-
+            Numero di fax del comune (come comunicata al Ministero dell'Interno, il dato potrebbe essere malformato, questo a causa di dati errati inviate dalle amministrazioni al Ministero stesso, in caso di anomalia si prega di contattare direttamente lo sviluppatore che prevederà al ripristino dei valori esatti, grazie).     
+            Non si assicura la correttezza sintattica e/o semantica del dato in quanto fornito direttamente dal comune in questione.
+          example: '+390471997404'
+        coordinate:
+          type: object
+          properties:
+            lat:
+              type: number
+              description: Latitudine
+              example: 46.5
+            lng:
+              type: number
+              description: Longitudine
+              example: 11.350000381469727
+    Provincia:
+      type: object
+      properties:
+        codice:
+          type: string
+          description: Codice ISTAT della provincia.
+          example: '021'
+        nome:
+          type: string
+          description: Nome della provincia.
+          example: Bolzano
+        sigla:
+          type: string
+          description: Sigla della provincia (in maiuscolo).
+          example: BZ
+          pattern: '[A-Z]{2}'
+        regione:
+          type: string
+          description: Regione del provincia.
+          example: Trentino Alto Adige

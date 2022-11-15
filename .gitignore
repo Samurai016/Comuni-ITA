@@ -1,0 +1,9 @@
+.vscode
+*.bat
+
+# Ignore supabase
+.temp
+config.toml
+seed.sql
+
+updater
