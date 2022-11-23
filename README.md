@@ -1,5 +1,5 @@
 # [Comuni ITA API](https://samurai016.github.io/Comuni-ITA/)
-![Versione](https://img.shields.io/badge/versione-v3.0.0-%23007ec6?style=flat-square)
+![Versione](https://img.shields.io/badge/versione-v3.0.1-%23007ec6?style=flat-square)
 [![Hosted on Supabase](https://img.shields.io/badge/Hosted%20on%20Supabase-passing?style=flat-square&logo=supabase&labelColor=1c1c1c&color=1c1c1c)](https://axqvoqvbfjpaamphztgd.functions.supabase.co)
 [![Leggi la documentazione](https://img.shields.io/badge/Leggi%20la%20documentazione%20Swagger-passing?style=flat-square&logo=Read%20the%20Docs&labelColor=8CA1AF&color=8CA1AF&logoColor=white)](https://samurai016.github.io/Comuni-ITA/)
 

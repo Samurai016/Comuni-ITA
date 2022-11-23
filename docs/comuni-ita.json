@@ -3,7 +3,7 @@
   "info": {
     "title": "Comuni ITA",
     "description": "Semplice API che permette di ottenere in formato JSON i comuni italiani.\n\n*Logo ispired by: [Castle by Jasfart from the Noun Project](https://thenounproject.com/omataloon/)*",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "x-logo": {
       "url": "./assets/logo.png",
       "altText": "Comuni ITA Logo"
