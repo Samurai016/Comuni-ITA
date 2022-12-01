@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.131.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.0.0";
-import requestHandler from "../../requestHandler.ts";
+import requestHandler from "../requestHandler.ts";
 
 serve(async (req) => {
   return await requestHandler(req, async () => {
@@ -20,7 +20,7 @@ serve(async (req) => {
 
     // Filtri
     if (regione) {
-      query = query.ilike("regione.nome", regione.toLowerCase());
+      query = query.ilike("regione.nome", decodeURI(regione.toLowerCase()));
     }
 
     if (params.has("nome")) {
