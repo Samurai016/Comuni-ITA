@@ -26,37 +26,37 @@ La documentazione è disponibile anche all'indirizzo https://samurai016.github.i
 
 Ottieni la lista di tutti i comuni italiani.
 
-### [Documentazione](https://axqvoqvbfjpaamphztgd.functions.supabase.co/#operation/comuni)
+### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/comuni)
 
 ## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni/{regione}
 
 Ottieni la lista di tutti i comuni della regione indicata.
 
-### [Documentazione](https://axqvoqvbfjpaamphztgd.functions.supabase.co/#operation/comuni-regione)
+### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/comuni-regione)
 
 ## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni/provincia/{provincia}
 
 Ottieni la lista di tutti i comuni della provincia indicata.
 
-### [Documentazione](https://axqvoqvbfjpaamphztgd.functions.supabase.co/#operation/comuni-provincia)
+### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/comuni-provincia)
 
 ## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /province
 
 Ottieni la lista di tutte le province italiane.
 
-### [Documentazione](https://axqvoqvbfjpaamphztgd.functions.supabase.co/#operation/province)
+### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/province)
 
 ## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /province/{regione}
 
 Ottieni la lista di tutte le province della regione indicata.
 
-### [Documentazione](https://axqvoqvbfjpaamphztgd.functions.supabase.co/#operation/province-regione)
+### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/province-regione)
 
 ## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /regioni
 
 Ottieni la lista delle regioni italiane.
 
-### [Documentazione](https://axqvoqvbfjpaamphztgd.functions.supabase.co/#operation/regioni)
+### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/regioni)
 
 # Dettagli sulle regioni e sulle province
 
