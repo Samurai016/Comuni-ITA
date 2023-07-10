@@ -22,37 +22,37 @@ La documentazione è disponibile anche all'indirizzo https://samurai016.github.i
 
 # Endpoints
 
-## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni
+## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni](https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni)
 
 Ottieni la lista di tutti i comuni italiani.
 
 ### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/comuni)
 
-## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni/{regione}
+## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni/{regione}](https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni/trentino%20alto%20adige})
 
 Ottieni la lista di tutti i comuni della regione indicata.
 
 ### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/comuni-regione)
 
-## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni/provincia/{provincia}
+## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni/provincia/{provincia}]https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni/provincia/bolzano)
 
 Ottieni la lista di tutti i comuni della provincia indicata.
 
 ### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/comuni-provincia)
 
-## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /province
+## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /province](https://axqvoqvbfjpaamphztgd.functions.supabase.co/province)
 
 Ottieni la lista di tutte le province italiane.
 
 ### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/province)
 
-## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /province/{regione}
+## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /province/{regione}](https://axqvoqvbfjpaamphztgd.functions.supabase.co/province/trentino%20alto%20adige)
 
 Ottieni la lista di tutte le province della regione indicata.
 
 ### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/province-regione)
 
-## ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /regioni
+## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /regioni](https://axqvoqvbfjpaamphztgd.functions.supabase.co/regioni)
 
 Ottieni la lista delle regioni italiane.
 
