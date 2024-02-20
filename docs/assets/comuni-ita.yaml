@@ -1,11 +1,13 @@
 openapi: 3.0.1
 info:
   title: Comuni ITA
-  description: |-
-    Semplice API che permette di ottenere in formato JSON i comuni italiani.
+  description: >-
+    Semplice API che permette di ottenere i comuni italiani in formato JSON, XML o CSV.
 
-    *Logo ispired by: [Castle by Jasfart from the Noun Project](https://thenounproject.com/omataloon/)*
-  version: 3.0.2
+
+    *Logo ispired by: [Castle by Jasfart from the Noun
+    Project](https://thenounproject.com/omataloon/)*
+  version: 3.1.0
   x-logo:
     url: ./assets/logo.png
     altText: Comuni ITA Logo
@@ -31,6 +33,9 @@ tags:
 paths:
   /comuni:
     parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
       - $ref: '#/components/parameters/onlyname'
       - $ref: '#/components/parameters/onlyforeignname'
       - $ref: '#/components/parameters/nome_comune'
@@ -51,10 +56,58 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comune'
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: comuni
+                properties:
+                  page:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero della pagina fornita
+                    minimum: 1
+                    example: 107
+                  pagesize:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: La dimensione di ogni pagina.
+                    minimum: 0
+                    maximum: 500
+                    default: 500
+                  total:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero totale di entries disponibili.
+                    minimum: 0
+                    example: 500
+                  comuni:
+                    type: array
+                    xml:
+                      name: comune
+                    items:
+                      $ref: '#/components/schemas/Comune'
+            text/csv:
+              schema:
+                type: string
+                description: |-
+                  Lista CSV delimitata dal carattere ;  
+                  Include l'header nella prima riga.  
+                  Gli attributi che nei formati JSON e XML sono innestati, in CSV vengono convertiti in colonne nel formato
+                  colonna_attributo
+                example: |-
+                  codice;nome;nomeStraniero;codiceCatastale;cap;prefisso;provincia_nome;provincia_regione;email;pec;telefono;fax;coordinate_lat;coordinate_lng
+                  028001;Abano Terme;;A001;35031;049;Padova;Veneto;protocollo@abanoterme.net;abanoterme.pd@cert.ip-veneto.net;+39 049 8245111;+39 049 8600499;45.3619;11.7924
         5XX:
           description: Errore del server. **Contattare lo sviluppatore.**
   /comuni/{regione}:
     parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
       - $ref: '#/components/parameters/regione'
       - $ref: '#/components/parameters/onlyname'
       - $ref: '#/components/parameters/onlyforeignname'
@@ -76,12 +129,60 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comune'
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: comuni
+                properties:
+                  page:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero della pagina fornita
+                    minimum: 1
+                    example: 107
+                  pagesize:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: La dimensione di ogni pagina.
+                    minimum: 0
+                    maximum: 500
+                    default: 500
+                  total:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero totale di entries disponibili.
+                    minimum: 0
+                    example: 500
+                  comuni:
+                    type: array
+                    xml:
+                      name: comune
+                    items:
+                      $ref: '#/components/schemas/Comune'
+            text/csv:
+              schema:
+                type: string
+                description: |-
+                  Lista CSV delimitata dal carattere ;  
+                  Include l'header nella prima riga.  
+                  Gli attributi che nei formati JSON e XML sono innestati, in CSV vengono convertiti in colonne nel formato
+                  colonna_attributo
+                example: |-
+                  codice;nome;nomeStraniero;codiceCatastale;cap;prefisso;provincia_nome;provincia_regione;email;pec;telefono;fax;coordinate_lat;coordinate_lng
+                  028001;Abano Terme;;A001;35031;049;Padova;Veneto;protocollo@abanoterme.net;abanoterme.pd@cert.ip-veneto.net;+39 049 8245111;+39 049 8600499;45.3619;11.7924
         '400':
           description: Richiesta errata. Probabilmente uno dei parametri è errato.
         5XX:
           description: Errore del server. **Contattare lo sviluppatore.**
   /comuni/provincia/{provincia}:
     parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
       - $ref: '#/components/parameters/provincia'
       - $ref: '#/components/parameters/onlyname'
       - $ref: '#/components/parameters/onlyforeignname'
@@ -103,12 +204,60 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comune'
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: comuni
+                properties:
+                  page:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero della pagina fornita
+                    minimum: 1
+                    example: 107
+                  pagesize:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: La dimensione di ogni pagina.
+                    minimum: 0
+                    maximum: 500
+                    default: 500
+                  total:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero totale di entries disponibili.
+                    minimum: 0
+                    example: 500
+                  comuni:
+                    type: array
+                    xml:
+                      name: comune
+                    items:
+                      $ref: '#/components/schemas/Comune'
+            text/csv:
+              schema:
+                type: string
+                description: |-
+                  Lista CSV delimitata dal carattere ;  
+                  Include l'header nella prima riga.  
+                  Gli attributi che nei formati JSON e XML sono innestati, in CSV vengono convertiti in colonne nel formato
+                  colonna_attributo
+                example: |-
+                  codice;nome;nomeStraniero;codiceCatastale;cap;prefisso;provincia_nome;provincia_regione;email;pec;telefono;fax;coordinate_lat;coordinate_lng
+                  028001;Abano Terme;;A001;35031;049;Padova;Veneto;protocollo@abanoterme.net;abanoterme.pd@cert.ip-veneto.net;+39 049 8245111;+39 049 8600499;45.3619;11.7924
         '400':
           description: Richiesta errata. Probabilmente uno dei parametri è errato.
         5XX:
           description: Errore del server. **Contattare lo sviluppatore.**
   /province:
     parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
       - $ref: '#/components/parameters/onlyname'
       - $ref: '#/components/parameters/nome_provincia'
       - $ref: '#/components/parameters/codice_provincia'
@@ -127,10 +276,59 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Provincia'
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: province
+                properties:
+                  page:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero della pagina fornita
+                    minimum: 1
+                    example: 107
+                  pagesize:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: La dimensione di ogni pagina.
+                    minimum: 0
+                    maximum: 500
+                    default: 500
+                  total:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero totale di entries disponibili.
+                    minimum: 0
+                    example: 500
+                  province:
+                    type: array
+                    xml:
+                      name: provincia
+                    items:
+                      $ref: '#/components/schemas/Provincia'
+            text/csv:
+              schema:
+                type: string
+                description: |-
+                  Lista CSV delimitata dal carattere ;  
+                  Include l'header nella prima riga.
+                example: |-
+                  codice;nome;sigla;regione
+                  084;Agrigento;AG;Sicilia
+                  006;Alessandria;AL;Piemonte
+                  042;Ancona;AN;Marche
+                  051;Arezzo;AR;Toscana
         5XX:
           description: Errore del server. **Contattare lo sviluppatore.**
   /province/{regione}:
     parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
       - $ref: '#/components/parameters/onlyname'
       - $ref: '#/components/parameters/regione'
       - $ref: '#/components/parameters/nome_provincia'
@@ -150,20 +348,73 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Provincia'
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: province
+                properties:
+                  page:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero della pagina fornita
+                    minimum: 1
+                    example: 107
+                  pagesize:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: La dimensione di ogni pagina.
+                    minimum: 0
+                    maximum: 500
+                    default: 500
+                  total:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero totale di entries disponibili.
+                    minimum: 0
+                    example: 500
+                  province:
+                    type: array
+                    xml:
+                      name: provincia
+                    items:
+                      $ref: '#/components/schemas/Provincia'
+            text/csv:
+              schema:
+                type: string
+                description: |-
+                  Lista CSV delimitata dal carattere ;  
+                  Include l'header nella prima riga.
+                example: |-
+                  codice;nome;sigla;regione
+                  084;Agrigento;AG;Sicilia
+                  006;Alessandria;AL;Piemonte
+                  042;Ancona;AN;Marche
+                  051;Arezzo;AR;Toscana
         '400':
           description: Richiesta errata. Probabilmente uno dei parametri è errato.
         5XX:
           description: Errore del server. **Contattare lo sviluppatore.**
   /regioni:
     parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
       - in: query
         name: nome
         schema:
           type: string
-        description: |-
+        description: >-
           Nome della regione da cercare.  
+
           Il parametro è case insensitive.  
-          L'API effettua la ricerca cercando regioni che abbiano nel nome la stringa indicata (fuzzy search). Inserendo ad esempio `b` verranno restituite tutte le regioni il cui nome contiene la stringa "b".
+
+          L'API effettua la ricerca cercando regioni che abbiano nel nome la
+          stringa indicata (fuzzy search). Inserendo ad esempio `b` verranno
+          restituite tutte le regioni il cui nome contiene la stringa "b".
     get:
       summary: Ottieni la lista delle regioni italiane.
       operationId: regioni
@@ -179,6 +430,52 @@ paths:
                 items:
                   type: string
                   example: Trentino Alto Adige
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: regioni
+                properties:
+                  page:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero della pagina fornita
+                    minimum: 1
+                    example: 1
+                  pagesize:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: La dimensione di ogni pagina.
+                    minimum: 0
+                    maximum: 500
+                    default: 500
+                  total:
+                    xml:
+                      attribute: true
+                    type: integer
+                    description: Il numero totale di entries disponibili.
+                    minimum: 0
+                    example: 20 
+                  regioni:
+                    type: array
+                    xml:
+                      name: regione
+                    items:
+                      type: string
+                      example: Trentino Alto Adige
+            text/csv:
+              schema:
+                type: string
+                description: |-
+                  Lista CSV delimitata dal carattere ;  
+                  Include l'header nella prima riga.
+                example: |-
+                  nome
+                  Abruzzo
+                  Basilicata
+                  Calabria
         5XX:
           description: Errore del server. **Contattare lo sviluppatore.**
 components:
@@ -208,19 +505,27 @@ components:
       name: onlyname
       schema:
         type: boolean
-      description: |-
+      description: >-
         Può essere un valore qualunque.  
-        In caso il parametro abbia un valore, il risultato della query sarà un array di stringhe, tali stringhe rappresentano i nomi dei comuni selezionati.
+
+        In caso il parametro abbia un valore, il risultato della query sarà un
+        array di stringhe, tali stringhe rappresentano i nomi dei comuni
+        selezionati.
       example: true
     onlyforeignname:
       in: query
       name: onlyforeignname
       schema:
         type: boolean
-      description: |-
+      description: >-
         Può essere un valore qualunque.  
-        In caso il parametro abbia un valore, il risultato della query sarà un array di stringhe, tali stringhe rappresentano i nomi stranieri dei comuni selezionati.
+
+        In caso il parametro abbia un valore, il risultato della query sarà un
+        array di stringhe, tali stringhe rappresentano i nomi stranieri dei
+        comuni selezionati.
+
         Se il comune non ha un nome straniero verrà utilizzato il nome italiano.
+
         Se usato insieme a onlyname, quest'ultimo viene ignorato.
       example: true
     nome_comune:
@@ -228,68 +533,129 @@ components:
       name: nome
       schema:
         type: string
-      description: |-
+      description: >-
         Nome del comune da cercare.  
+
         Il parametro è case insensitive.  
-        L'API effettua la ricerca cercando comuni che abbiano nel nome la stringa indicata (fuzzy search). Inserendo ad esempio `mi` verranno restituiti tutti i comuni il cui nome contiene la stringa "mi".
+
+        L'API effettua la ricerca cercando comuni che abbiano nel nome la
+        stringa indicata (fuzzy search). Inserendo ad esempio `mi` verranno
+        restituiti tutti i comuni il cui nome contiene la stringa "mi".
       example: bolzano
     codice_comune:
       in: query
       name: codice
       schema:
         type: string
-      description: |-
+      description: >-
         Codice ISTAT del comune da cercare.  
-        L'API effettua la ricerca cercando comuni che abbiano esattamente lo stesso codice ISTAT indicato. Inserendo ad esempio `021008` verrà restituito il comune di Bolzano, ma inserendo solo `021` non verrà restituito nulla.
+
+        L'API effettua la ricerca cercando comuni che abbiano esattamente lo
+        stesso codice ISTAT indicato. Inserendo ad esempio `021008` verrà
+        restituito il comune di Bolzano, ma inserendo solo `021` non verrà
+        restituito nulla.
       example: '021008'
     codiceCatastale_comune:
       in: query
       name: codiceCatastale
       schema:
         type: string
-      description: |-
+      description: >-
         Codice catastale del comune da cercare.  
-        L'API effettua la ricerca cercando comuni che abbiano esattamente lo stesso codice catastale indicato. Inserendo ad esempio `A952` verrà restituito il comune di Bolzano, ma inserendo solo `A9` non verrà restituito nulla.
+
+        L'API effettua la ricerca cercando comuni che abbiano esattamente lo
+        stesso codice catastale indicato. Inserendo ad esempio `A952` verrà
+        restituito il comune di Bolzano, ma inserendo solo `A9` non verrà
+        restituito nulla.
       example: A952
     cap_comune:
       in: query
       name: cap
       schema:
         type: string
-      description: |-
+      description: >-
         CAP del comune da cercare.  
-        L'API effettua la ricerca cercando comuni che esattamente lo stesso CAP indicato. Inserendo ad esempio `39100` verrà restituito il comune di Bolzano, ma inserendo solo `391` non verrà restituito nulla.
-        A differenza dei parametri `codice` e `codiceCatastale` si ricorda che vari comuni possono condividere lo stesso CAP.
+
+        L'API effettua la ricerca cercando comuni che esattamente lo stesso CAP
+        indicato. Inserendo ad esempio `39100` verrà restituito il comune di
+        Bolzano, ma inserendo solo `391` non verrà restituito nulla.
+
+        A differenza dei parametri `codice` e `codiceCatastale` si ricorda che
+        vari comuni possono condividere lo stesso CAP.
       example: '39100'
     nome_provincia:
       in: query
       name: nome
       schema:
         type: string
-      description: |-
+      description: >-
         Nome della provincia da cercare.  
+
         Il parametro è case insensitive.  
-        L'API effettua la ricerca cercando province che abbiano nel nome la stringa indicata (fuzzy search). Inserendo ad esempio `b` verranno restituite tutte le province il cui nome contiene la stringa "b".
+
+        L'API effettua la ricerca cercando province che abbiano nel nome la
+        stringa indicata (fuzzy search). Inserendo ad esempio `b` verranno
+        restituite tutte le province il cui nome contiene la stringa "b".
       example: bolzano
     codice_provincia:
       in: query
       name: codice
       schema:
         type: string
-      description: |-
+      description: >-
         Codice ISTAT della provincia da cercare.  
-        L'API effettua la ricerca cercando province che abbiano esattamente lo stesso codice ISTAT indicato. Inserendo ad esempio `021` verrà restituita la provincia di Bolzano, ma inserendo solo `21` non verrà restituito nulla.
+
+        L'API effettua la ricerca cercando province che abbiano esattamente lo
+        stesso codice ISTAT indicato. Inserendo ad esempio `021` verrà
+        restituita la provincia di Bolzano, ma inserendo solo `21` non verrà
+        restituito nulla.
       example: '021'
     sigla_provincia:
       in: query
       name: sigla
       schema:
         type: string
-      description: |-
+      description: >-
         Sigla della provincia da cercare.  
+
         Il parametro è case insensitive.  
-        L'API effettua la ricerca cercando province che abbiano esattamente la stessa sigla indicata. Inserendo ad esempio `bz` verrà restituita la provincia di Bolzano, ma inserendo solo `b` non verrà restituito nulla.
+
+        L'API effettua la ricerca cercando province che abbiano esattamente la
+        stessa sigla indicata. Inserendo ad esempio `bz` verrà restituita la
+        provincia di Bolzano, ma inserendo solo `b` non verrà restituito nulla.
       example: bz
+    format:
+      in: query
+      name: format
+      schema:
+        type: string
+        enum: ["json", "xml", "csv"]
+        default: "json"
+      description: >-
+        Parametro case-insensitive che descrive il formato dell'output.
+    page:
+      in: query
+      name: page
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: >-
+        Parametro che descrive l'indice della pagina.  
+        
+        [Vedi qui per ulteriori informazioni sul sistema di pagina](https://github.com/Samurai016/Comuni-ITA#sistema-di-pagina)
+    pagesize:
+      in: query
+      name: pagesize
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 500
+        default: 500
+      description: >-
+        Parametro che descrive la dimensione di ogni pagina.  
+        
+        [Vedi qui per ulteriori informazioni sul sistema di pagina](https://github.com/Samurai016/Comuni-ITA#sistema-di-pagina)
   schemas:
     Comune:
       type: object
@@ -335,28 +701,54 @@ components:
         email:
           type: string
           format: email
-          description: |-
-            Email ufficiale del comune (come comunicata al Ministero dell'Interno, il dato potrebbe essere malformato, questo a causa di dati errati inviate dalle amministrazioni al Ministero stesso, in caso di anomalia si prega di contattare direttamente lo sviluppatore che prevederà al ripristino dei valori esatti, grazie).   
-            Non si assicura la correttezza sintattica e/o semantica del dato in quanto fornito direttamente dal comune in questione.
-          example: 'urp@comune.bolzano.it'
+          description: >-
+            Email ufficiale del comune (come comunicata al Ministero
+            dell'Interno, il dato potrebbe essere malformato, questo a causa di
+            dati errati inviate dalle amministrazioni al Ministero stesso, in
+            caso di anomalia si prega di contattare direttamente lo sviluppatore
+            che prevederà al ripristino dei valori esatti, grazie).   
+
+            Non si assicura la correttezza sintattica e/o semantica del dato in
+            quanto fornito direttamente dal comune in questione.
+          example: urp@comune.bolzano.it
         pec:
           type: string
           format: email
-          description: |-
-            Email PEC (Posta Elettronica Certificata) del comune (come comunicata al Ministero dell'Interno, il dato potrebbe essere malformato, questo a causa di dati errati inviate dalle amministrazioni al Ministero stesso, in caso di anomalia si prega di contattare direttamente lo sviluppatore che prevederà al ripristino dei valori esatti, grazie).   
-            Non si assicura la correttezza sintattica e/o semantica del dato in quanto fornito direttamente dal comune in questione.
-          example: 'bolzano@legalmail.it'
+          description: >-
+            Email PEC (Posta Elettronica Certificata) del comune (come
+            comunicata al Ministero dell'Interno, il dato potrebbe essere
+            malformato, questo a causa di dati errati inviate dalle
+            amministrazioni al Ministero stesso, in caso di anomalia si prega di
+            contattare direttamente lo sviluppatore che prevederà al ripristino
+            dei valori esatti, grazie).   
+
+            Non si assicura la correttezza sintattica e/o semantica del dato in
+            quanto fornito direttamente dal comune in questione.
+          example: bolzano@legalmail.it
         telefono:
           type: string
-          description: |-
-            Numero di telefono ufficiale del comune (come comunicata al Ministero dell'Interno, il dato potrebbe essere malformato, questo a causa di dati errati inviate dalle amministrazioni al Ministero stesso, in caso di anomalia si prega di contattare direttamente lo sviluppatore che prevederà al ripristino dei valori esatti, grazie).   
-            Non si assicura la correttezza sintattica e/o semantica del dato in quanto fornito direttamente dal comune in questione.
+          description: >-
+            Numero di telefono ufficiale del comune (come comunicata al
+            Ministero dell'Interno, il dato potrebbe essere malformato, questo a
+            causa di dati errati inviate dalle amministrazioni al Ministero
+            stesso, in caso di anomalia si prega di contattare direttamente lo
+            sviluppatore che prevederà al ripristino dei valori esatti,
+            grazie).   
+
+            Non si assicura la correttezza sintattica e/o semantica del dato in
+            quanto fornito direttamente dal comune in questione.
           example: '+390471997111'
         fax:
           type: string
-          description: |-
-            Numero di fax del comune (come comunicata al Ministero dell'Interno, il dato potrebbe essere malformato, questo a causa di dati errati inviate dalle amministrazioni al Ministero stesso, in caso di anomalia si prega di contattare direttamente lo sviluppatore che prevederà al ripristino dei valori esatti, grazie).     
-            Non si assicura la correttezza sintattica e/o semantica del dato in quanto fornito direttamente dal comune in questione.
+          description: >-
+            Numero di fax del comune (come comunicata al Ministero dell'Interno,
+            il dato potrebbe essere malformato, questo a causa di dati errati
+            inviate dalle amministrazioni al Ministero stesso, in caso di
+            anomalia si prega di contattare direttamente lo sviluppatore che
+            prevederà al ripristino dei valori esatti, grazie).     
+
+            Non si assicura la correttezza sintattica e/o semantica del dato in
+            quanto fornito direttamente dal comune in questione.
           example: '+390471997404'
         coordinate:
           type: object

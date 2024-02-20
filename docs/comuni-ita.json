@@ -2,8 +2,8 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Comuni ITA",
-    "description": "Semplice API che permette di ottenere in formato JSON i comuni italiani.\n\n*Logo ispired by: [Castle by Jasfart from the Noun Project](https://thenounproject.com/omataloon/)*",
-    "version": "3.0.2",
+    "description": "Semplice API che permette di ottenere i comuni italiani in formato JSON, XML o CSV.\n\n*Logo ispired by: [Castle by Jasfart from the Noun Project](https://thenounproject.com/omataloon/)*",
+    "version": "3.1.0",
     "x-logo": {
       "url": "./assets/logo.png",
       "altText": "Comuni ITA Logo"
@@ -45,6 +45,15 @@
     "/comuni": {
       "parameters": [
         {
+          "$ref": "#/components/parameters/format"
+        },
+        {
+          "$ref": "#/components/parameters/page"
+        },
+        {
+          "$ref": "#/components/parameters/pagesize"
+        },
+        {
           "$ref": "#/components/parameters/onlyname"
         },
         {
@@ -80,6 +89,60 @@
                     "$ref": "#/components/schemas/Comune"
                   }
                 }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "xml": {
+                    "name": "comuni"
+                  },
+                  "properties": {
+                    "page": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero della pagina fornita",
+                      "minimum": 1,
+                      "example": 107
+                    },
+                    "pagesize": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "La dimensione di ogni pagina.",
+                      "minimum": 0,
+                      "maximum": 500,
+                      "default": 500
+                    },
+                    "total": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero totale di entries disponibili.",
+                      "minimum": 0,
+                      "example": 500
+                    },
+                    "comuni": {
+                      "type": "array",
+                      "xml": {
+                        "name": "comune"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Comune"
+                      }
+                    }
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "Lista CSV delimitata dal carattere ;  \nInclude l'header nella prima riga.  \nGli attributi che nei formati JSON e XML sono innestati, in CSV vengono convertiti in colonne nel formato\ncolonna_attributo",
+                  "example": "codice;nome;nomeStraniero;codiceCatastale;cap;prefisso;provincia_nome;provincia_regione;email;pec;telefono;fax;coordinate_lat;coordinate_lng\n028001;Abano Terme;;A001;35031;049;Padova;Veneto;protocollo@abanoterme.net;abanoterme.pd@cert.ip-veneto.net;+39 049 8245111;+39 049 8600499;45.3619;11.7924"
+                }
               }
             }
           },
@@ -91,6 +154,15 @@
     },
     "/comuni/{regione}": {
       "parameters": [
+        {
+          "$ref": "#/components/parameters/format"
+        },
+        {
+          "$ref": "#/components/parameters/page"
+        },
+        {
+          "$ref": "#/components/parameters/pagesize"
+        },
         {
           "$ref": "#/components/parameters/regione"
         },
@@ -130,6 +202,60 @@
                     "$ref": "#/components/schemas/Comune"
                   }
                 }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "xml": {
+                    "name": "comuni"
+                  },
+                  "properties": {
+                    "page": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero della pagina fornita",
+                      "minimum": 1,
+                      "example": 107
+                    },
+                    "pagesize": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "La dimensione di ogni pagina.",
+                      "minimum": 0,
+                      "maximum": 500,
+                      "default": 500
+                    },
+                    "total": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero totale di entries disponibili.",
+                      "minimum": 0,
+                      "example": 500
+                    },
+                    "comuni": {
+                      "type": "array",
+                      "xml": {
+                        "name": "comune"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Comune"
+                      }
+                    }
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "Lista CSV delimitata dal carattere ;  \nInclude l'header nella prima riga.  \nGli attributi che nei formati JSON e XML sono innestati, in CSV vengono convertiti in colonne nel formato\ncolonna_attributo",
+                  "example": "codice;nome;nomeStraniero;codiceCatastale;cap;prefisso;provincia_nome;provincia_regione;email;pec;telefono;fax;coordinate_lat;coordinate_lng\n028001;Abano Terme;;A001;35031;049;Padova;Veneto;protocollo@abanoterme.net;abanoterme.pd@cert.ip-veneto.net;+39 049 8245111;+39 049 8600499;45.3619;11.7924"
+                }
               }
             }
           },
@@ -144,6 +270,15 @@
     },
     "/comuni/provincia/{provincia}": {
       "parameters": [
+        {
+          "$ref": "#/components/parameters/format"
+        },
+        {
+          "$ref": "#/components/parameters/page"
+        },
+        {
+          "$ref": "#/components/parameters/pagesize"
+        },
         {
           "$ref": "#/components/parameters/provincia"
         },
@@ -183,6 +318,60 @@
                     "$ref": "#/components/schemas/Comune"
                   }
                 }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "xml": {
+                    "name": "comuni"
+                  },
+                  "properties": {
+                    "page": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero della pagina fornita",
+                      "minimum": 1,
+                      "example": 107
+                    },
+                    "pagesize": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "La dimensione di ogni pagina.",
+                      "minimum": 0,
+                      "maximum": 500,
+                      "default": 500
+                    },
+                    "total": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero totale di entries disponibili.",
+                      "minimum": 0,
+                      "example": 500
+                    },
+                    "comuni": {
+                      "type": "array",
+                      "xml": {
+                        "name": "comune"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Comune"
+                      }
+                    }
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "Lista CSV delimitata dal carattere ;  \nInclude l'header nella prima riga.  \nGli attributi che nei formati JSON e XML sono innestati, in CSV vengono convertiti in colonne nel formato\ncolonna_attributo",
+                  "example": "codice;nome;nomeStraniero;codiceCatastale;cap;prefisso;provincia_nome;provincia_regione;email;pec;telefono;fax;coordinate_lat;coordinate_lng\n028001;Abano Terme;;A001;35031;049;Padova;Veneto;protocollo@abanoterme.net;abanoterme.pd@cert.ip-veneto.net;+39 049 8245111;+39 049 8600499;45.3619;11.7924"
+                }
               }
             }
           },
@@ -197,6 +386,15 @@
     },
     "/province": {
       "parameters": [
+        {
+          "$ref": "#/components/parameters/format"
+        },
+        {
+          "$ref": "#/components/parameters/page"
+        },
+        {
+          "$ref": "#/components/parameters/pagesize"
+        },
         {
           "$ref": "#/components/parameters/onlyname"
         },
@@ -227,6 +425,60 @@
                     "$ref": "#/components/schemas/Provincia"
                   }
                 }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "xml": {
+                    "name": "province"
+                  },
+                  "properties": {
+                    "page": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero della pagina fornita",
+                      "minimum": 1,
+                      "example": 107
+                    },
+                    "pagesize": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "La dimensione di ogni pagina.",
+                      "minimum": 0,
+                      "maximum": 500,
+                      "default": 500
+                    },
+                    "total": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero totale di entries disponibili.",
+                      "minimum": 0,
+                      "example": 500
+                    },
+                    "province": {
+                      "type": "array",
+                      "xml": {
+                        "name": "provincia"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Provincia"
+                      }
+                    }
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "Lista CSV delimitata dal carattere ;  \nInclude l'header nella prima riga.",
+                  "example": "codice;nome;sigla;regione\n084;Agrigento;AG;Sicilia\n006;Alessandria;AL;Piemonte\n042;Ancona;AN;Marche\n051;Arezzo;AR;Toscana"
+                }
               }
             }
           },
@@ -238,6 +490,15 @@
     },
     "/province/{regione}": {
       "parameters": [
+        {
+          "$ref": "#/components/parameters/format"
+        },
+        {
+          "$ref": "#/components/parameters/page"
+        },
+        {
+          "$ref": "#/components/parameters/pagesize"
+        },
         {
           "$ref": "#/components/parameters/onlyname"
         },
@@ -271,6 +532,60 @@
                     "$ref": "#/components/schemas/Provincia"
                   }
                 }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "xml": {
+                    "name": "province"
+                  },
+                  "properties": {
+                    "page": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero della pagina fornita",
+                      "minimum": 1,
+                      "example": 107
+                    },
+                    "pagesize": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "La dimensione di ogni pagina.",
+                      "minimum": 0,
+                      "maximum": 500,
+                      "default": 500
+                    },
+                    "total": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero totale di entries disponibili.",
+                      "minimum": 0,
+                      "example": 500
+                    },
+                    "province": {
+                      "type": "array",
+                      "xml": {
+                        "name": "provincia"
+                      },
+                      "items": {
+                        "$ref": "#/components/schemas/Provincia"
+                      }
+                    }
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "Lista CSV delimitata dal carattere ;  \nInclude l'header nella prima riga.",
+                  "example": "codice;nome;sigla;regione\n084;Agrigento;AG;Sicilia\n006;Alessandria;AL;Piemonte\n042;Ancona;AN;Marche\n051;Arezzo;AR;Toscana"
+                }
               }
             }
           },
@@ -285,6 +600,15 @@
     },
     "/regioni": {
       "parameters": [
+        {
+          "$ref": "#/components/parameters/format"
+        },
+        {
+          "$ref": "#/components/parameters/page"
+        },
+        {
+          "$ref": "#/components/parameters/pagesize"
+        },
         {
           "in": "query",
           "name": "nome",
@@ -311,6 +635,61 @@
                     "type": "string",
                     "example": "Trentino Alto Adige"
                   }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "xml": {
+                    "name": "regioni"
+                  },
+                  "properties": {
+                    "page": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero della pagina fornita",
+                      "minimum": 1,
+                      "example": 1
+                    },
+                    "pagesize": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "La dimensione di ogni pagina.",
+                      "minimum": 0,
+                      "maximum": 500,
+                      "default": 500
+                    },
+                    "total": {
+                      "xml": {
+                        "attribute": true
+                      },
+                      "type": "integer",
+                      "description": "Il numero totale di entries disponibili.",
+                      "minimum": 0,
+                      "example": 20
+                    },
+                    "regioni": {
+                      "type": "array",
+                      "xml": {
+                        "name": "regione"
+                      },
+                      "items": {
+                        "type": "string",
+                        "example": "Trentino Alto Adige"
+                      }
+                    }
+                  }
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "Lista CSV delimitata dal carattere ;  \nInclude l'header nella prima riga.",
+                  "example": "nome\nAbruzzo\nBasilicata\nCalabria"
                 }
               }
             }
@@ -424,6 +803,41 @@
         },
         "description": "Sigla della provincia da cercare.  \nIl parametro è case insensitive.  \nL'API effettua la ricerca cercando province che abbiano esattamente la stessa sigla indicata. Inserendo ad esempio `bz` verrà restituita la provincia di Bolzano, ma inserendo solo `b` non verrà restituito nulla.",
         "example": "bz"
+      },
+      "format": {
+        "in": "query",
+        "name": "format",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "json",
+            "xml",
+            "csv"
+          ],
+          "default": "json"
+        },
+        "description": "Parametro case-insensitive che descrive il formato dell'output."
+      },
+      "page": {
+        "in": "query",
+        "name": "page",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "description": "Parametro che descrive l'indice della pagina.  \n[Vedi qui per ulteriori informazioni sul sistema di pagina](https://github.com/Samurai016/Comuni-ITA#sistema-di-pagina)"
+      },
+      "pagesize": {
+        "in": "query",
+        "name": "pagesize",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 500,
+          "default": 500
+        },
+        "description": "Parametro che descrive la dimensione di ogni pagina.  \n[Vedi qui per ulteriori informazioni sul sistema di pagina](https://github.com/Samurai016/Comuni-ITA#sistema-di-pagina)"
       }
     },
     "schemas": {

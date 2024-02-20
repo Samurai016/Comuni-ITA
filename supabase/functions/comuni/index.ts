@@ -1,9 +1,10 @@
+// deno-lint-ignore-file
 import { serve } from "https://deno.land/std@0.131.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.0.0";
 import requestHandler from "../requestHandler.ts";
 
 serve(async (req) => {
-  return await requestHandler(req, async () => {
+  return await requestHandler(req, "comune", "comuni", async () => {
     const supabaseClient = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_ANON_KEY") ?? "");
 
     // Ottengo query params
@@ -53,7 +54,7 @@ serve(async (req) => {
     const response = await query;
     if (response.error) throw response.error;
 
-    const comuni = response.data.map((comune) => {
+    const comuni = response.data.map((comune: any) => {
       if (isOnlyNome) return comune.nome;
       if (isOnlyNomeStraniero) return comune.nomeStraniero || comune.nome;
 
