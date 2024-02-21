@@ -6,4 +6,10 @@
 config.toml
 seed.sql
 
+# Ignore docs
+docs/index.html
+docs/js
+docs/css
+
+# Ignore updater
 updater
