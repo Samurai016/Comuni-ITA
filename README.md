@@ -1,7 +1,7 @@
-# [Comuni ITA API](https://samurai016.github.io/Comuni-ITA/)
+# [Comuni ITA API](https://comuni-ita.readme.io/reference/comuni-1)
 ![Versione](https://img.shields.io/badge/versione-v3.1.0-%23007ec6?style=flat-square)
 [![Hosted on Supabase](https://img.shields.io/badge/Hosted%20on%20Supabase-passing?style=flat-square&logo=supabase&labelColor=1c1c1c&color=1c1c1c)](https://axqvoqvbfjpaamphztgd.functions.supabase.co)
-[![Leggi la documentazione](https://img.shields.io/badge/Leggi%20la%20documentazione%20Swagger-passing?style=flat-square&logo=Read%20the%20Docs&labelColor=8CA1AF&color=8CA1AF&logoColor=white)](https://samurai016.github.io/Comuni-ITA/)
+[![Leggi la documentazione](https://img.shields.io/badge/Leggi%20la%20documentazione%20Swagger-passing?style=flat-square&logo=Read%20the%20Docs&labelColor=8CA1AF&color=8CA1AF&logoColor=white)](https://comuni-ita.readme.io/reference/comuni-1)
 
 > ### Legacy project
 > Questa repository è la versione aggiornata della repository [Comuni-ITA-legacy](https://github.com/Samurai016/Comuni-ITA-legacy).  
@@ -15,7 +15,7 @@ Dato che l'API è hostata su un servizio gratuito sarebbe opportuno evitare di s
 
 In questa wiki troverai una spiegazione di come funzionano gli endpoint e di come installare l'API su un server.  
 
-La documentazione è disponibile anche all'indirizzo https://samurai016.github.io/Comuni-ITA/ sotto forma di documentazione Swagger.  
+La documentazione è disponibile anche all'indirizzo https://comuni-ita.readme.io/reference/comuni-1 sotto forma di documentazione Swagger.  
 
 **License:** [MIT](https://opensource.org/licenses/MIT)  
 **Credits:** Logo inpired by: [Castle by Jasfart from the Noun Project](https://thenounproject.com/omataloon/)
@@ -40,37 +40,37 @@ La documentazione è disponibile anche all'indirizzo https://samurai016.github.i
 
 Ottieni la lista di tutti i comuni italiani.
 
-### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/comuni)
+### [Documentazione](https://comuni-ita.readme.io/reference/comuni-1#operation/comuni)
 
 ## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni/{regione}](https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni/trentino%20alto%20adige)
 
 Ottieni la lista di tutti i comuni della regione indicata.
 
-### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/comuni-regione)
+### [Documentazione](https://comuni-ita.readme.io/reference/comuni-1#operation/comuni-regione)
 
 ## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /comuni/provincia/{provincia}](https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni/provincia/bolzano)
 
 Ottieni la lista di tutti i comuni della provincia indicata.
 
-### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/comuni-provincia)
+### [Documentazione](https://comuni-ita.readme.io/reference/comuni-1#operation/comuni-provincia)
 
 ## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /province](https://axqvoqvbfjpaamphztgd.functions.supabase.co/province)
 
 Ottieni la lista di tutte le province italiane.
 
-### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/province)
+### [Documentazione](https://comuni-ita.readme.io/reference/comuni-1#operation/province)
 
 ## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /province/{regione}](https://axqvoqvbfjpaamphztgd.functions.supabase.co/province/trentino%20alto%20adige)
 
 Ottieni la lista di tutte le province della regione indicata.
 
-### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/province-regione)
+### [Documentazione](https://comuni-ita.readme.io/reference/comuni-1#operation/province-regione)
 
 ## [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) /regioni](https://axqvoqvbfjpaamphztgd.functions.supabase.co/regioni)
 
 Ottieni la lista delle regioni italiane.
 
-### [Documentazione](https://samurai016.github.io/Comuni-ITA/#operation/regioni)
+### [Documentazione](https://comuni-ita.readme.io/reference/comuni-1#operation/regioni)
 
 # Dettagli sulle regioni e sulle province
 
