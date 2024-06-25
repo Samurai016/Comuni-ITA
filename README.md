@@ -3,6 +3,11 @@
 [![Hosted on Supabase](https://img.shields.io/badge/Hosted%20on%20Supabase-passing?style=flat-square&logo=supabase&labelColor=1c1c1c&color=1c1c1c)](https://axqvoqvbfjpaamphztgd.functions.supabase.co)
 [![Leggi la documentazione](https://img.shields.io/badge/Leggi%20la%20documentazione-passing?style=flat-square&logo=Read%20the%20Docs&labelColor=8CA1AF&color=8CA1AF&logoColor=white)](https://comuni-ita.readme.io/)
 
+> ### ⚠️ Limiti di utilizzo superati ⚠️
+> Comuni-ITA è un progetto gratuito, reso fruibile gratuitamente e pertanto è soggetto a limiti di risorse.  
+> Al momento il progetto ha superato la quota di risorse mensile allocata ed è stato sospeso.   
+> **Tornerà online il 29 Giugno 2024**
+
 > ### Legacy project
 > Questa repository è la versione aggiornata della repository [Comuni-ITA-legacy](https://github.com/Samurai016/Comuni-ITA-legacy).  
 > È possibile usare quella repository per installare una versione standalone dell'API non gestita con Supabase.
