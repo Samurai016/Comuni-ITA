@@ -1,0 +1,108 @@
+codice,nome,sigla,regione
+001,Torino,TO,Piemonte
+002,Vercelli,VC,Piemonte
+003,Novara,NO,Piemonte
+004,Cuneo,CN,Piemonte
+005,Asti,AT,Piemonte
+006,Alessandria,AL,Piemonte
+007,Valle d'Aosta,AO,Valle d'Aosta
+008,Imperia,IM,Liguria
+009,Savona,SV,Liguria
+010,Genova,GE,Liguria
+011,La Spezia,SP,Liguria
+012,Varese,VA,Lombardia
+013,Como,CO,Lombardia
+014,Sondrio,SO,Lombardia
+015,Milano,MI,Lombardia
+016,Bergamo,BG,Lombardia
+017,Brescia,BS,Lombardia
+018,Pavia,PV,Lombardia
+019,Cremona,CR,Lombardia
+020,Mantova,MN,Lombardia
+021,Bolzano,BZ,Trentino Alto Adige
+022,Trento,TN,Trentino Alto Adige
+023,Verona,VR,Veneto
+024,Vicenza,VI,Veneto
+025,Belluno,BL,Veneto
+026,Treviso,TV,Veneto
+027,Venezia,VE,Veneto
+028,Padova,PD,Veneto
+029,Rovigo,RO,Veneto
+030,Udine,UD,Friuli Venezia Giulia
+031,Gorizia,GO,Friuli Venezia Giulia
+032,Trieste,TS,Friuli Venezia Giulia
+033,Piacenza,PC,Emilia Romagna
+034,Parma,PR,Emilia Romagna
+035,Reggio nell'Emilia,RE,Emilia Romagna
+036,Modena,MO,Emilia Romagna
+037,Bologna,BO,Emilia Romagna
+038,Ferrara,FE,Emilia Romagna
+039,Ravenna,RA,Emilia Romagna
+040,Forlì-Cesena,FC,Emilia Romagna
+041,Pesaro e Urbino,PU,Marche
+042,Ancona,AN,Marche
+043,Macerata,MC,Marche
+044,Ascoli Piceno,AP,Marche
+045,Massa-Carrara,MS,Toscana
+046,Lucca,LU,Toscana
+047,Pistoia,PT,Toscana
+048,Firenze,FI,Toscana
+049,Livorno,LI,Toscana
+050,Pisa,PI,Toscana
+051,Arezzo,AR,Toscana
+052,Siena,SI,Toscana
+053,Grosseto,GR,Toscana
+054,Perugia,PG,Umbria
+055,Terni,TR,Umbria
+056,Viterbo,VT,Lazio
+057,Rieti,RI,Lazio
+058,Roma,RM,Lazio
+059,Latina,LT,Lazio
+060,Frosinone,FR,Lazio
+061,Caserta,CE,Campania
+062,Benevento,BN,Campania
+063,Napoli,NA,Campania
+064,Avellino,AV,Campania
+065,Salerno,SA,Campania
+066,L'Aquila,AQ,Abruzzo
+067,Teramo,TE,Abruzzo
+068,Pescara,PE,Abruzzo
+069,Chieti,CH,Abruzzo
+070,Campobasso,CB,Molise
+071,Foggia,FG,Puglia
+072,Bari,BA,Puglia
+073,Taranto,TA,Puglia
+074,Brindisi,BR,Puglia
+075,Lecce,LE,Puglia
+076,Potenza,PZ,Basilicata
+077,Matera,MT,Basilicata
+078,Cosenza,CS,Calabria
+079,Catanzaro,CZ,Calabria
+080,Reggio Calabria,RC,Calabria
+081,Trapani,TP,Sicilia
+082,Palermo,PA,Sicilia
+083,Messina,ME,Sicilia
+084,Agrigento,AG,Sicilia
+085,Caltanissetta,CL,Sicilia
+086,Enna,EN,Sicilia
+087,Catania,CT,Sicilia
+088,Ragusa,RG,Sicilia
+089,Siracusa,SR,Sicilia
+090,Sassari,SS,Sardegna
+091,Nuoro,NU,Sardegna
+092,Cagliari,CA,Sardegna
+093,Pordenone,PN,Friuli Venezia Giulia
+094,Isernia,IS,Molise
+095,Oristano,OR,Sardegna
+096,Biella,BI,Piemonte
+097,Lecco,LC,Lombardia
+098,Lodi,LO,Lombardia
+099,Rimini,RN,Emilia Romagna
+100,Prato,PO,Toscana
+101,Crotone,KR,Calabria
+102,Vibo Valentia,VV,Calabria
+103,Verbano-Cusio-Ossola,VB,Piemonte
+108,Monza e della Brianza,MB,Lombardia
+109,Fermo,FM,Marche
+110,Barletta-Andria-Trani,BT,Puglia
+111,Sud Sardegna,SU,Sardegna

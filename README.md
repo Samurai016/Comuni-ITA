@@ -15,7 +15,7 @@
 Tramite questa REST API hai accesso ad una lista di tutti i comuni, le province e le regioni italiane. I dati sono ottenuti e aggiornamenti da un sistema di aggiornamento semiautomatico che preleva i dati direttamente dagli archivi ISTAT e integra le informazioni mancanti interrogando Wikidata.  
 I dati non ottenuti automaticamente dal sistema vengono inoltrati direttamente a me che procedo a verificarli e modificarli manualmente.  
 
-L'API è scaricabile e installabile su una propria istanza di Supabase oppure è usufruibile in maniera gratuita all'indirizzo https://axqvoqvbfjpaamphztgd.functions.supabase.co.  
+L'API è [scaricabile e installabile su una propria istanza di Supabase](https://github.com/Samurai016/Comuni-ITA/blob/master/setup) oppure è usufruibile in maniera gratuita all'indirizzo https://axqvoqvbfjpaamphztgd.functions.supabase.co.  
 Dato che l'API è hostata su un servizio gratuito sarebbe opportuno evitare di sovraccaricare l'API per dare a tutti la possibilità di accedervi.  
 
 In questa wiki troverai una spiegazione di come funzionano gli endpoint e di come installare l'API su un server.  
