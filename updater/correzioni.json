@@ -1,0 +1,19 @@
+{
+  "comuni": [
+    {
+      "codice": "012144",
+      "email": "protocollo@comune.bardelloconmalgessoebregano.va.it",
+      "pec": "comunebardelloconmalgessoebregano@halleypec.it",
+      "telefono": "0332706691"
+    },
+    {
+      "codice": "063024",
+      "pec": "protocollo.stabia@asmepec.it"
+    },
+    {
+      "codice": "081025",
+      "email": "protocollo@comune.misiliscemi.tp.it",
+      "pec": "protocollo@pec.comune.misiliscemi.tp.it"
+    }
+  ]
+}

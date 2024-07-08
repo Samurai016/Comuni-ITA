@@ -88,9 +88,8 @@ Per ottenere i successivi 500 elementi è necessario specificare il parametro `p
 **Essendo gli endpoint `/regioni` e `/province` molto leggeri, non è necessario specificare il parametro `page` per ottenere tutti i risultati.**
 
 # Installazione su server proprio
-
-Tramite questa repo è possibile installare l'API su una propria istanza di Supabase.
+Tramite questa repo è possibile installare l'API su una propria istanza di Supabase seguendo la [guida di installazione]((https://github.com/Samurai016/Comuni-ITA/blob/master/setup)).
 
 ### Sistema di aggiornamento
-Il sistema di aggiornamento della API prevede un sistema di logging tramite un bot Telegram. Il bot serve, oltre che per essere notificati sullo stato dell'aggiornamento da remoto, sia per la risoluzione di eventuali problemi/conflitti occorsi durante il fetch automatico dei dati.
-Prima di poter installare l'API quindi, crea un bot Telegram tramite [BotFather](https://t.me/botfather) (Puoi chiamarlo come vuoi, il codice per il suo funzionamento è incluso in questa repo). 
+L'API è dotata di un sistema di aggiornamento semiautomatico che preleva i dati direttamente dagli archivi ISTAT e ministeriali e integra le informazioni mancanti interrogando Wikidata.
+I dettagli sul funzionamento del sistema di aggiornamento sono disponibili [nell'apposita cartella](https://github.com/Samurai016/Comuni-ITA/blob/master/updater).

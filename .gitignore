@@ -12,4 +12,6 @@ docs/js
 docs/css
 
 # Ignore updater
-updater
+updater/node_modules
+updater/package-lock.json
+updater/.env
