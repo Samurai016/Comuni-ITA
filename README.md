@@ -88,7 +88,7 @@ Per ottenere i successivi 500 elementi è necessario specificare il parametro `p
 **Essendo gli endpoint `/regioni` e `/province` molto leggeri, non è necessario specificare il parametro `page` per ottenere tutti i risultati.**
 
 # Installazione su progetto Supabase
-Tramite questa repo è possibile installare l'API su una propria istanza di Supabase seguendo la [guida di installazione]((https://github.com/Samurai016/Comuni-ITA/blob/master/setup)).
+Tramite questa repo è possibile installare l'API su una propria istanza di Supabase seguendo la [guida di installazione](https://github.com/Samurai016/Comuni-ITA/blob/master/setup).
 
 # Sistema di aggiornamento
 L'API è dotata di un sistema di aggiornamento semiautomatico che preleva i dati direttamente dagli archivi ISTAT e ministeriali e integra le informazioni mancanti interrogando Wikidata.
