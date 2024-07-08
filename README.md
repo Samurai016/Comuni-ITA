@@ -31,8 +31,8 @@ La documentazione è disponibile anche all'indirizzo https://comuni-ita.readme.i
   - [GET /regioni](#-regioni)
 - [Dettagli sulle regioni e sulle province](#dettagli-sulle-regioni-e-sulle-province)
 - [Sistema di paging](#sistema-di-paging)
-- [Installazione su server proprio](#installazione-su-server-proprio)
-  - [Sistema di aggiornamento](#sistema-di-aggiornamento)
+- [Installazione su progetto Supabase](#installazione-su-progetto-supabase)
+- [Sistema di aggiornamento](#sistema-di-aggiornamento)
 
 # Endpoints
 
@@ -87,9 +87,9 @@ Per ottenere i successivi 500 elementi è necessario specificare il parametro `p
 
 **Essendo gli endpoint `/regioni` e `/province` molto leggeri, non è necessario specificare il parametro `page` per ottenere tutti i risultati.**
 
-# Installazione su server proprio
+# Installazione su progetto Supabase
 Tramite questa repo è possibile installare l'API su una propria istanza di Supabase seguendo la [guida di installazione]((https://github.com/Samurai016/Comuni-ITA/blob/master/setup)).
 
-### Sistema di aggiornamento
+# Sistema di aggiornamento
 L'API è dotata di un sistema di aggiornamento semiautomatico che preleva i dati direttamente dagli archivi ISTAT e ministeriali e integra le informazioni mancanti interrogando Wikidata.
 I dettagli sul funzionamento del sistema di aggiornamento sono disponibili [nell'apposita cartella](https://github.com/Samurai016/Comuni-ITA/blob/master/updater).
