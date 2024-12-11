@@ -3,7 +3,7 @@
   "info": {
     "title": "Comuni ITA",
     "description": "Semplice API che permette di ottenere i comuni italiani in formato JSON, XML o CSV.\n\n*Logo ispired by: [Castle by Jasfart from the Noun Project](https://thenounproject.com/omataloon/)*",
-    "version": "3.1.0",
+    "version": "3.2.0",
     "x-logo": {
       "url": "./assets/logo.png",
       "altText": "Comuni ITA Logo"
@@ -878,19 +878,7 @@
             "pattern": "\\d{2,5}"
           },
           "provincia": {
-            "type": "object",
-            "properties": {
-              "nome": {
-                "type": "string",
-                "description": "Nome della provincia.",
-                "example": "Bolzano"
-              },
-              "regione": {
-                "type": "string",
-                "description": "Regione del provincia.",
-                "example": "Trentino Alto Adige"
-              }
-            }
+            "$ref": "#/components/schemas/Provincia"
           },
           "email": {
             "type": "string",
@@ -913,6 +901,11 @@
             "type": "string",
             "description": "Numero di fax del comune (come comunicata al Ministero dell'Interno, il dato potrebbe essere malformato, questo a causa di dati errati inviate dalle amministrazioni al Ministero stesso, in caso di anomalia si prega di contattare direttamente lo sviluppatore che prevederà al ripristino dei valori esatti, grazie).     \nNon si assicura la correttezza sintattica e/o semantica del dato in quanto fornito direttamente dal comune in questione.",
             "example": "+390471997404"
+          },
+          "popolazione": {
+            "type": "integer",
+            "description": "Numero di abitanti",
+            "example": 106107
           },
           "coordinate": {
             "type": "object",

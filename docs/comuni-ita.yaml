@@ -7,7 +7,7 @@ info:
 
     *Logo ispired by: [Castle by Jasfart from the Noun
     Project](https://thenounproject.com/omataloon/)*
-  version: 3.1.0
+  version: 3.2.0
   x-logo:
     url: ./assets/logo.png
     altText: Comuni ITA Logo
@@ -688,16 +688,7 @@ components:
           example: '0471'
           pattern: \d{2,5}
         provincia:
-          type: object
-          properties:
-            nome:
-              type: string
-              description: Nome della provincia.
-              example: Bolzano
-            regione:
-              type: string
-              description: Regione del provincia.
-              example: Trentino Alto Adige
+          $ref: '#/components/schemas/Provincia'
         email:
           type: string
           format: email
@@ -750,6 +741,10 @@ components:
             Non si assicura la correttezza sintattica e/o semantica del dato in
             quanto fornito direttamente dal comune in questione.
           example: '+390471997404'
+        popolazione:
+          type: integer
+          description: Numero di abitanti
+          example: 106107
         coordinate:
           type: object
           properties:
