@@ -19,7 +19,8 @@ CREATE TABLE public.comuni (
     email character varying,
     pec character varying,
     telefono character varying,
-    fax character varying
+    fax character varying,
+    popolazione integer,
 );
 
 
