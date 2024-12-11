@@ -22,7 +22,7 @@ serve(async (req) => {
     const provincia = provinceMatch ? provinceMatch.pathname.groups.provincia : null;
 
     // Creo query
-    let query = supabaseClient.from("comuni").select("*, provincia!inner(nome, regione!inner(nome))");
+    let query = supabaseClient.from("comuni").select("*, provincia!inner(*, regione!inner(nome))");
 
     // Filtri
     if (regione) {
