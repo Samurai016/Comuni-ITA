@@ -3,7 +3,6 @@
 
 # Ignore supabase
 .temp
-config.toml
 seed.sql
 
 # Ignore docs
@@ -15,3 +14,8 @@ docs/css
 updater/node_modules
 updater/package-lock.json
 updater/.env
+
+# Supabase
+supabase/.branches
+supabase/.temp
+supabase/.env
