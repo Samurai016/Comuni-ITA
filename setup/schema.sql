@@ -20,7 +20,7 @@ CREATE TABLE public.comuni (
     pec character varying,
     telefono character varying,
     fax character varying,
-    popolazione integer,
+    popolazione integer
 );
 
 
