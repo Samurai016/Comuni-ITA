@@ -82,7 +82,7 @@ In generale i nomi vanno scritti utilizzando i caratteri speciali come apostrofi
 A causa delle risorse limitate di Supabase, è stato implementato un sistema di paging per evitare di sovraccaricare il server.   
 
 Il sistema di paging funziona mediante i parametri `page` e `pagesize` nell'URL.  
-Il numero della pagina viene specificato tramite il parametro `page` nell'URL. Ad esempio, per ottenere la seconda pagina di risultati, si può usare l'URL `/comuni?page=2`.
+Il numero della pagina viene specificato tramite il parametro `page` nell'URL. Ad esempio, per ottenere la seconda pagina di risultati, si può usare l'URL `/comuni?page=2`.  
 È possibile personalizzare il numero di elementi per pagina tramite il parametro `pagesize` nell'URL (**limitato comunque a massimo 500 elementi**).  
 
 # Installazione su progetto Supabase
