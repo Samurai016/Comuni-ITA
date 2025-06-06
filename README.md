@@ -80,12 +80,10 @@ In generale i nomi vanno scritti utilizzando i caratteri speciali come apostrofi
 # Sistema di paging
 
 A causa delle risorse limitate di Supabase, è stato implementato un sistema di paging per evitare di sovraccaricare il server.   
-**Il sistema limita la risposa a 500 elementi per pagina.**  
 
-Per ottenere i successivi 500 elementi è necessario specificare il parametro `page` nell'URL.  
-È possibile personalizzare il numero di elementi per pagina tramite il parametro `pagesize` nell'URL (limitato comunque a massimo 500 elementi).  
-
-**Essendo gli endpoint `/regioni` e `/province` molto leggeri, non è necessario specificare il parametro `page` per ottenere tutti i risultati.**
+Il sistema di paging funziona mediante i parametri `page` e `pagesize` nell'URL.  
+Il numero della pagina viene specificato tramite il parametro `page` nell'URL. Ad esempio, per ottenere la seconda pagina di risultati, si può usare l'URL `/comuni?page=2`.
+È possibile personalizzare il numero di elementi per pagina tramite il parametro `pagesize` nell'URL (**limitato comunque a massimo 500 elementi**).  
 
 # Installazione su progetto Supabase
 Tramite questa repo è possibile installare l'API su una propria istanza di Supabase seguendo la [guida di installazione](https://github.com/Samurai016/Comuni-ITA/blob/master/setup).
