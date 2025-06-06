@@ -32,7 +32,8 @@ export default async function (req: Request, name: string, pluralName: string, h
   } catch (error) {
     console.error(error);
 
-    return new Response(JSON.stringify({ error: error.message }), {
+    const errorObject = error instanceof Error ? error : (typeof error === "string" ? new Error(error) : new Error("Unknown error"));
+    return new Response(JSON.stringify({ error: errorObject.message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 400,
     });

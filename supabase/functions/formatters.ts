@@ -1,6 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { stringify as stringifyXML } from "https://deno.land/x/xml@2.1.3/mod.ts";
-import { udocument } from "https://deno.land/x/xml@2.1.3/utils/types.ts";
+import { stringify as stringifyXML } from "https://deno.land/x/xml@7.0.0/mod.ts";
 
 export enum Format {
   JSON = "json",
@@ -26,11 +25,18 @@ export class Formatter {
     const url = new URL(request.url);
     const params = url.searchParams;
 
+    // Gestisco paging
+    const total = data.length;
+    let page = null, pageSize = null;
+    if (params.has("page") || params.has("pagesize") || format === Format.XML) {
+      page = Math.max(parseInt(params.get("page") ?? "1"), 1);
+      pageSize = Math.min(parseInt(params.get("pagesize") ?? "500"), 500);
+      data = data.slice((page - 1) * pageSize, page * pageSize);
+    }
+
     switch (format) {
       case Format.XML: {
-        const page = parseInt(params.get("page") ?? "1");
-        const pageSize = parseInt(params.get("pagesize") ?? "500");
-        response = this.formatXml(data, page, pageSize);
+        response = this.formatXml(data, total, page!, pageSize!);
         mimeType = "application/xml";
         break;
       }
@@ -56,30 +62,21 @@ export class Formatter {
     return JSON.stringify(data);
   }
 
-  protected formatXml(data: Array<any>, page: number, pageSize: number): string {
-    // Configurazione
-    const minPage = 1;
-    const maxPageSize = 500;
-
-    // A causa delle risorse limitate, implemento un sistema di paging per le richieste XML
-    const sanitizedPage = Math.max(page, minPage);
-    const sanitizedPageSize = Math.min(pageSize, maxPageSize);
-    const start = Math.max((sanitizedPage - 1) * sanitizedPageSize, 0);
-    const end = Math.min(start + sanitizedPageSize, data.length);
-    const pageData = data.slice(start, end);
-
+  protected formatXml(data: Array<any>, total: number, page: number, pageSize: number): string {
     // Creo XML come richiesto dalla libreria
     // https://github.com/lowlighter/xml?tab=readme-ov-file#features
-    const xmlData: unknown = {
+    const xmlData = {
+      "@version": "1.0",
+      "@encoding": "UTF-8",
       [this.pluralName as string]: {
-        "@page": sanitizedPage.toString(),
-        "@pagesize": sanitizedPageSize.toString(),
-        "@total": data.length.toString(),
-        [this.name as string]: pageData,
+        "@page": page.toString(),
+        "@pagesize": pageSize.toString(),
+        "@total": total.toString(),
+        [this.name as string]: data,
       },
     };
 
-    return stringifyXML(xmlData as udocument);
+    return stringifyXML(xmlData);
   }
 
   protected formatCsv(data: Array<any>): string {
