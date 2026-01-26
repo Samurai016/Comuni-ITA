@@ -1,6 +1,6 @@
 {
   "name": "comuni-ita",
-  "version": "1.0.0",
+  "version": "4.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,8 +8,8 @@
     "start": "ts-node src/http/server.ts"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Nicolò Rebaioli <niko.reba@gmail.com> (https://nicolorebaioli.dev/)",
+  "license": "MIT",
   "type": "commonjs",
   "dependencies": {
     "@fastify/compress": "^8.3.1",
