@@ -27,6 +27,7 @@ const getProvincesOpts: RouteShorthandOptions = {
   },
 };
 
+// Filter functions
 const filterByRegione = (regione: string) => {
   const sanitizedRegione = normalizeString(regione);
   return (c: Provincia) => {
@@ -34,7 +35,7 @@ const filterByRegione = (regione: string) => {
   };
 };
 
-const applyFilter = (result: Provincia[], query: ProvinceQuery) => {
+const applyFilters = (result: Provincia[], query: ProvinceQuery) => {
   const { codice, sigla, regione } = query;
 
   if (codice) {
@@ -50,56 +51,41 @@ const applyFilter = (result: Provincia[], query: ProvinceQuery) => {
   return result;
 };
 
+const getProvince = (province: Provincia[], query: ProvinceQuery): Partial<Provincia>[] => {
+  // Filtering
+  let result: Partial<Provincia>[] = applyFilters(province, query);
+
+  // Sorting
+  result = applySorting(result, query.sort);
+
+  // Pagination
+  result = applyPagination(result, query.limit, query.offset);
+
+  // Projection (field selection)
+  result = applyProjection(result, query.fields);
+
+  return result;
+};
+
 export function provinceRoutes(fastify: FastifyInstance) {
   // GET /province
-  fastify.get<{ Querystring: ProvinceQuery; Reply: Provincia[] }>("/province", getProvincesOpts, (request, reply) => {
-    let result: Provincia[] = Array.from(dataset.provinceByCodice.values());
-
-    // Filtering
-    result = applyFilter(result, request.query);
-
-    // Sorting
-    result = applySorting(result, request.query.sort);
-
-    // Pagination
-    result = applyPagination(result, request.query.limit, request.query.offset);
-
-    // Projection (field selection)
-    const projectedResult = applyProjection(result, request.query.fields);
-
-    reply.send(projectedResult as Provincia[]);
+  fastify.get<{ Querystring: ProvinceQuery; Reply: Partial<Provincia>[] }>("/province", getProvincesOpts, (request, reply) => {
+    const province: Provincia[] = Array.from(dataset.provinceByCodice.values());
+    reply.send(getProvince(province, request.query));
   });
 
   // GET /province/:regione
-  fastify.get<{ Params: { regione: string }; Querystring: ProvinceQuery; Reply: Provincia[] }>(
-    "/province/:regione",
-    {
-      schema: {
-        params: Type.Object({
-          regione: Type.String(),
-        }),
-        querystring: ProvinceQuerySchema,
-        response: getProvincesOpts.schema?.response,
-      },
+  const provinceByRegioneSchema = {
+    schema: {
+      params: Type.Object({
+        regione: Type.String(),
+      }),
+      querystring: ProvinceQuerySchema,
+      response: getProvincesOpts.schema?.response,
     },
-    (request, reply) => {
-      const { regione } = request.params;
-
-      let result: Provincia[] = dataset.province.filter(filterByRegione(regione));
-
-      // Filtering
-      result = applyFilter(result, request.query);
-
-      // Sorting
-      result = applySorting(result, request.query.sort);
-
-      // Pagination
-      result = applyPagination(result, request.query.limit, request.query.offset);
-
-      // Projection (field selection)
-      const projectedResult = applyProjection(result, request.query.fields);
-
-      reply.send(projectedResult as Provincia[]);
-    },
-  );
+  };
+  fastify.get<{ Params: { regione: string }; Querystring: ProvinceQuery; Reply: Partial<Provincia>[] }>("/province/:regione", provinceByRegioneSchema, (request, reply) => {
+    const province: Provincia[] = dataset.province.filter(filterByRegione(request.params.regione));
+    reply.send(getProvince(province, request.query));
+  });
 }

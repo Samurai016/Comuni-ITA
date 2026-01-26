@@ -83,6 +83,7 @@ const applyFilters = (result: Comune[], query: ComuniQuery) => {
 };
 
 const getComuni = (comuni: Comune[], query: ComuniQuery): Partial<Comune>[] => {
+  // Filtering
   let result: Partial<Comune>[] = applyFilters(comuni, query);
 
   // Sorting
