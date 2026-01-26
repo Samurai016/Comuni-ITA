@@ -26,33 +26,25 @@ const getComuniOpts: RouteShorthandOptions = {
     querystring: ComuniQuerySchema,
     response: {
       200: {
-        type: "object",
-        properties: {
-          comuni: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                codice: { type: "string" },
-                nome: { type: "string" },
-                nomeStraniero: { type: "string" },
-                codiceCatastale: { type: "string" },
-                cap: { type: "string" },
-                prefisso: { type: "string" },
-                lat: { type: "number" },
-                lng: { type: "number" },
-                provincia: { type: "string" },
-                email: { type: "string" },
-                pec: { type: "string" },
-                telefono: { type: "string" },
-                fax: { type: "string" },
-                popolazione: { type: "number" },
-              },
-            },
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            codice: { type: "string" },
+            nome: { type: "string" },
+            nomeStraniero: { type: "string" },
+            codiceCatastale: { type: "string" },
+            cap: { type: "string" },
+            prefisso: { type: "string" },
+            lat: { type: "number" },
+            lng: { type: "number" },
+            provincia: { type: "string" },
+            email: { type: "string" },
+            pec: { type: "string" },
+            telefono: { type: "string" },
+            fax: { type: "string" },
+            popolazione: { type: "number" },
           },
-          count: { type: "number" },
-          limit: { type: "number" },
-          offset: { type: "number" },
         },
       },
     },
@@ -99,6 +91,7 @@ export async function comuniRoutes(fastify: FastifyInstance) {
       });
     }
 
+    const totalCount = result.length;
     // Pagination
     const paginatedResult = result.slice(offset, offset + limit);
 
@@ -152,6 +145,7 @@ export async function comuniRoutes(fastify: FastifyInstance) {
         });
       }
 
+      const totalCount = result.length;
       const paginatedResult = result.slice(offset, offset + limit);
 
       const projectedResult = paginatedResult.map((comune) => {
@@ -201,6 +195,7 @@ export async function comuniRoutes(fastify: FastifyInstance) {
         });
       }
 
+      const totalCount = result.length;
       const paginatedResult = result.slice(offset, offset + limit);
 
       const projectedResult = paginatedResult.map((comune) => {
