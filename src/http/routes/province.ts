@@ -50,9 +50,9 @@ const applyFilter = (result: Provincia[], query: ProvinceQuery) => {
   return result;
 };
 
-export async function provinceRoutes(fastify: FastifyInstance) {
+export function provinceRoutes(fastify: FastifyInstance) {
   // GET /province
-  fastify.get<{ Querystring: ProvinceQuery; Reply: Provincia[] }>("/province", getProvincesOpts, async (request, reply) => {
+  fastify.get<{ Querystring: ProvinceQuery; Reply: Provincia[] }>("/province", getProvincesOpts, (request, reply) => {
     let result: Provincia[] = Array.from(dataset.provinceByCodice.values());
 
     // Filtering
@@ -82,7 +82,7 @@ export async function provinceRoutes(fastify: FastifyInstance) {
         response: getProvincesOpts.schema?.response,
       },
     },
-    async (request, reply) => {
+    (request, reply) => {
       const { regione } = request.params;
 
       let result: Provincia[] = dataset.province.filter(filterByRegione(regione));

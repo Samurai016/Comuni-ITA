@@ -98,9 +98,9 @@ const getComuni = (comuni: Comune[], query: ComuniQuery): Partial<Comune>[] => {
 };
 
 // Define route handlers
-export async function comuniRoutes(fastify: FastifyInstance) {
+export function comuniRoutes(fastify: FastifyInstance) {
   // GET /comuni
-  fastify.get<{ Querystring: ComuniQuery; Reply: Partial<Comune>[] }>("/comuni", getComuniOpts, async (request, reply) => {
+  fastify.get<{ Querystring: ComuniQuery; Reply: Partial<Comune>[] }>("/comuni", getComuniOpts, (request, reply) => {
     const comuni: Comune[] = Array.from(dataset.comuniByCodice.values());
     reply.send(getComuni(comuni, request.query));
   });
@@ -130,7 +130,7 @@ export async function comuniRoutes(fastify: FastifyInstance) {
       response: getComuniOpts.schema?.response,
     },
   };
-  fastify.get<{ Params: { provincia: string }; Querystring: ComuniQuery; Reply: Partial<Comune>[] }>("/comuni/provincia/:provincia", comuniByProvinciaSchema, async (request, reply) => {
+  fastify.get<{ Params: { provincia: string }; Querystring: ComuniQuery; Reply: Partial<Comune>[] }>("/comuni/provincia/:provincia", comuniByProvinciaSchema, (request, reply) => {
     const comuni: Comune[] = dataset.comuni.filter(filterByProvincia(request.params.provincia));
     reply.send(getComuni(comuni, request.query));
   });

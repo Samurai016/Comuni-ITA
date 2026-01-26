@@ -14,9 +14,9 @@ const getRegioniOpts: RouteShorthandOptions = {
   },
 };
 
-export async function regioniRoutes(fastify: FastifyInstance) {
+export function regioniRoutes(fastify: FastifyInstance) {
   // GET /regioni
-  fastify.get<{ Reply: string[] }>("/regioni", getRegioniOpts, async (request, reply) => {
+  fastify.get<{ Reply: string[] }>("/regioni", getRegioniOpts, (request, reply) => {
     const regioni = Array.from(dataset.regioni);
     reply.send(regioni);
   });
