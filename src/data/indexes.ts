@@ -1,15 +1,15 @@
 // src/data/indexes.ts
 
-import { Comune, Provincia, Regione } from '../domain/types';
-import { normalizeString } from '../domain/normalization';
-import * as comuniData from '../../data/comuni.json';
-import * as provinceData from '../../data/province.json';
-import * as regioniData from '../../data/regioni.json';
+import { Comune, Provincia } from "../domain/types";
+import { normalizeString } from "../domain/normalization";
+import * as comuniData from "../../data/comuni.json";
+import * as provinceData from "../../data/province.json";
+import * as regioniData from "../../data/regioni.json";
 
 interface Dataset {
   comuni: Comune[];
   province: Provincia[];
-  regioni: Regione[];
+  regioni: string[];
   // Indexes for efficient lookup
   comuniByCodice: Map<string, Comune>;
   comuniByProvincia: Map<string, Comune[]>;
@@ -20,8 +20,6 @@ interface Dataset {
   provinceByCodice: Map<string, Provincia>;
   provinceBySigla: Map<string, Provincia>;
   provinceByRegione: Map<string, Provincia[]>;
-
-  regioniByNome: Map<string, Regione>;
 }
 
 export const dataset: Dataset = {
@@ -36,17 +34,13 @@ export const dataset: Dataset = {
   provinceByCodice: new Map(),
   provinceBySigla: new Map(),
   provinceByRegione: new Map(),
-  regioniByNome: new Map(),
 };
 
 export function loadAndIndexData() {
-  console.log('Loading and indexing data...');
+  console.log("Loading and indexing data...");
 
   // Load regioni
-  dataset.regioni = (regioniData as any).default as Regione[];
-  dataset.regioni.forEach((regione) => {
-    dataset.regioniByNome.set(regione.nome, regione);
-  });
+  dataset.regioni = (regioniData as any).default as string[];
 
   // Load province
   dataset.province = (provinceData as any).default as Provincia[];
@@ -83,14 +77,13 @@ export function loadAndIndexData() {
       dataset.comuniByCap.set(cap, []);
     }
     dataset.comuniByCap.get(cap)?.push(comune);
-    
 
     const normalizedNome = normalizeString(comune.nome);
     if (!dataset.comuniByNomeNormalized.has(normalizedNome)) {
       dataset.comuniByNomeNormalized.set(normalizedNome, []);
     }
     dataset.comuniByNomeNormalized.get(normalizedNome)?.push(comune);
-    
+
     if (comune.nomeStraniero) {
       const normalizedNomeStraniero = normalizeString(comune.nomeStraniero);
       if (!dataset.comuniByNomeNormalized.has(normalizedNomeStraniero)) {
@@ -98,7 +91,6 @@ export function loadAndIndexData() {
       }
       dataset.comuniByNomeNormalized.get(normalizedNomeStraniero)?.push(comune);
     }
-
   });
 
   console.log(`Data loaded: ${dataset.comuni.length} comuni, ${dataset.province.length} province, ${dataset.regioni.length} regioni`);

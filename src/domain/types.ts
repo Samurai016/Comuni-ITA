@@ -23,7 +23,3 @@ export interface Provincia {
   sigla: string;
   regione: string; // FK -> regione.nome
 }
-
-export interface Regione {
-  nome: string;
-}
