@@ -1,5 +1,4 @@
 import { Comune, Provincia } from "../domain/types";
-import { normalizeString } from "../domain/normalization";
 import * as comuniData from "../../data/comuni.json";
 import * as provinceData from "../../data/province.json";
 import * as regioniData from "../../data/regioni.json";
@@ -12,8 +11,6 @@ interface Dataset {
   comuniByCodice: Map<string, Comune>;
   comuniByProvincia: Map<string, Comune[]>;
   comuniByRegione: Map<string, Comune[]>;
-  comuniByCap: Map<string, Comune[]>;
-  comuniByNomeNormalized: Map<string, Comune[]>;
 
   provinceByCodice: Map<string, Provincia>;
   provinceBySigla: Map<string, Provincia>;
@@ -27,8 +24,6 @@ export const dataset: Dataset = {
   comuniByCodice: new Map(),
   comuniByProvincia: new Map(),
   comuniByRegione: new Map(),
-  comuniByCap: new Map(),
-  comuniByNomeNormalized: new Map(),
   provinceByCodice: new Map(),
   provinceBySigla: new Map(),
   provinceByRegione: new Map(),
@@ -68,26 +63,6 @@ export function loadAndIndexData() {
         dataset.comuniByRegione.set(associatedProvincia.regione, []);
       }
       dataset.comuniByRegione.get(associatedProvincia.regione)?.push(comune);
-    }
-
-    const cap = comune.cap;
-    if (!dataset.comuniByCap.has(cap)) {
-      dataset.comuniByCap.set(cap, []);
-    }
-    dataset.comuniByCap.get(cap)?.push(comune);
-
-    const normalizedNome = normalizeString(comune.nome);
-    if (!dataset.comuniByNomeNormalized.has(normalizedNome)) {
-      dataset.comuniByNomeNormalized.set(normalizedNome, []);
-    }
-    dataset.comuniByNomeNormalized.get(normalizedNome)?.push(comune);
-
-    if (comune.nomeStraniero) {
-      const normalizedNomeStraniero = normalizeString(comune.nomeStraniero);
-      if (!dataset.comuniByNomeNormalized.has(normalizedNomeStraniero)) {
-        dataset.comuniByNomeNormalized.set(normalizedNomeStraniero, []);
-      }
-      dataset.comuniByNomeNormalized.get(normalizedNomeStraniero)?.push(comune);
     }
   });
 
