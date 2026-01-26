@@ -1,5 +1,3 @@
-// src/data/indexes.ts
-
 import { Comune, Provincia } from "../domain/types";
 import { normalizeString } from "../domain/normalization";
 import * as comuniData from "../../data/comuni.json";
@@ -58,13 +56,13 @@ export function loadAndIndexData() {
   dataset.comuni.forEach((comune) => {
     dataset.comuniByCodice.set(comune.codice, comune);
 
-    if (!dataset.comuniByProvincia.has(comune.provincia)) {
-      dataset.comuniByProvincia.set(comune.provincia, []);
+    if (!dataset.comuniByProvincia.has(comune.provincia.codice)) {
+      dataset.comuniByProvincia.set(comune.provincia.codice, []);
     }
-    dataset.comuniByProvincia.get(comune.provincia)?.push(comune);
+    dataset.comuniByProvincia.get(comune.provincia.codice)?.push(comune);
 
     // Assuming we can derive region from province, or it's directly available
-    const associatedProvincia = dataset.provinceByCodice.get(comune.provincia);
+    const associatedProvincia = dataset.provinceByCodice.get(comune.provincia.codice);
     if (associatedProvincia) {
       if (!dataset.comuniByRegione.has(associatedProvincia.regione)) {
         dataset.comuniByRegione.set(associatedProvincia.regione, []);
