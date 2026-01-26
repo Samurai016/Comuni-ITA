@@ -1,4 +1,4 @@
-import { Type, Static } from "@sinclair/typebox";
+import { Type } from "@sinclair/typebox";
 
 export const CommonQuerySchema = {
   sort: Type.Optional(Type.String()),
