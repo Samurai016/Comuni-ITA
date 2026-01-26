@@ -1,198 +1,250 @@
-# Comuni-ITA API
+# [Comuni ITA API](https://comuni-ita.readme.io/)
 
-This is a high-performance HTTP API that serves Italian municipalities (comuni), provinces, and regions. The dataset is small, mostly static, and loaded entirely in memory for fast, cacheable responses.
+![Versione](https://img.shields.io/github/v/release/Samurai016/Comuni-ITA?style=flat-square&label=versione)
+[![Leggi la documentazione](https://img.shields.io/badge/Leggi%20la%20documentazione-passing?style=flat-square&logo=Read%20the%20Docs&labelColor=8CA1AF&color=8CA1AF&logoColor=white)](https://comuni-ita.readme.io/)
 
-## Core Goals
+## Indice
 
--   **Very high performance**: Minimal per-request CPU and allocations, predictable latency.
--   **TypeScript stack**: Node.js LTS with a Fastify-based HTTP server.
--   **Cache-first design**: Strong HTTP caching (ETag, Cache-Control) and deterministic responses.
--   **Simple Docker deployment**: Single container, served behind Nginx reverse proxy.
+- [⚡Panoramica](#panoramica)
+- [📚 Endpoint API](#endpoint-api)
+  - [GET /comuni](#get-comuni)
+  - [GET /comuni/:regione](#get-comuni-regione)
+  - [GET /comuni/provincia/:provincia](#get-comuni-provincia-provincia)
+  - [GET /province](#get-province)
+  - [GET /province/:regione](#get-province-regione)
+  - [GET /regioni](#get-regioni)
+- [📊 Parametri di Query](#parametri-di-query)
+- [🚀 Deploy](#deploy)
+- [🛠️ Sviluppo](#sviluppo)
 
-## Setup and Running
+## ⚡ Panoramica
 
-### Prerequisites
+`comuni-ita` è un'API Node.js leggera e ad alte prestazioni costruita con [Fastify](https://www.fastify.io/). Fornisce accesso istantaneo a un dataset completo di comuni, province e regioni italiane.
 
--   Node.js (LTS recommended)
--   npm (or yarn/pnpm)
--   Docker (for containerized deployment)
+I dati sono ottenuti e aggiornati da un sistema semiautomatico che preleva i dati direttamente dagli archivi ISTAT e integra le informazioni mancanti interrogando Wikidata.
 
-### Local Development
+## 📚 Endpoint API
 
-1.  **Clone the repository (if not already done):**
+### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni`
+
+Recupera informazioni dettagliate sui comuni italiani.
+
+#### Filtri
+
+- `codice`: Filtra per codice ISTAT esatto.
+- `provincia`: Filtra per nome della provincia (corrispondenza esatta, case-insensitive).
+- `regione`: Filtra per nome della regione (corrispondenza esatta, case-insensitive).
+- `cap`: Filtra per codice postale (CAP).
+- `q`: Ricerca parziale per nome (es. "milano").
+
+#### Esempi
+
+Query per ottenere i primi 10 comuni italiani, ordinati alfabeticamente per nome e mostrando solo il nome, il codice e il CAP.
+
+```http
+GET /comuni?regione=lombardia&sort=nome&fields=nome,codice,cap&limit=10
+```
+
+Query per ottenere tutti i comuni con CAP 20121.
+
+```http
+GET /comuni?cap=20121
+```
+
+Query per ottenere tutti i comuni che contengono "milano" nel nome.
+
+```http
+GET /comuni?q=milano
+```
+
+### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni/:regione`
+
+Recupera informazioni dettagliate sui comuni di una regione specifica.
+
+#### Filtri
+
+- `codice`: Filtra per codice ISTAT esatto.
+- `provincia`: Filtra per nome della provincia (corrispondenza esatta, case-insensitive).
+- `cap`: Filtra per codice postale (CAP).
+- `q`: Ricerca parziale per nome (es. "milano").
+
+#### Esempi
+
+Query per ottenere tutti i comuni lombardi che contengono "milano" nel nome.
+
+```http
+GET /comuni/lombardia?q=milano
+```
+
+Query per ottenere tutti i comuni della Valle d'Aosta.
+
+```http
+GET /comuni/valle d'aosta
+GET /comuni/valle-d'aosta
+GET /comuni/valle-d-aosta
+```
+
+### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni/provincia/:provincia`
+
+Recupera informazioni dettagliate sui comuni di una provincia specifica.
+
+#### Filtri
+
+- `codice`: Filtra per codice ISTAT esatto.
+- `cap`: Filtra per codice postale (CAP).
+- `q`: Ricerca parziale per nome (es. "milano").
+
+#### Esempi
+
+Query per ottenere tutti i comuni della provincia di Milano.
+
+```http
+GET /comuni/provincia/milano
+```
+
+Query per ottenere tutti i comuni della provincia di Milano che contengono "milano" nel nome.
+
+```http
+GET /comuni/provincia/milano?q=milano
+```
+
+### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/province`
+
+Recupera informazioni dettagliate sulle province italiane.
+
+#### Filtri
+
+- `codice`: Filtra per codice ISTAT esatto.
+- `regione`: Filtra per nome della regione (corrispondenza esatta, case-insensitive).
+
+#### Esempi
+
+Query per ottenere tutte le province italiane.
+
+```http
+GET /province
+```
+
+Query per ottenere tutte le province italiane che contengono "reggio" nel nome.
+
+```http
+GET /province?q=reggio
+```
+
+### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/province/:regione`
+
+Recupera informazioni dettagliate sulle province italiane di una regione specifica.
+
+#### Filtri
+
+- `codice`: Filtra per codice ISTAT esatto.
+
+#### Esempi
+
+Query per ottenere tutte le province italiane della regione di Lombardia.
+
+```http
+GET /province/lombardia
+```
+
+### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/regioni`
+
+Recupera informazioni dettagliate sulle regioni italiane.
+
+#### Esempi
+
+Query per ottenere tutte le regioni italiane.
+
+```http
+GET /regioni
+```
+
+## 📊 Parametri di Query
+
+### 🌪️ Ordinamento (Sorting)
+
+Usa il parametro `sort` per ordinare i risultati.
+
+- **Crescente:** `?sort=nome`
+- **Decrescente:** `?sort=-nome` (aggiungi il prefisso `-`)
+
+### ✂️ Proiezione (Selezione Campi)
+
+Riduci la dimensione del payload selezionando solo i campi necessari usando `fields`.
+
+- **Esempio:** `?fields=nome,codice,cap`
+
+### 📄 Paginazione
+
+Controlla la quantità di dati restituiti.
+
+- `limit`: Numero di elementi da restituire (predefinito: `100`).
+- `offset`: Numero di elementi da saltare (predefinito: `0`).
+
+## 🚀 Deploy
+
+Puoi eseguire il deploy di `comuni-ita` utilizzando ambienti Node.js standard o Docker.
+
+### 🐳 Usando Docker
+
+Forniamo un setup pronto all'uso con **Dockerfile** e **docker-compose**.
+
+1.  **Build ed Esecuzione:**
     ```bash
-    git clone <your-repo-url>
+    docker-compose up --build -d
+    ```
+2.  **Accesso:**
+    L'API sarà disponibile su `http://localhost:8080`.
+
+### 🟢 Usando Node.js
+
+1.  **Installa le dipendenze:**
+    ```bash
+    npm install
+    ```
+2.  **Avvia il Server:**
+    ```bash
+    npm start
+    ```
+    Questo comando usa `ts-node` per eseguire il server direttamente.
+
+**Variabili d'Ambiente:**
+
+- `PORT`: Porta di ascolto (predefinito: `8080`).
+
+---
+
+## 🤝 Sviluppo
+
+Vuoi aggiungere funzionalità o contribuire? I contributi sono benvenuti!
+
+1.  **Clona la Repo:**
+
+    ```bash
+    git clone https://github.com/tuo-username/comuni-ita.git
     cd comuni-ita
     ```
 
-2.  **Install dependencies:**
+2.  **Installa le dipendenze:**
+
     ```bash
     npm install
     ```
 
-3.  **Prepare data:**
-    Place your `comuni.json`, `province.json`, and `regioni.json` files into the `data/` directory. Empty placeholder files are provided.
+3.  **Esegui in Locale:**
 
-4.  **Run the API in development mode:**
     ```bash
     npm start
     ```
-    The API will start on `http://localhost:8080`. Logging will be pretty-printed to the console.
 
-### Docker Deployment
+4.  **Struttura del Progetto:**
+    - `src/http/routes`: Definisce gli endpoint dell'API.
+    - `src/data`: Gestisce il caricamento e l'indicizzazione dei dati.
+    - `src/domain`: Tipi e logica di business.
 
-1.  **Build the Docker image:**
-    ```bash
-    docker build -t comuni-ita-api .
-    ```
+5.  **Invia una PR:**
+    Apporta le tue modifiche, testale localmente e apri una Pull Request!
 
-2.  **Run the Docker container:**
-    ```bash
-    docker run -p 8080:8080 comuni-ita-api
-    ```
-    The API will be accessible on `http://localhost:8080`.
+---
 
-## API Endpoints
-
-All responses include `Cache-Control: public, max-age=86400, stale-while-revalidate=604800` and an `ETag` header.
-
-### 1. Regioni
-
-**`GET /regioni`**
-
-Returns a list of all Italian regions.
-
-**Example:**
-```
-GET /regioni
-```
-
-### 2. Province
-
-**`GET /province`**
-
-Returns a list of all Italian provinces.
-
-**`GET /province/:regione`**
-
-Returns provinces belonging to a specific region.
-
-**Query Parameters:**
-
--   `codice`: Filter by province code.
--   `sigla`: Filter by province abbreviation.
--   `regione`: Filter by region name.
--   `sort`: Sort results by field (e.g., `nome`, `codice`). Use `-` prefix for descending (e.g., `-nome`).
--   `limit`: Maximum number of results (default: 100, max: 1000).
--   `offset`: Number of results to skip.
--   `fields`: Comma-separated list of fields to include in the response (e.g., `codice,nome,sigla`).
-
-**Example:**
-```
-GET /province?regione=Lombardia&sort=nome&limit=5&fields=nome,sigla
-```
-
-### 3. Comuni
-
-**`GET /comuni`**
-
-Returns a list of all Italian municipalities.
-
-**`GET /comuni/:regione`**
-
-Returns municipalities belonging to a specific region.
-
-**`GET /comuni/provincia/:provincia`**
-
-Returns municipalities belonging to a specific province.
-
-**Query Parameters:**
-
--   `codice`: Filter by municipality code.
--   `provincia`: Filter by province code.
--   `regione`: Filter by region name.
--   `cap`: Filter by CAP (postal code).
--   `q`: Case- and accent-insensitive search by municipality name (`nome` or `nomeStraniero`).
--   `sort`: Sort results by field (e.g., `nome`, `codice`, `popolazione`). Use `-` prefix for descending (e.g., `-nome`).
--   `limit`: Maximum number of results (default: 100, max: 1000).
--   `offset`: Number of results to skip.
--   `fields`: Comma-separated list of fields to include in the response (e.g., `codice,nome,provincia`).
-
-**Example:**
-```
-GET /comuni?q=milano&provincia=MI&limit=10&fields=nome,cap,popolazione
-```
-
-## Data Model
-
-The API uses an in-memory data model based on the following structures:
-
-```typescript
-// Comune
-interface Comune {
-  codice: string;
-  nome: string;
-  nomeStraniero?: string;
-  codiceCatastale: string;
-  cap: string[];
-  prefisso: string;
-  lat: number;
-  lng: number;
-  provincia: string; // FK -> provincia.codice
-  email?: string;
-  pec?: string;
-  telefono?: string;
-  fax?: string;
-  popolazione?: number;
-}
-
-// Provincia
-interface Provincia {
-  codice: string;
-  nome: string;
-  sigla: string;
-  regione: string; // FK -> regione.nome
-}
-
-// Regione
-interface Regione {
-  nome: string;
-}
-```
-
-## Observability
-
-The API uses Pino for structured logging. In production, logs are minimal.
-
-## Performance Constraints
-
-The API is designed for high performance:
-
--   No ORMs or runtime reflection.
--   Precomputed indexes for fast lookups.
--   Fast JSON serialization via TypeBox schemas.
-
-## Project Structure
-
-```
-src/
-  data/
-    comuni.ts (generated)
-    province.ts (generated)
-    regioni.ts (generated)
-    indexes.ts        # Data loading and in-memory indexes
-  http/
-    server.ts         # Fastify server setup
-    routes/
-      comuni.ts       # Comuni routes
-      province.ts     # Province routes
-      regioni.ts      # Regioni routes
-  domain/
-    types.ts          # TypeScript interfaces for data models
-    normalization.ts  # String normalization utilities
-  config/             # Configuration (e.g., environment variables)
-data/
-  comuni.json         # Raw comuni data (placeholder)
-  province.json       # Raw province data (placeholder)
-  regioni.json        # Raw regioni data (placeholder)
-```
+_Realizzato con ❤️ per la community di sviluppatori italiani._
