@@ -1,6 +1,6 @@
 import Fastify from "fastify";
-// import compress from '@fastify/compress';
-// import etag from '@fastify/etag';
+import compress from "@fastify/compress";
+import etag from "@fastify/etag";
 import { loadAndIndexData } from "../data/indexes";
 
 const fastify = Fastify({
@@ -20,8 +20,8 @@ import { provinceRoutes } from "./routes/province";
 import { comuniRoutes } from "./routes/comuni";
 
 // Register plugins
-// fastify.register(compress);
-// fastify.register(etag);
+fastify.register(compress);
+fastify.register(etag);
 fastify.register(regioniRoutes);
 fastify.register(provinceRoutes);
 fastify.register(comuniRoutes);
