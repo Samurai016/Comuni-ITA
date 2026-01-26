@@ -1,0 +1,9 @@
+node_modules
+dist
+npm-debug.log
+.vscode
+.git
+.gitignore
+.env
+data/*.json # Exclude actual data files from initial build if they are large and will be mounted/copied separately
+src/**/*.ts # Source files are compiled to dist

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  comuni-ita-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: development # Or 'production' if you want to test the production build locally
+      PORT: 8080
+    volumes:
+      - ./data:/app/data # Mount the data directory for easy updates
+      # - ./src:/app/src # Optional: Mount src for live reloading if using ts-node directly in container for dev
+    restart: unless-stopped
