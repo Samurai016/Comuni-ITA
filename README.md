@@ -31,7 +31,7 @@ L'API è disponibile gratuitamente e senza limitazioni all'indirizzo `https://co
 
 ## 📚 Endpoint API
 
-### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni`
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni`](https://comuni-ita.nicolorebaioli.dev/comuni)
 
 Recupera informazioni dettagliate sui comuni italiani.
 
@@ -63,7 +63,7 @@ Query per ottenere tutti i comuni che contengono "milano" nel nome.
 GET /comuni?q=milano
 ```
 
-### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni/:regione`
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni/:regione`](https://comuni-ita.nicolorebaioli.dev/comuni/lombardia)
 
 Recupera informazioni dettagliate sui comuni di una regione specifica.
 
@@ -90,7 +90,7 @@ GET /comuni/valle-d'aosta
 GET /comuni/valle-d-aosta
 ```
 
-### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni/provincia/:provincia`
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni/provincia/:provincia`](https://comuni-ita.nicolorebaioli.dev/comuni/provincia/milano)
 
 Recupera informazioni dettagliate sui comuni di una provincia specifica.
 
@@ -114,7 +114,7 @@ Query per ottenere tutti i comuni della provincia di Milano che contengono "mila
 GET /comuni/provincia/milano?q=milano
 ```
 
-### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/province`
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/province`](https://comuni-ita.nicolorebaioli.dev/province)
 
 Recupera informazioni dettagliate sulle province italiane.
 
@@ -137,7 +137,7 @@ Query per ottenere tutte le province italiane che contengono "reggio" nel nome.
 GET /province?q=reggio
 ```
 
-### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/province/:regione`
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/province/:regione`](https://comuni-ita.nicolorebaioli.dev/province/lombardia)
 
 Recupera informazioni dettagliate sulle province italiane di una regione specifica.
 
@@ -153,7 +153,7 @@ Query per ottenere tutte le province italiane della regione di Lombardia.
 GET /province/lombardia
 ```
 
-### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/regioni`
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/regioni`](https://comuni-ita.nicolorebaioli.dev/regioni)
 
 Recupera informazioni dettagliate sulle regioni italiane.
 
