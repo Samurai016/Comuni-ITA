@@ -1,6 +1,7 @@
 import Fastify from "fastify";
 import compress from "@fastify/compress";
 import etag from "@fastify/etag";
+import cors from "@fastify/cors";
 import { loadAndIndexData } from "../data/indexes";
 
 const fastify = Fastify({
@@ -18,10 +19,14 @@ const fastify = Fastify({
 import { regioniRoutes } from "./routes/regioni";
 import { provinceRoutes } from "./routes/province";
 import { comuniRoutes } from "./routes/comuni";
+import { responseFormatter } from "./plugins/response-formatter";
 
 // Register plugins
+fastify.register(cors);
 fastify.register(compress);
 fastify.register(etag);
+fastify.register(responseFormatter);
+
 fastify.register(regioniRoutes);
 fastify.register(provinceRoutes);
 fastify.register(comuniRoutes);
