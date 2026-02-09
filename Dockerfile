@@ -1,5 +1,5 @@
 # Use a lightweight Node.js image as the base
-FROM node:lts-alpine as base
+FROM node:lts-alpine AS base
 
 # Create app directory
 WORKDIR /app
@@ -20,7 +20,7 @@ RUN npm install typescript
 RUN npx tsc
 
 # --- Production Stage ---
-FROM node:lts-alpine as production
+FROM node:lts-alpine AS production
 
 # Set environment to production
 ENV NODE_ENV production

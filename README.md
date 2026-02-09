@@ -15,7 +15,6 @@
   - [GET /regioni](#get-regioni)
 - [📊 Parametri di Query](#parametri-di-query)
 - [🚀 Deploy](#deploy)
-- [🛠️ Sviluppo](#sviluppo)
 
 ## ⚡ Panoramica
 
@@ -178,8 +177,8 @@ Riduci la dimensione del payload selezionando solo i campi necessari usando `fie
 
 Controlla la quantità di dati restituiti.
 
-- `limit`: Numero di elementi da restituire (predefinito: `100`).
-- `offset`: Numero di elementi da saltare (predefinito: `0`).
+- `page`: Numero di pagina da restituire (predefinito: `1`).
+- `pagesize`: Numero di elementi per pagina (predefinito: `INFINITE`: vengono restituiti tutti gli elementi).
 
 ## 🚀 Deploy
 
@@ -198,53 +197,13 @@ Forniamo un setup pronto all'uso con **Dockerfile** e **docker-compose**.
 
 ### 🟢 Usando Node.js
 
-1.  **Installa le dipendenze:**
-    ```bash
-    npm install
-    ```
-2.  **Avvia il Server:**
-    ```bash
-    npm start
-    ```
-    Questo comando usa `ts-node` per eseguire il server direttamente.
+```bash
+git clone https://github.com/Samurai016/Comuni-ITA
+cd Comuni-ITA
 
-**Variabili d'Ambiente:**
+# Installa le dipendenze e avvia l'API
+npm install
+npm start
+```
 
-- `PORT`: Porta di ascolto (predefinito: `8080`).
-
----
-
-## 🤝 Sviluppo
-
-Vuoi aggiungere funzionalità o contribuire? I contributi sono benvenuti!
-
-1.  **Clona la Repo:**
-
-    ```bash
-    git clone https://github.com/tuo-username/comuni-ita.git
-    cd comuni-ita
-    ```
-
-2.  **Installa le dipendenze:**
-
-    ```bash
-    npm install
-    ```
-
-3.  **Esegui in Locale:**
-
-    ```bash
-    npm start
-    ```
-
-4.  **Struttura del Progetto:**
-    - `src/http/routes`: Definisce gli endpoint dell'API.
-    - `src/data`: Gestisce il caricamento e l'indicizzazione dei dati.
-    - `src/domain`: Tipi e logica di business.
-
-5.  **Invia una PR:**
-    Apporta le tue modifiche, testale localmente e apri una Pull Request!
-
----
-
-_Realizzato con ❤️ per la community di sviluppatori italiani._
+L'API sarà disponibile su `http://localhost:8080`.
