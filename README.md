@@ -22,6 +22,13 @@
 
 I dati sono ottenuti e aggiornati da un sistema semiautomatico che preleva i dati direttamente dagli archivi ISTAT e integra le informazioni mancanti interrogando Wikidata.
 
+L'API è disponibile gratuitamente e senza limitazioni all'indirizzo `https://comuni-ita.nicolorebaioli.dev/` oppure può essere facilmente eseguita in locale o distribuita su qualsiasi piattaforma Node.js o Docker.
+
+> **⚠️ Attenzione ⚠️**
+> **Il vecchio link https://axqvoqvbfjpaamphztgd.functions.supabase.co e la vecchia versione v3 basata su Supabase sono temporaneamente disponibili ma d'ora in poi faranno redirect al nuovo dominio e alla nuova versione v4 basata su Fastify.**  
+> **Le risposte e il funzionamento della versione v3 sono invariati** e non richiedono quindi modifiche ai software che utilizzano l'API, ma si consiglia di aggiornare al più presto alla nuova versione v4 per beneficiare di prestazioni migliorate.  
+> La versione v3 hostata su Supabase è soggetta a limitazioni di utilizzo e prestazioni, e l'incremento della popolarità dell'API ha portato a superare di gran largo queste limitazioni, **mi aspetto una sospension del progetto v3 su Supabase**, motivo per il quale ho deciso di sviluppare una nuova versione v4 basata su Fastify e hostata su un'infrastruttura più performante e scalabile.
+
 ## 📚 Endpoint API
 
 ### ![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni`
