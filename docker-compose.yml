@@ -1,5 +1,6 @@
 services:
   comuni-ita-api:
+    container_name: comuni-ita-api
     build:
       context: .
       dockerfile: Dockerfile
