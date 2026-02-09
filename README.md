@@ -5,16 +5,16 @@
 
 ## Indice
 
-- [⚡Panoramica](#panoramica)
-- [📚 Endpoint API](#endpoint-api)
-  - [GET /comuni](#get-comuni)
-  - [GET /comuni/:regione](#get-comuni-regione)
-  - [GET /comuni/provincia/:provincia](#get-comuni-provincia-provincia)
-  - [GET /province](#get-province)
-  - [GET /province/:regione](#get-province-regione)
-  - [GET /regioni](#get-regioni)
-- [📊 Parametri di Query](#parametri-di-query)
-- [🚀 Deploy](#deploy)
+- [⚡Panoramica](#-panoramica)
+- [📚 Endpoint API](#-endpoint-api)
+  - [GET /comuni](#-comuni)
+  - [GET /comuni/:regione](#-comuniregione)
+  - [GET /comuni/provincia/:provincia](#-comuniprovincaprovincia)
+  - [GET /province](#-province)
+  - [GET /province/:regione](#-provinceregione)
+  - [GET /regioni](#-regioni)
+- [📊 Parametri di Query](#-parametri-di-query)
+- [🚀 Deploy](#-deploy)
 
 ## ⚡ Panoramica
 
