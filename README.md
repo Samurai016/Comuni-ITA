@@ -1,6 +1,11 @@
+<p align="center">
+  <img src="./docs/logo.png" alt="Comuni ITA Logo" />
+</p>
+
 # [Comuni ITA API](https://comuni-ita.readme.io/)
 
 ![Versione](https://img.shields.io/github/v/release/Samurai016/Comuni-ITA?style=flat-square&label=versione)
+![Licenza](https://img.shields.io/github/license/Samurai016/Comuni-ITA?style=flat-square&label=licenza)
 [![Leggi la documentazione](https://img.shields.io/badge/Leggi%20la%20documentazione-passing?style=flat-square&logo=Read%20the%20Docs&labelColor=8CA1AF&color=8CA1AF&logoColor=white)](https://comuni-ita.readme.io/)
 
 ## Indice
@@ -23,6 +28,9 @@
 I dati sono ottenuti e aggiornati da un sistema semiautomatico che preleva i dati direttamente dagli archivi ISTAT e integra le informazioni mancanti interrogando Wikidata.
 
 L'API è disponibile gratuitamente e senza limitazioni all'indirizzo `https://comuni-ita.nicolorebaioli.dev/` oppure può essere facilmente eseguita in locale o distribuita su qualsiasi piattaforma Node.js o Docker.
+
+La documentazione è disponibile anche all'indirizzo [https://comuni-ita.readme.io/](https://comuni-ita.readme.io/).
+
 
 > **⚠️ Attenzione ⚠️**
 > **Il vecchio link https://axqvoqvbfjpaamphztgd.functions.supabase.co e la vecchia versione v3 basata su Supabase sono temporaneamente disponibili ma d'ora in poi faranno redirect al nuovo dominio e alla nuova versione v4 basata su Fastify.**  
@@ -214,3 +222,7 @@ npm start
 ```
 
 L'API sarà disponibile su `http://localhost:8080`.
+
+---
+
+Credits: Logo inpired by: [Castle by Jasfart from the Noun Project](https://thenounproject.com/creator/omataloon/)
