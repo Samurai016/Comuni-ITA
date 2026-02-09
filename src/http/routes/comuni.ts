@@ -5,7 +5,7 @@ import { normalizeString } from "../../domain/normalization";
 import { Static, Type } from "@sinclair/typebox";
 
 // Define query string schema for validation and typing
-import { CommonQuerySchema, applyPagination, applyProjection, applySorting } from "../query-utils";
+import { CommonQuerySchema, CommonResponseSchema, applyPagination, applyProjection, applySorting } from "../query-utils";
 
 // Define query string schema for validation and typing
 const ComuniQuerySchema = Type.Object({
@@ -18,8 +18,10 @@ const ComuniQuerySchema = Type.Object({
   q: Type.Optional(Type.String()),
   ...CommonQuerySchema,
 });
-
 type ComuniQuery = Static<typeof ComuniQuerySchema>;
+
+const ComuniResponseSchema = CommonResponseSchema(ComuneSchema);
+type ComuniResponse = Static<typeof ComuniResponseSchema>;
 
 const getComuniOpts: RouteShorthandOptions = {
   schema: {
@@ -82,26 +84,33 @@ const applyFilters = (result: Comune[], query: ComuniQuery) => {
   return result;
 };
 
-const getComuni = (comuni: Comune[], query: ComuniQuery): Partial<Comune>[] => {
+const getComuni = (comuni: Comune[], query: ComuniQuery): ComuniResponse => {
   // Filtering
   let result: Partial<Comune>[] = applyFilters(comuni, query);
 
   // Sorting
   result = applySorting(result, query.sort);
 
+  const total = result.length;
+
   // Pagination
-  result = applyPagination(result, query.limit, query.offset);
+  result = applyPagination(result, query.page, query.pagesize);
 
   // Projection (field selection)
   result = applyProjection(result, query.fields);
 
-  return result;
+  return {
+    items: result,
+    page: query.page,
+    pagesize: query.pagesize || total,
+    total: total,
+  };
 };
 
 // Define route handlers
 export function comuniRoutes(fastify: FastifyInstance) {
   // GET /comuni
-  fastify.get<{ Querystring: ComuniQuery; Reply: Partial<Comune>[] }>("/comuni", getComuniOpts, (request, reply) => {
+  fastify.get<{ Querystring: ComuniQuery; Reply: ComuniResponse }>("/comuni", getComuniOpts, (request, reply) => {
     const comuni: Comune[] = Array.from(dataset.comuniByCodice.values());
     reply.send(getComuni(comuni, request.query));
   });
@@ -116,7 +125,7 @@ export function comuniRoutes(fastify: FastifyInstance) {
       response: getComuniOpts.schema?.response,
     },
   };
-  fastify.get<{ Params: { regione: string }; Querystring: ComuniQuery; Reply: Partial<Comune>[] }>("/comuni/:regione", comuniByRegioneSchema, (request, reply) => {
+  fastify.get<{ Params: { regione: string }; Querystring: ComuniQuery; Reply: ComuniResponse }>("/comuni/:regione", comuniByRegioneSchema, (request, reply) => {
     const comuni: Comune[] = dataset.comuni.filter(filterByRegione(request.params.regione));
     reply.send(getComuni(comuni, request.query));
   });
@@ -131,7 +140,7 @@ export function comuniRoutes(fastify: FastifyInstance) {
       response: getComuniOpts.schema?.response,
     },
   };
-  fastify.get<{ Params: { provincia: string }; Querystring: ComuniQuery; Reply: Partial<Comune>[] }>("/comuni/provincia/:provincia", comuniByProvinciaSchema, (request, reply) => {
+  fastify.get<{ Params: { provincia: string }; Querystring: ComuniQuery; Reply: ComuniResponse }>("/comuni/provincia/:provincia", comuniByProvinciaSchema, (request, reply) => {
     const comuni: Comune[] = dataset.comuni.filter(filterByProvincia(request.params.provincia));
     reply.send(getComuni(comuni, request.query));
   });
