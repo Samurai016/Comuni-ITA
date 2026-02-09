@@ -8,9 +8,17 @@
 ![Licenza](https://img.shields.io/github/license/Samurai016/Comuni-ITA?style=flat-square&label=licenza)
 [![Leggi la documentazione](https://img.shields.io/badge/Leggi%20la%20documentazione-passing?style=flat-square&logo=Read%20the%20Docs&labelColor=8CA1AF&color=8CA1AF&logoColor=white)](https://comuni-ita.readme.io/)
 
+## ⚡TL;DR
+
+* [https://comuni-ita.nicolorebaioli.dev/comuni](https://comuni-ita.nicolorebaioli.dev/comuni) - Lista dei comuni italiani.
+* [https://comuni-ita.nicolorebaioli.dev/province](https://comuni-ita.nicolorebaioli.dev/province) - Lista delle province italiane.
+* [https://comuni-ita.nicolorebaioli.dev/regioni](https://comuni-ita.nicolorebaioli.dev/regioni) - Lista delle regioni italiane.
+
+Per ulteriori dettagli su filtri, sorting, paginazione e altri endpoint, prosegui la lettura.
+
 ## Indice
 
-- [⚡Panoramica](#-panoramica)
+- [✨Panoramica](#-panoramica)
 - [📚 Endpoint API](#-endpoint-api)
   - [GET /comuni](#-comuni)
   - [GET /comuni/:regione](#-comuniregione)
@@ -21,13 +29,13 @@
 - [📊 Parametri di Query](#-parametri-di-query)
 - [🚀 Deploy](#-deploy)
 
-## ⚡ Panoramica
+## ✨ Panoramica
 
 `comuni-ita` è un'API Node.js leggera e ad alte prestazioni costruita con [Fastify](https://www.fastify.io/). Fornisce accesso istantaneo a un dataset completo di comuni, province e regioni italiane.
 
 I dati sono ottenuti e aggiornati da un sistema semiautomatico che preleva i dati direttamente dagli archivi ISTAT e integra le informazioni mancanti interrogando Wikidata.
 
-L'API è disponibile gratuitamente e senza limitazioni all'indirizzo `https://comuni-ita.nicolorebaioli.dev/` oppure può essere facilmente eseguita in locale o distribuita su qualsiasi piattaforma Node.js o Docker.
+L'API è disponibile gratuitamente e senza limitazioni all'indirizzo **[https://comuni-ita.nicolorebaioli.dev/](https://comuni-ita.nicolorebaioli.dev/)** oppure può essere facilmente eseguita in locale o distribuita su qualsiasi piattaforma Node.js o Docker.
 
 La documentazione è disponibile anche all'indirizzo [https://comuni-ita.readme.io/](https://comuni-ita.readme.io/).
 
