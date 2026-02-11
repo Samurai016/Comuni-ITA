@@ -35,7 +35,7 @@ const getRegioni = (province: string[], query: CommonQuery): RegioniResponse => 
 
   return {
     items: result,
-    page: query.page,
+    page: query.page || 1,
     pagesize: query.pagesize || total,
     total: total,
   };
