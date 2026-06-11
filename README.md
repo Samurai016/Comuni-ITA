@@ -64,7 +64,7 @@ Recupera informazioni dettagliate sui comuni italiani.
 Query per ottenere i primi 10 comuni italiani, ordinati alfabeticamente per nome e mostrando solo il nome, il codice e il CAP.
 
 ```http
-GET /comuni?regione=lombardia&sort=nome&fields=nome,codice,cap&limit=10
+GET /comuni?regione=lombardia&sort=nome&fields=nome,codice,cap&pagesize=10
 ```
 
 Query per ottenere tutti i comuni con CAP 20121.
