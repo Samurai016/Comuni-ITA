@@ -38,7 +38,7 @@ I dati sono ottenuti e aggiornati da un sistema semiautomatico che preleva i dat
 
 L'API è disponibile gratuitamente e senza limitazioni all'indirizzo **[https://comuni-ita.nicolorebaioli.dev/](https://comuni-ita.nicolorebaioli.dev/)** oppure può essere facilmente eseguita in locale o distribuita su qualsiasi piattaforma Node.js o Docker.
 
-La documentazione è disponibile anche all'indirizzo [https://comuni-ita.readme.io/](https://comuni-ita.readme.io/).
+La documentazione è disponibile anche all'indirizzo [https://comuni-ita.readme.io/](https://comuni-ita.readme.io/). La specifica OpenAPI da cui è generata sta in [`docs/comuni-ita.yaml`](docs/comuni-ita.yaml).
 
 
 > **⚠️ Attenzione ⚠️**
@@ -62,14 +62,14 @@ Nessun software esistente va toccato: chi interroga `/comuni` continua a ricever
 
 ### CAP multipli
 
-Un comune può avere più di un CAP: Milano ne ha 38, Napoli 25, Bologna 19, Trento 3, Castegnero Nanto 2. La v1 può esporne uno solo, e per ognuno di questi comuni espone quello della sede comunale; la v2 li espone tutti.
+Un comune può avere più di un CAP: Milano ne ha 38, Napoli 25, Bologna 19, Trento 3, Castegnero Nanto 2. La v1 può esporne uno solo, e per ognuno di questi comuni espone quello della sede comunale; la v2 li espone tutti, con la sede in testa.
 
 ```jsonc
-// GET /comuni?q=trento          →  "cap": "38121"
-// GET /v2/comuni?q=trento       →  "cap": ["38121", "38122", "38123"]
+// GET /comuni?codice=022205     →  "cap": "38122"
+// GET /v2/comuni?codice=022205  →  "cap": ["38122", "38121", "38123"]
 ```
 
-Negli altri formati la lista segue la convenzione del formato: nel CSV i CAP stanno in una sola colonna separati da uno spazio (`38121 38122 38123`), nell'XML diventano un elemento `<cap>` ripetuto.
+Negli altri formati la lista segue la convenzione del formato: nel CSV i CAP stanno in una sola colonna separati da uno spazio (`38122 38121 38123`), nell'XML diventano un elemento `<cap>` ripetuto.
 
 I CAP pubblicati arrivano solo da fonti istituzionali o da Wikidata; l'elenco dei comuni a CAP multipli è curato a mano, perché nessuna fonte aperta lo pubblica in modo affidabile. Il filtro `?cap=` invece funziona anche sui CAP che l'API non espone (quelli storici, o quelli dei comuni multi-CAP non ancora censiti): sono buoni per **trovare** un comune, non abbastanza per descriverlo.
 
@@ -82,6 +82,8 @@ Recupera informazioni dettagliate sui comuni italiani.
 #### Filtri
 
 - `codice`: Filtra per codice ISTAT esatto.
+- `codiceCatastale`: Filtra per codice catastale esatto.
+- `prefisso`: Filtra per prefisso telefonico esatto.
 - `provincia`: Filtra per nome della provincia (corrispondenza esatta, case-insensitive).
 - `regione`: Filtra per nome della regione (corrispondenza esatta, case-insensitive).
 - `cap`: Filtra per codice postale (CAP). Corrisponde un comune se il CAP è **fra i suoi**, anche quando non è quello esposto nella risposta.
@@ -114,6 +116,8 @@ Recupera informazioni dettagliate sui comuni di una regione specifica.
 #### Filtri
 
 - `codice`: Filtra per codice ISTAT esatto.
+- `codiceCatastale`: Filtra per codice catastale esatto.
+- `prefisso`: Filtra per prefisso telefonico esatto.
 - `provincia`: Filtra per nome della provincia (corrispondenza esatta, case-insensitive).
 - `cap`: Filtra per codice postale (CAP). Corrisponde un comune se il CAP è **fra i suoi**, anche quando non è quello esposto nella risposta.
 - `q`: Ricerca parziale per nome (es. "milano").
@@ -141,6 +145,8 @@ Recupera informazioni dettagliate sui comuni di una provincia specifica.
 #### Filtri
 
 - `codice`: Filtra per codice ISTAT esatto.
+- `codiceCatastale`: Filtra per codice catastale esatto.
+- `prefisso`: Filtra per prefisso telefonico esatto.
 - `cap`: Filtra per codice postale (CAP). Corrisponde un comune se il CAP è **fra i suoi**, anche quando non è quello esposto nella risposta.
 - `q`: Ricerca parziale per nome (es. "milano").
 
@@ -230,6 +236,12 @@ Controlla la quantità di dati restituiti.
 
 - `page`: Numero di pagina da restituire (predefinito: `1`).
 - `pagesize`: Numero di elementi per pagina (predefinito: `INFINITE`: vengono restituiti tutti gli elementi).
+
+### 📦 Formato
+
+Usa `format` per scegliere il formato della risposta: `json` (predefinito), `xml` o `csv`. Va scritto in minuscolo.
+
+- **Esempio:** `?format=csv`
 
 ## 🚀 Deploy
 

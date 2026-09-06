@@ -1,0 +1,750 @@
+openapi: 3.0.1
+info:
+  title: Comuni ITA
+  description: >-
+    Semplice API che permette di ottenere i comuni italiani in formato JSON, XML o CSV.
+
+
+    Ogni endpoint è servito su tre percorsi. Quelli storici (`/comuni`, `/province`,
+    `/regioni`) e quelli sotto `/v1` restituiscono la stessa identica risposta; sotto
+    `/v2` cambia solo il campo `cap` dei comuni, che diventa una lista. I percorsi
+    storici rispondono con l'header `Deprecation: true` e un `Link` alla rotta `/v1`
+    corrispondente: restano supportati, ma per il codice nuovo conviene indicare la
+    versione.
+
+
+    *Logo ispired by: [Castle by Jasfart from the Noun
+    Project](https://thenounproject.com/omataloon/)*
+  version: 4.1.0
+  x-logo:
+    url: ./logo.png
+    altText: Comuni ITA Logo
+  contact:
+    name: Nicolò Rebaioli
+    email: niko.reba@gmail.com
+    url: https://nicolorebaioli.dev
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+externalDocs:
+  description: Github
+  url: https://github.com/Samurai016/Comuni-ITA
+servers:
+  - url: https://comuni-ita.nicolorebaioli.dev
+# L'API è pubblica e non richiede autenticazione
+security: []
+tags:
+  - name: comuni
+    description: Endpoint che restituiscono comuni
+  - name: province
+    description: Endpoint che restituiscono province
+  - name: regioni
+    description: Endpoint che restituiscono regioni
+paths:
+  /comuni:
+    parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+      - $ref: '#/components/parameters/prefisso_comune'
+      - $ref: '#/components/parameters/provincia_comune'
+      - $ref: '#/components/parameters/regione_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni italiani.
+      description: >-
+        Disponibile anche su `/v1/comuni`, con la stessa risposta.
+      operationId: comuni
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniV1'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /comuni/{regione}:
+    parameters:
+      - $ref: '#/components/parameters/regione'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+      - $ref: '#/components/parameters/prefisso_comune'
+      - $ref: '#/components/parameters/provincia_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni della regione indicata.
+      description: >-
+        Disponibile anche su `/v1/comuni/{regione}`, con la stessa risposta.
+      operationId: comuni-regione
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniV1'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /comuni/provincia/{provincia}:
+    parameters:
+      - $ref: '#/components/parameters/provincia'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+      - $ref: '#/components/parameters/prefisso_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni della provincia indicata.
+      description: >-
+        Disponibile anche su `/v1/comuni/provincia/{provincia}`, con la stessa risposta.
+      operationId: comuni-provincia
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniV1'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /v2/comuni:
+    parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+      - $ref: '#/components/parameters/prefisso_comune'
+      - $ref: '#/components/parameters/provincia_comune'
+      - $ref: '#/components/parameters/regione_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni italiani, con tutti i loro CAP.
+      description: >-
+        Come `/comuni`, ma il campo `cap` è una lista.
+      operationId: comuni-v2
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniV2'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /v2/comuni/{regione}:
+    parameters:
+      - $ref: '#/components/parameters/regione'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+      - $ref: '#/components/parameters/prefisso_comune'
+      - $ref: '#/components/parameters/provincia_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni della regione indicata, con tutti i loro CAP.
+      description: >-
+        Come `/comuni/{regione}`, ma il campo `cap` è una lista.
+      operationId: comuni-regione-v2
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniV2'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /v2/comuni/provincia/{provincia}:
+    parameters:
+      - $ref: '#/components/parameters/provincia'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+      - $ref: '#/components/parameters/prefisso_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni della provincia indicata, con tutti i loro CAP.
+      description: >-
+        Come `/comuni/provincia/{provincia}`, ma il campo `cap` è una lista.
+      operationId: comuni-provincia-v2
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniV2'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /province:
+    parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/codice_provincia'
+      - $ref: '#/components/parameters/sigla_provincia'
+      - $ref: '#/components/parameters/regione_provincia'
+    get:
+      summary: Ottieni la lista di tutte le province italiane.
+      description: >-
+        Identico su `/v1/province` e `/v2/province`: le province non cambiano fra le versioni.
+      operationId: province
+      tags:
+        - province
+      responses:
+        '200':
+          $ref: '#/components/responses/Province'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /province/{regione}:
+    parameters:
+      - $ref: '#/components/parameters/regione'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/codice_provincia'
+      - $ref: '#/components/parameters/sigla_provincia'
+    get:
+      summary: Ottieni la lista di tutte le province della regione indicata.
+      description: >-
+        Identico su `/v1/province/{regione}` e `/v2/province/{regione}`.
+      operationId: province-regione
+      tags:
+        - province
+      responses:
+        '200':
+          $ref: '#/components/responses/Province'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /regioni:
+    parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+    get:
+      summary: Ottieni la lista di tutte le regioni italiane.
+      description: >-
+        Identico su `/v1/regioni` e `/v2/regioni`.
+      operationId: regioni
+      tags:
+        - regioni
+      responses:
+        '200':
+          description: L'operazione ha avuto successo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: Trentino Alto Adige
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: regioni
+                properties:
+                  page:
+                    xml:
+                      attribute: true
+                    type: integer
+                  pagesize:
+                    xml:
+                      attribute: true
+                    type: integer
+                  total:
+                    xml:
+                      attribute: true
+                    type: integer
+                  regioni:
+                    type: array
+                    xml:
+                      name: regione
+                    items:
+                      type: string
+            text/csv:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+components:
+  responses:
+    ComuniV1:
+      description: L'operazione ha avuto successo.
+      headers:
+        Deprecation:
+          description: >-
+            Presente, con valore `true`, solo sui percorsi senza prefisso di versione.
+          schema:
+            type: string
+        Link:
+          description: >-
+            Presente insieme a `Deprecation`, indica la rotta `/v1` corrispondente.
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Comune'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ComuniXML'
+        text/csv:
+          schema:
+            $ref: '#/components/schemas/ComuniCSV'
+    ComuniV2:
+      description: L'operazione ha avuto successo.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ComuneV2'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ComuniXMLV2'
+        text/csv:
+          schema:
+            $ref: '#/components/schemas/ComuniCSVV2'
+    Province:
+      description: L'operazione ha avuto successo.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Provincia'
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: province
+            properties:
+              page:
+                xml:
+                  attribute: true
+                type: integer
+              pagesize:
+                xml:
+                  attribute: true
+                type: integer
+              total:
+                xml:
+                  attribute: true
+                type: integer
+              province:
+                type: array
+                xml:
+                  name: provincia
+                items:
+                  $ref: '#/components/schemas/Provincia'
+        text/csv:
+          schema:
+            type: string
+            example: |-
+              codice,nome,sigla,regione
+              021,Bolzano,BZ,Trentino Alto Adige
+    BadRequest:
+      description: >-
+        Uno dei parametri non è valido. Il messaggio dice quale.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 400
+              code:
+                type: string
+                example: FST_ERR_VALIDATION
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: querystring/page must be >= 1
+    ServerError:
+      description: Errore del server. **Contattare lo sviluppatore.**
+  parameters:
+    provincia:
+      in: path
+      name: provincia
+      required: true
+      schema:
+        type: string
+      description: |-
+        Nome della provincia di cui si vogliono i dati.
+        Il parametro è case insensitive.
+      example: l'aquila
+    regione:
+      in: path
+      name: regione
+      required: true
+      schema:
+        type: string
+      description: |-
+        Nome della regione di cui si vogliono i dati.
+        Il parametro è case insensitive.
+      example: valle d'aosta
+    q_comune:
+      in: query
+      name: q
+      schema:
+        type: string
+      description: >-
+        Nome del comune da cercare, anche parziale e senza badare a maiuscole e
+        accenti. Cerca sia nel nome italiano sia in quello straniero: `bozen`
+        restituisce Bolzano.
+      example: bolzano
+    codice_comune:
+      in: query
+      name: codice
+      schema:
+        type: string
+      description: >-
+        Codice ISTAT esatto del comune. `021008` restituisce Bolzano, `021` non
+        restituisce nulla.
+      example: '021008'
+    codiceCatastale_comune:
+      in: query
+      name: codiceCatastale
+      schema:
+        type: string
+      description: >-
+        Codice catastale esatto del comune. `A952` restituisce Bolzano, `A9` non
+        restituisce nulla.
+      example: A952
+    cap_comune:
+      in: query
+      name: cap
+      schema:
+        type: string
+        pattern: \d{5}
+      description: >-
+        CAP esatto del comune.
+
+
+        Un comune corrisponde se il CAP è fra i suoi, anche quando non è quello
+        che compare nella risposta: Milano si trova con ciascuno dei suoi 38 CAP
+        e Roma con ognuno dei suoi. La ricerca copre anche i CAP storici, che
+        l'API conosce ma non espone.
+
+
+        Lo stesso CAP può appartenere a più comuni.
+      example: '20143'
+    prefisso_comune:
+      in: query
+      name: prefisso
+      schema:
+        type: string
+      description: Prefisso telefonico esatto del comune.
+      example: '0471'
+    provincia_comune:
+      in: query
+      name: provincia
+      schema:
+        type: string
+      description: >-
+        Nome esatto della provincia, case insensitive.
+      example: bolzano
+    regione_comune:
+      in: query
+      name: regione
+      schema:
+        type: string
+      description: >-
+        Nome esatto della regione, case insensitive.
+      example: trentino alto adige
+    codice_provincia:
+      in: query
+      name: codice
+      schema:
+        type: string
+      description: >-
+        Codice ISTAT esatto della provincia. `021` restituisce Bolzano, `21` non
+        restituisce nulla.
+      example: '021'
+    sigla_provincia:
+      in: query
+      name: sigla
+      schema:
+        type: string
+        pattern: '[A-Z]{2}'
+      description: Sigla esatta della provincia, in maiuscolo.
+      example: BZ
+    regione_provincia:
+      in: query
+      name: regione
+      schema:
+        type: string
+      description: Nome esatto della regione, case insensitive.
+      example: trentino alto adige
+    format:
+      in: query
+      name: format
+      schema:
+        type: string
+        enum: ["json", "xml", "csv"]
+        default: "json"
+      description: >-
+        Formato dell'output. Va scritto in minuscolo: `CSV` viene rifiutato.
+    sort:
+      in: query
+      name: sort
+      schema:
+        type: string
+      description: >-
+        Campo su cui ordinare. Anteponi `-` per l'ordine decrescente, ad esempio
+        `-popolazione`. Un campo che non esiste lascia l'ordine invariato.
+      example: nome
+    fields:
+      in: query
+      name: fields
+      schema:
+        type: string
+      description: >-
+        Elenco separato da virgole dei campi da restituire. Gli altri vengono
+        omessi.
+      example: nome,codice,cap
+    page:
+      in: query
+      name: page
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: >-
+        Indice della pagina, a partire da 1. Ha effetto solo insieme a `pagesize`.
+    pagesize:
+      in: query
+      name: pagesize
+      schema:
+        type: integer
+        minimum: 1
+      description: >-
+        Numero di elementi per pagina. Se omesso, la risposta contiene tutti i
+        risultati.
+  schemas:
+    Comune:
+      type: object
+      properties:
+        codice:
+          type: string
+          description: Codice ISTAT del comune.
+          example: '021008'
+        nome:
+          type: string
+          description: Nome del comune.
+          example: Bolzano
+        nomeStraniero:
+          type: string
+          nullable: true
+          description: Nome straniero del comune, `null` se non ne ha uno.
+          example: Bozen
+        codiceCatastale:
+          type: string
+          description: Codice catastale del comune.
+          example: A952
+          pattern: '[A-Z]\d{3}'
+        cap:
+          type: string
+          description: >-
+            CAP del comune. I pochi comuni che ne hanno più di uno espongono qui
+            quello della sede comunale; per averli tutti usa `/v2`.
+          example: '39100'
+          pattern: \d{5}
+        prefisso:
+          type: string
+          description: Prefisso telefonico del comune.
+          example: '0471'
+          pattern: \d{2,5}
+        provincia:
+          $ref: '#/components/schemas/Provincia'
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: >-
+            Email ordinaria del comune, dall'elenco del Ministero dell'Interno o
+            dall'Indice dei domicili digitali della PA. Il dato arriva dalle
+            amministrazioni: può essere malformato o assente. Segnalando
+            un'anomalia allo sviluppatore viene corretta.
+          example: urp@comune.bolzano.it
+        pec:
+          type: string
+          format: email
+          nullable: true
+          description: >-
+            Email PEC del comune, dalle stesse fonti e con le stesse riserve
+            dell'email ordinaria.
+          example: bolzano@legalmail.it
+        telefono:
+          type: string
+          nullable: true
+          description: >-
+            Numero di telefono del comune, dalle stesse fonti e con le stesse
+            riserve dell'email ordinaria.
+          example: '+39 0471 997111'
+        fax:
+          type: string
+          nullable: true
+          description: >-
+            Numero di fax del comune, dalle stesse fonti e con le stesse riserve
+            dell'email ordinaria.
+          example: '+39 0471 997 404'
+        popolazione:
+          type: integer
+          description: Numero di abitanti, dall'ultima rilevazione ISTAT disponibile.
+          example: 106901
+        coordinate:
+          type: object
+          description: Coordinate del municipio.
+          properties:
+            lat:
+              type: number
+              description: Latitudine
+              example: 46.498113
+            lng:
+              type: number
+              description: Longitudine
+              example: 11.35478
+    ComuneV2:
+      allOf:
+        - $ref: '#/components/schemas/Comune'
+        - type: object
+          properties:
+            cap:
+              type: array
+              description: >-
+                Tutti i CAP del comune, in lista anche quando è uno solo. Il
+                primo è quello della sede comunale.
+              items:
+                type: string
+                pattern: \d{5}
+              example: ['38122', '38121', '38123']
+    ComuniXML:
+      type: object
+      xml:
+        name: comuni
+      properties:
+        page:
+          xml:
+            attribute: true
+          type: integer
+          description: Il numero della pagina fornita.
+          minimum: 1
+          example: 1
+        pagesize:
+          xml:
+            attribute: true
+          type: integer
+          description: La dimensione di ogni pagina.
+          minimum: 1
+          example: 10
+        total:
+          xml:
+            attribute: true
+          type: integer
+          description: Il numero totale di entries disponibili.
+          minimum: 0
+          example: 7894
+        comuni:
+          type: array
+          xml:
+            name: comune
+          items:
+            $ref: '#/components/schemas/Comune'
+    ComuniXMLV2:
+      allOf:
+        - $ref: '#/components/schemas/ComuniXML'
+        - type: object
+          description: >-
+            Un comune con più CAP ripete l'elemento `cap`, uno per valore.
+          properties:
+            comuni:
+              type: array
+              xml:
+                name: comune
+              items:
+                $ref: '#/components/schemas/ComuneV2'
+    ComuniCSV:
+      type: string
+      description: >-
+        Lista CSV delimitata da virgola, con l'header nella prima riga. I campi
+        innestati diventano colonne nel formato `campo_attributo`.
+      example: |-
+        codice,nome,nomeStraniero,codiceCatastale,cap,prefisso,provincia_nome,provincia_sigla,provincia_codice,provincia_regione,email,pec,telefono,fax,popolazione,coordinate_lat,coordinate_lng
+        021008,Bolzano,Bozen,A952,39100,0471,Bolzano,BZ,021,Trentino Alto Adige,urp@comune.bolzano.it,bolzano@legalmail.it,+39 0471 997111,+39 0471 997 404,106901,46.498113,11.35478
+    ComuniCSVV2:
+      type: string
+      description: >-
+        Come il CSV della v1. I comuni con più CAP li elencano nella stessa
+        colonna, separati da uno spazio.
+      example: |-
+        nome,cap,prefisso
+        Tione di Trento,38079,0465
+        Trento,38122 38121 38123,0461
+    Provincia:
+      type: object
+      properties:
+        codice:
+          type: string
+          description: Codice ISTAT della provincia.
+          example: '021'
+        nome:
+          type: string
+          description: Nome della provincia.
+          example: Bolzano
+        sigla:
+          type: string
+          description: Sigla della provincia (in maiuscolo).
+          example: BZ
+          pattern: '[A-Z]{2}'
+        regione:
+          type: string
+          description: Regione della provincia.
+          example: Trentino Alto Adige
