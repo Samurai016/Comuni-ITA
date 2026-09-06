@@ -8,6 +8,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 export const format = (request: FastifyRequest, reply: FastifyReply) => {
   reply.type("application/json");
   reply.serializer((payload: any) => {
-    return JSON.stringify(payload.items);
+    // The listing routes expose their items alone; the others, the root among
+    // them, carry no `items` and are serialized as they are.
+    return JSON.stringify(payload?.items ?? payload);
   });
 };

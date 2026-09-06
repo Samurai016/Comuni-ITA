@@ -19,6 +19,7 @@ Per ulteriori dettagli su filtri, sorting, paginazione e altri endpoint, prosegu
 ## Indice
 
 - [✨Panoramica](#-panoramica)
+- [🔀 Versioni](#-versioni)
 - [📚 Endpoint API](#-endpoint-api)
   - [GET /comuni](#-comuni)
   - [GET /comuni/:regione](#-comuniregione)
@@ -45,6 +46,33 @@ La documentazione è disponibile anche all'indirizzo [https://comuni-ita.readme.
 > **Le risposte e il funzionamento della versione v3 sono invariati** e non richiedono quindi modifiche ai software che utilizzano l'API, ma si consiglia di aggiornare al più presto alla nuova versione v4 per beneficiare di prestazioni migliorate.  
 > La versione v3 hostata su Supabase è soggetta a limitazioni di utilizzo e prestazioni, e l'incremento della popolarità dell'API ha portato a superare di gran largo queste limitazioni, **mi aspetto una sospension del progetto v3 su Supabase**, motivo per il quale ho deciso di sviluppare una nuova versione v4 basata su Fastify e hostata su un'infrastruttura più performante e scalabile.
 
+## 🔀 Versioni
+
+Ogni endpoint è servito su tre percorsi, che restituiscono gli stessi comuni ma non sempre nella stessa forma:
+
+| Percorso | Versione | Note |
+| --- | --- | --- |
+| `/comuni`, `/province`, `/regioni` | v1 | Le rotte storiche, invariate. Rispondono con l'header `Deprecation: true` e un `Link` alla rotta versionata corrispondente. |
+| `/v1/comuni`, `/v1/province`, `/v1/regioni` | v1 | Identiche alle rotte storiche, ma esplicite. |
+| `/v2/comuni`, `/v2/province`, `/v2/regioni` | v2 | `cap` è una lista. |
+
+> Queste versioni riguardano **il formato della risposta**, non la versione dell'API: la v3 su Supabase e la v4 su Fastify di cui si parla sopra sono generazioni dell'infrastruttura, `/v1` e `/v2` sono forme del JSON.
+
+Nessun software esistente va toccato: chi interroga `/comuni` continua a ricevere quello che ha sempre ricevuto. Le rotte senza prefisso restano supportate, l'header `Deprecation` segnala solo che la strada consigliata per il codice nuovo è quella versionata.
+
+### CAP multipli
+
+Un comune può avere più di un CAP: Milano ne ha 38, Napoli 25, Bologna 19, Trento 3, Castegnero Nanto 2. La v1 può esporne uno solo, e per ognuno di questi comuni espone quello della sede comunale; la v2 li espone tutti.
+
+```jsonc
+// GET /comuni?q=trento          →  "cap": "38121"
+// GET /v2/comuni?q=trento       →  "cap": ["38121", "38122", "38123"]
+```
+
+Negli altri formati la lista segue la convenzione del formato: nel CSV i CAP stanno in una sola colonna separati da uno spazio (`38121 38122 38123`), nell'XML diventano un elemento `<cap>` ripetuto.
+
+I CAP pubblicati arrivano solo da fonti istituzionali o da Wikidata; l'elenco dei comuni a CAP multipli è curato a mano, perché nessuna fonte aperta lo pubblica in modo affidabile. Il filtro `?cap=` invece funziona anche sui CAP che l'API non espone (quelli storici, o quelli dei comuni multi-CAP non ancora censiti): sono buoni per **trovare** un comune, non abbastanza per descriverlo.
+
 ## 📚 Endpoint API
 
 ### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni`](https://comuni-ita.nicolorebaioli.dev/comuni)
@@ -56,7 +84,7 @@ Recupera informazioni dettagliate sui comuni italiani.
 - `codice`: Filtra per codice ISTAT esatto.
 - `provincia`: Filtra per nome della provincia (corrispondenza esatta, case-insensitive).
 - `regione`: Filtra per nome della regione (corrispondenza esatta, case-insensitive).
-- `cap`: Filtra per codice postale (CAP).
+- `cap`: Filtra per codice postale (CAP). Corrisponde un comune se il CAP è **fra i suoi**, anche quando non è quello esposto nella risposta.
 - `q`: Ricerca parziale per nome (es. "milano").
 
 #### Esempi
@@ -67,7 +95,7 @@ Query per ottenere i primi 10 comuni italiani, ordinati alfabeticamente per nome
 GET /comuni?regione=lombardia&sort=nome&fields=nome,codice,cap&pagesize=10
 ```
 
-Query per ottenere tutti i comuni con CAP 20121.
+Query per ottenere tutti i comuni con CAP 20121 (restituisce Milano, di cui 20121 è uno dei 38 CAP).
 
 ```http
 GET /comuni?cap=20121
@@ -87,7 +115,7 @@ Recupera informazioni dettagliate sui comuni di una regione specifica.
 
 - `codice`: Filtra per codice ISTAT esatto.
 - `provincia`: Filtra per nome della provincia (corrispondenza esatta, case-insensitive).
-- `cap`: Filtra per codice postale (CAP).
+- `cap`: Filtra per codice postale (CAP). Corrisponde un comune se il CAP è **fra i suoi**, anche quando non è quello esposto nella risposta.
 - `q`: Ricerca parziale per nome (es. "milano").
 
 #### Esempi
@@ -113,7 +141,7 @@ Recupera informazioni dettagliate sui comuni di una provincia specifica.
 #### Filtri
 
 - `codice`: Filtra per codice ISTAT esatto.
-- `cap`: Filtra per codice postale (CAP).
+- `cap`: Filtra per codice postale (CAP). Corrisponde un comune se il CAP è **fra i suoi**, anche quando non è quello esposto nella risposta.
 - `q`: Ricerca parziale per nome (es. "milano").
 
 #### Esempi

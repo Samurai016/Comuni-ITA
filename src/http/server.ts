@@ -3,6 +3,10 @@ import compress from "@fastify/compress";
 import etag from "@fastify/etag";
 import cors from "@fastify/cors";
 import { loadAndIndexData } from "../data/indexes";
+import { ApiVersion } from "../domain/types";
+
+/** Base url used to point deprecated routes at their versioned twin. */
+const API_BASE_URL = process.env.API_BASE_URL || "https://api.comuni-ita.it";
 
 const fastify = Fastify({
   logger: {
@@ -27,13 +31,48 @@ fastify.register(compress);
 fastify.register(etag);
 fastify.register(responseFormatter);
 
-fastify.register(regioniRoutes);
-fastify.register(provinceRoutes);
-fastify.register(comuniRoutes);
+/**
+ * Registers every route of a version on its own prefix.
+ *
+ * `regioni` and `province` are the same in both versions; only the comuni
+ * change, and only in the shape of `cap`.
+ * @param version The version to serve.
+ * @param prefix The prefix to serve it on.
+ */
+function registerVersion(version: ApiVersion, prefix: string) {
+  fastify.register(
+    async (instance) => {
+      instance.register(regioniRoutes);
+      instance.register(provinceRoutes);
+      instance.register(comuniRoutes, { version });
+    },
+    { prefix },
+  );
+}
+
+// The unprefixed routes stay the ones they have always been, that is v1: the
+// clients written before versioning go on working untouched.
+fastify.register(async (instance) => {
+  instance.addHook("onSend", async (request, reply) => {
+    reply.header("Deprecation", "true");
+    reply.header("Link", `<${API_BASE_URL}/v1${request.url}>; rel="successor-version"`);
+  });
+  instance.register(regioniRoutes);
+  instance.register(provinceRoutes);
+  instance.register(comuniRoutes, { version: "v1" });
+});
+
+registerVersion("v1", "/v1");
+registerVersion("v2", "/v2");
 
 // Root route for health check or basic info
 fastify.get("/", async (request, reply) => {
-  return { message: "Comuni-ITA API is running!", datasetVersion: process.env.DATASET_VERSION || "N/A" };
+  return {
+    message: "Comuni-ITA API is running!",
+    datasetVersion: process.env.DATASET_VERSION || "N/A",
+    versions: ["v1", "v2"],
+    latestVersion: "v2",
+  };
 });
 
 const start = async () => {

@@ -1,6 +1,6 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
 import { dataset } from "../../data/indexes";
-import { Comune, ComuneSchema } from "../../domain/types";
+import { ApiVersion, Comune, ComuneSchema, presentComune } from "../../domain/types";
 import { normalizeString } from "../../domain/normalization";
 import { Static, Type } from "@sinclair/typebox";
 
@@ -20,20 +20,20 @@ const ComuniQuerySchema = Type.Object({
 });
 type ComuniQuery = Static<typeof ComuniQuerySchema>;
 
-const ComuniResponseSchema = CommonResponseSchema(ComuneSchema);
-type ComuniResponse = Static<typeof ComuniResponseSchema>;
+const ComuniResponseSchema = (version: ApiVersion) => CommonResponseSchema(ComuneSchema(version));
+type ComuniResponse = Static<ReturnType<typeof ComuniResponseSchema>>;
 
-const getComuniOpts: RouteShorthandOptions = {
+const getComuniOpts = (version: ApiVersion): RouteShorthandOptions => ({
   schema: {
     querystring: ComuniQuerySchema,
     response: {
       200: {
         type: "array",
-        items: ComuneSchema,
+        items: ComuneSchema(version),
       },
     },
   },
-};
+});
 
 // Define filter functions
 const filterByRegione = (regione: string) => {
@@ -71,9 +71,11 @@ const applyFilters = (result: Comune[], query: ComuniQuery) => {
   if (regione) {
     result = result.filter(filterByRegione(regione));
   }
-  // Filtro per CAP
+  // Filtro per CAP: un comune corrisponde se il CAP è fra i suoi, anche quando
+  // non è quello principale.
   if (cap) {
-    result = result.filter((c) => c.cap === cap);
+    const matching = new Set(dataset.comuniByCap.get(cap) ?? []);
+    result = result.filter((c) => matching.has(c));
   }
   // Filtro per nome
   if (q) {
@@ -84,9 +86,13 @@ const applyFilters = (result: Comune[], query: ComuniQuery) => {
   return result;
 };
 
-const getComuni = (comuni: Comune[], query: ComuniQuery): ComuniResponse => {
+const getComuni = (comuni: Comune[], query: ComuniQuery, version: ApiVersion): ComuniResponse => {
   // Filtering
-  let result: Partial<Comune>[] = applyFilters(comuni, query);
+  const filtered = applyFilters(comuni, query);
+
+  // Shaping: from here on the comune is the one the requested version exposes,
+  // so that sorting and projection see the same fields the client does.
+  let result: Partial<Comune>[] = filtered.map((c) => presentComune(c, version)) as Partial<Comune>[];
 
   // Sorting
   result = applySorting(result, query.sort);
@@ -107,12 +113,21 @@ const getComuni = (comuni: Comune[], query: ComuniQuery): ComuniResponse => {
   };
 };
 
-// Define route handlers
-export function comuniRoutes(fastify: FastifyInstance) {
+/**
+ * Registers the comuni routes on an instance.
+ *
+ * The same routes are served once per version: the shape of `cap` is the only
+ * thing that changes, so the whole version lives in `presentComune`.
+ * @param fastify The instance the routes are registered on.
+ * @param options The version the instance serves, `v1` when unspecified.
+ */
+export function comuniRoutes(fastify: FastifyInstance, options: { version?: ApiVersion } = {}) {
+  const version: ApiVersion = options.version ?? "v1";
+
   // GET /comuni
-  fastify.get<{ Querystring: ComuniQuery; Reply: ComuniResponse }>("/comuni", getComuniOpts, (request, reply) => {
+  fastify.get<{ Querystring: ComuniQuery; Reply: ComuniResponse }>("/comuni", getComuniOpts(version), (request, reply) => {
     const comuni: Comune[] = Array.from(dataset.comuniByCodice.values());
-    reply.send(getComuni(comuni, request.query));
+    reply.send(getComuni(comuni, request.query, version));
   });
 
   // GET /comuni/:regione
@@ -122,12 +137,12 @@ export function comuniRoutes(fastify: FastifyInstance) {
         regione: Type.String(),
       }),
       querystring: ComuniQuerySchema,
-      response: getComuniOpts.schema?.response,
+      response: getComuniOpts(version).schema?.response,
     },
   };
   fastify.get<{ Params: { regione: string }; Querystring: ComuniQuery; Reply: ComuniResponse }>("/comuni/:regione", comuniByRegioneSchema, (request, reply) => {
     const comuni: Comune[] = dataset.comuni.filter(filterByRegione(request.params.regione));
-    reply.send(getComuni(comuni, request.query));
+    reply.send(getComuni(comuni, request.query, version));
   });
 
   // GET /comuni/provincia/:provincia
@@ -137,11 +152,11 @@ export function comuniRoutes(fastify: FastifyInstance) {
         provincia: Type.String(),
       }),
       querystring: ComuniQuerySchema,
-      response: getComuniOpts.schema?.response,
+      response: getComuniOpts(version).schema?.response,
     },
   };
   fastify.get<{ Params: { provincia: string }; Querystring: ComuniQuery; Reply: ComuniResponse }>("/comuni/provincia/:provincia", comuniByProvinciaSchema, (request, reply) => {
     const comuni: Comune[] = dataset.comuni.filter(filterByProvincia(request.params.provincia));
-    reply.send(getComuni(comuni, request.query));
+    reply.send(getComuni(comuni, request.query, version));
   });
 }

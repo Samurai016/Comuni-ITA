@@ -6,7 +6,12 @@ function flattenObject(obj: any, prefix = "", result: any = {}) {
       const value = obj[key];
       const newKey = prefix ? `${prefix}_${key}` : key;
 
-      if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+      if (Array.isArray(value)) {
+        // A multi-valued field, the CAP of v2, goes in a single column with its
+        // values separated by a space: a comma would be indistinguishable from
+        // the column separator to anyone reading the CSV by hand.
+        result[newKey] = value.join(" ");
+      } else if (typeof value === "object" && value !== null) {
         flattenObject(value, newKey, result);
       } else {
         result[newKey] = value;

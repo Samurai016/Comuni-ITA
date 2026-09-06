@@ -11,6 +11,8 @@ interface Dataset {
   comuniByCodice: Map<string, Comune>;
   comuniByProvincia: Map<string, Comune[]>;
   comuniByRegione: Map<string, Comune[]>;
+  /** Every CAP a comune can be found by, its `capAlternativi` included. */
+  comuniByCap: Map<string, Comune[]>;
 
   provinceByCodice: Map<string, Provincia>;
   provinceBySigla: Map<string, Provincia>;
@@ -24,6 +26,7 @@ export const dataset: Dataset = {
   comuniByCodice: new Map(),
   comuniByProvincia: new Map(),
   comuniByRegione: new Map(),
+  comuniByCap: new Map(),
   provinceByCodice: new Map(),
   provinceBySigla: new Map(),
   provinceByRegione: new Map(),
@@ -50,6 +53,15 @@ export function loadAndIndexData() {
   dataset.comuni = (comuniData as any).default as Comune[];
   dataset.comuni.forEach((comune) => {
     dataset.comuniByCodice.set(comune.codice, comune);
+
+    // A comune is searchable by any of its CAP, and by the alternative ones too:
+    // those are not good enough to be served, but they are good enough to find it.
+    for (const cap of new Set([...comune.cap, ...(comune.capAlternativi ?? [])])) {
+      if (!dataset.comuniByCap.has(cap)) {
+        dataset.comuniByCap.set(cap, []);
+      }
+      dataset.comuniByCap.get(cap)?.push(comune);
+    }
 
     if (!dataset.comuniByProvincia.has(comune.provincia.codice)) {
       dataset.comuniByProvincia.set(comune.provincia.codice, []);
