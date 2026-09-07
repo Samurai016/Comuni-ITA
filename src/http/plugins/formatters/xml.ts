@@ -28,7 +28,7 @@ function toXML(data: any, rootName = "root", childName = "item", rootAttributes?
       if (Object.prototype.hasOwnProperty.call(data, key)) {
         const tagName = key.replace(/[^a-zA-Z0-9_\-]/g, "_");
         const value = data[key];
-        // A multi-valued field, the CAP of v2, becomes a repeated element,
+        // A multi-valued field, the CAP of v5, becomes a repeated element,
         // <cap>20121</cap><cap>20122</cap>, rather than an anonymous wrapper.
         xml += Array.isArray(value) ? value.map((item) => toXML(item, tagName)).join("") : toXML(value, tagName);
       }
@@ -53,7 +53,7 @@ const VERSION_SEGMENT = /^v\d+$/;
 
 function getRootName(request: FastifyRequest<{ Querystring: CommonQuery }>): string {
   // /comuni -> comuni, /province -> province, /regioni -> regioni,
-  // e lo stesso sulle rotte versionate: /v2/comuni -> comuni.
+  // e lo stesso sulle rotte versionate: /v5/comuni -> comuni.
   const segments = (request.routeOptions.url ?? "").split("/").filter(Boolean);
   const first = segments[0];
   return (VERSION_SEGMENT.test(first ?? "") ? segments[1] : first) ?? "root";

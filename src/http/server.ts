@@ -6,7 +6,7 @@ import { loadAndIndexData } from "../data/indexes";
 import { ApiVersion } from "../domain/types";
 
 /** Base url used to point deprecated routes at their versioned twin. */
-const API_BASE_URL = process.env.API_BASE_URL || "https://api.comuni-ita.it";
+const API_BASE_URL = process.env.API_BASE_URL || "https://comuni-ita.nicolorebaioli.dev";
 
 const fastify = Fastify({
   logger: {
@@ -50,28 +50,28 @@ function registerVersion(version: ApiVersion, prefix: string) {
   );
 }
 
-// The unprefixed routes stay the ones they have always been, that is v1: the
+// The unprefixed routes stay the ones they have always been, that is v4: the
 // clients written before versioning go on working untouched.
 fastify.register(async (instance) => {
   instance.addHook("onSend", async (request, reply) => {
     reply.header("Deprecation", "true");
-    reply.header("Link", `<${API_BASE_URL}/v1${request.url}>; rel="successor-version"`);
+    reply.header("Link", `<${API_BASE_URL}/v4${request.url}>; rel="successor-version"`);
   });
   instance.register(regioniRoutes);
   instance.register(provinceRoutes);
-  instance.register(comuniRoutes, { version: "v1" });
+  instance.register(comuniRoutes, { version: "v4" });
 });
 
-registerVersion("v1", "/v1");
-registerVersion("v2", "/v2");
+registerVersion("v4", "/v4");
+registerVersion("v5", "/v5");
 
 // Root route for health check or basic info
 fastify.get("/", async (request, reply) => {
   return {
     message: "Comuni-ITA API is running!",
     datasetVersion: process.env.DATASET_VERSION || "N/A",
-    versions: ["v1", "v2"],
-    latestVersion: "v2",
+    versions: ["v4", "v5"],
+    latestVersion: "v5",
   };
 });
 

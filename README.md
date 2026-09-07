@@ -52,21 +52,19 @@ Ogni endpoint è servito su tre percorsi, che restituiscono gli stessi comuni ma
 
 | Percorso | Versione | Note |
 | --- | --- | --- |
-| `/comuni`, `/province`, `/regioni` | v1 | Le rotte storiche, invariate. Rispondono con l'header `Deprecation: true` e un `Link` alla rotta versionata corrispondente. |
-| `/v1/comuni`, `/v1/province`, `/v1/regioni` | v1 | Identiche alle rotte storiche, ma esplicite. |
-| `/v2/comuni`, `/v2/province`, `/v2/regioni` | v2 | `cap` è una lista. |
-
-> Queste versioni riguardano **il formato della risposta**, non la versione dell'API: la v3 su Supabase e la v4 su Fastify di cui si parla sopra sono generazioni dell'infrastruttura, `/v1` e `/v2` sono forme del JSON.
+| `/comuni`, `/province`, `/regioni` | v4 | Le rotte storiche, invariate. Rispondono con l'header `Deprecation: true` e un `Link` alla rotta versionata corrispondente. |
+| `/v4/comuni`, `/v4/province`, `/v4/regioni` | v4 | Identiche alle rotte storiche, ma esplicite. |
+| `/v5/comuni`, `/v5/province`, `/v5/regioni` | v5 | `cap` è una lista. |
 
 Nessun software esistente va toccato: chi interroga `/comuni` continua a ricevere quello che ha sempre ricevuto. Le rotte senza prefisso restano supportate, l'header `Deprecation` segnala solo che la strada consigliata per il codice nuovo è quella versionata.
 
 ### CAP multipli
 
-Un comune può avere più di un CAP: Milano ne ha 38, Napoli 25, Bologna 19, Trento 3, Castegnero Nanto 2. La v1 può esporne uno solo, e per ognuno di questi comuni espone quello della sede comunale; la v2 li espone tutti, con la sede in testa.
+Un comune può avere più di un CAP: Milano ne ha 38, Napoli 25, Bologna 19, Trento 3, Castegnero Nanto 2. La v4 può esporne uno solo, e per ognuno di questi comuni espone quello della sede comunale; la v5 li espone tutti, con la sede in testa.
 
 ```jsonc
 // GET /comuni?codice=022205     →  "cap": "38122"
-// GET /v2/comuni?codice=022205  →  "cap": ["38122", "38121", "38123"]
+// GET /v5/comuni?codice=022205  →  "cap": ["38122", "38121", "38123"]
 ```
 
 Negli altri formati la lista segue la convenzione del formato: nel CSV i CAP stanno in una sola colonna separati da uno spazio (`38122 38121 38123`), nell'XML diventano un elemento `<cap>` ripetuto.

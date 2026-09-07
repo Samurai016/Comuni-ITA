@@ -44,9 +44,10 @@ export interface Comune {
 }
 
 /**
- * The versions of the API. The unversioned routes serve v1.
+ * The versions of the API. The unversioned routes serve v4, the version the
+ * API has been serving all along.
  */
-export type ApiVersion = "v1" | "v2";
+export type ApiVersion = "v4" | "v5";
 
 const ComuneSchemaFields = {
   codice: Type.Optional(Type.String()),
@@ -68,25 +69,25 @@ const ComuneSchemaFields = {
   ),
 };
 
-/** v1 exposes a single CAP, the one the comune has always been published with. */
-export const ComuneSchemaV1 = Type.Object({
+/** v4 exposes a single CAP, the one the comune has always been published with. */
+export const ComuneSchemaV4 = Type.Object({
   ...ComuneSchemaFields,
   cap: Type.Optional(Type.String()),
 });
 
-/** v2 exposes every CAP of the comune, as an array even when there is one. */
-export const ComuneSchemaV2 = Type.Object({
+/** v5 exposes every CAP of the comune, as an array even when there is one. */
+export const ComuneSchemaV5 = Type.Object({
   ...ComuneSchemaFields,
   cap: Type.Optional(Type.Array(Type.String())),
 });
 
-export const ComuneSchema = (version: ApiVersion) => (version === "v2" ? ComuneSchemaV2 : ComuneSchemaV1);
+export const ComuneSchema = (version: ApiVersion) => (version === "v5" ? ComuneSchemaV5 : ComuneSchemaV4);
 
 /**
  * Shapes a comune for the requested version.
  *
- * v1 keeps the field a single string, so that the clients written against it go
- * on working; v2 hands over the whole list. Neither exposes `capAlternativi`,
+ * v4 keeps the field a single string, so that the clients written against it go
+ * on working; v5 hands over the whole list. Neither exposes `capAlternativi`,
  * which exists only to widen the search.
  * @param comune The stored comune.
  * @param version The version to serve.
@@ -97,6 +98,6 @@ export function presentComune(comune: Comune, version: ApiVersion) {
   // not place, so that the CSV columns stay the ones they have always been.
   const presented: Record<string, unknown> = { ...comune };
   delete presented.capAlternativi;
-  presented.cap = version === "v2" ? comune.cap : (comune.cap[0] ?? null);
+  presented.cap = version === "v5" ? comune.cap : (comune.cap[0] ?? null);
   return presented;
 }

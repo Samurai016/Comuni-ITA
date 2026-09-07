@@ -119,10 +119,10 @@ const getComuni = (comuni: Comune[], query: ComuniQuery, version: ApiVersion): C
  * The same routes are served once per version: the shape of `cap` is the only
  * thing that changes, so the whole version lives in `presentComune`.
  * @param fastify The instance the routes are registered on.
- * @param options The version the instance serves, `v1` when unspecified.
+ * @param options The version the instance serves, `v4` when unspecified.
  */
 export function comuniRoutes(fastify: FastifyInstance, options: { version?: ApiVersion } = {}) {
-  const version: ApiVersion = options.version ?? "v1";
+  const version: ApiVersion = options.version ?? "v4";
 
   // GET /comuni
   fastify.get<{ Querystring: ComuniQuery; Reply: ComuniResponse }>("/comuni", getComuniOpts(version), (request, reply) => {

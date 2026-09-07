@@ -6,16 +6,16 @@ info:
 
 
     Ogni endpoint è servito su tre percorsi. Quelli storici (`/comuni`, `/province`,
-    `/regioni`) e quelli sotto `/v1` restituiscono la stessa identica risposta; sotto
-    `/v2` cambia solo il campo `cap` dei comuni, che diventa una lista. I percorsi
-    storici rispondono con l'header `Deprecation: true` e un `Link` alla rotta `/v1`
+    `/regioni`) e quelli sotto `/v4` restituiscono la stessa identica risposta; sotto
+    `/v5` cambia solo il campo `cap` dei comuni, che diventa una lista. I percorsi
+    storici rispondono con l'header `Deprecation: true` e un `Link` alla rotta `/v4`
     corrispondente: restano supportati, ma per il codice nuovo conviene indicare la
     versione.
 
 
     *Logo ispired by: [Castle by Jasfart from the Noun
     Project](https://thenounproject.com/omataloon/)*
-  version: 4.1.0
+  version: 5.0.0
   x-logo:
     url: ./logo.png
     altText: Comuni ITA Logo
@@ -58,13 +58,13 @@ paths:
     get:
       summary: Ottieni la lista di tutti i comuni italiani.
       description: >-
-        Disponibile anche su `/v1/comuni`, con la stessa risposta.
+        Disponibile anche su `/v4/comuni`, con la stessa risposta.
       operationId: comuni
       tags:
         - comuni
       responses:
         '200':
-          $ref: '#/components/responses/ComuniV1'
+          $ref: '#/components/responses/ComuniV4'
         '400':
           $ref: '#/components/responses/BadRequest'
         5XX:
@@ -86,13 +86,13 @@ paths:
     get:
       summary: Ottieni la lista di tutti i comuni della regione indicata.
       description: >-
-        Disponibile anche su `/v1/comuni/{regione}`, con la stessa risposta.
+        Disponibile anche su `/v4/comuni/{regione}`, con la stessa risposta.
       operationId: comuni-regione
       tags:
         - comuni
       responses:
         '200':
-          $ref: '#/components/responses/ComuniV1'
+          $ref: '#/components/responses/ComuniV4'
         '400':
           $ref: '#/components/responses/BadRequest'
         5XX:
@@ -113,18 +113,18 @@ paths:
     get:
       summary: Ottieni la lista di tutti i comuni della provincia indicata.
       description: >-
-        Disponibile anche su `/v1/comuni/provincia/{provincia}`, con la stessa risposta.
+        Disponibile anche su `/v4/comuni/provincia/{provincia}`, con la stessa risposta.
       operationId: comuni-provincia
       tags:
         - comuni
       responses:
         '200':
-          $ref: '#/components/responses/ComuniV1'
+          $ref: '#/components/responses/ComuniV4'
         '400':
           $ref: '#/components/responses/BadRequest'
         5XX:
           $ref: '#/components/responses/ServerError'
-  /v2/comuni:
+  /v5/comuni:
     parameters:
       - $ref: '#/components/parameters/format'
       - $ref: '#/components/parameters/page'
@@ -142,17 +142,17 @@ paths:
       summary: Ottieni la lista di tutti i comuni italiani, con tutti i loro CAP.
       description: >-
         Come `/comuni`, ma il campo `cap` è una lista.
-      operationId: comuni-v2
+      operationId: comuni-v5
       tags:
         - comuni
       responses:
         '200':
-          $ref: '#/components/responses/ComuniV2'
+          $ref: '#/components/responses/ComuniV5'
         '400':
           $ref: '#/components/responses/BadRequest'
         5XX:
           $ref: '#/components/responses/ServerError'
-  /v2/comuni/{regione}:
+  /v5/comuni/{regione}:
     parameters:
       - $ref: '#/components/parameters/regione'
       - $ref: '#/components/parameters/format'
@@ -170,17 +170,17 @@ paths:
       summary: Ottieni la lista di tutti i comuni della regione indicata, con tutti i loro CAP.
       description: >-
         Come `/comuni/{regione}`, ma il campo `cap` è una lista.
-      operationId: comuni-regione-v2
+      operationId: comuni-regione-v5
       tags:
         - comuni
       responses:
         '200':
-          $ref: '#/components/responses/ComuniV2'
+          $ref: '#/components/responses/ComuniV5'
         '400':
           $ref: '#/components/responses/BadRequest'
         5XX:
           $ref: '#/components/responses/ServerError'
-  /v2/comuni/provincia/{provincia}:
+  /v5/comuni/provincia/{provincia}:
     parameters:
       - $ref: '#/components/parameters/provincia'
       - $ref: '#/components/parameters/format'
@@ -197,12 +197,12 @@ paths:
       summary: Ottieni la lista di tutti i comuni della provincia indicata, con tutti i loro CAP.
       description: >-
         Come `/comuni/provincia/{provincia}`, ma il campo `cap` è una lista.
-      operationId: comuni-provincia-v2
+      operationId: comuni-provincia-v5
       tags:
         - comuni
       responses:
         '200':
-          $ref: '#/components/responses/ComuniV2'
+          $ref: '#/components/responses/ComuniV5'
         '400':
           $ref: '#/components/responses/BadRequest'
         5XX:
@@ -220,7 +220,7 @@ paths:
     get:
       summary: Ottieni la lista di tutte le province italiane.
       description: >-
-        Identico su `/v1/province` e `/v2/province`: le province non cambiano fra le versioni.
+        Identico su `/v4/province` e `/v5/province`: le province non cambiano fra le versioni.
       operationId: province
       tags:
         - province
@@ -244,7 +244,7 @@ paths:
     get:
       summary: Ottieni la lista di tutte le province della regione indicata.
       description: >-
-        Identico su `/v1/province/{regione}` e `/v2/province/{regione}`.
+        Identico su `/v4/province/{regione}` e `/v5/province/{regione}`.
       operationId: province-regione
       tags:
         - province
@@ -263,7 +263,7 @@ paths:
     get:
       summary: Ottieni la lista di tutte le regioni italiane.
       description: >-
-        Identico su `/v1/regioni` e `/v2/regioni`.
+        Identico su `/v4/regioni` e `/v5/regioni`.
       operationId: regioni
       tags:
         - regioni
@@ -310,7 +310,7 @@ paths:
           $ref: '#/components/responses/ServerError'
 components:
   responses:
-    ComuniV1:
+    ComuniV4:
       description: L'operazione ha avuto successo.
       headers:
         Deprecation:
@@ -320,7 +320,7 @@ components:
             type: string
         Link:
           description: >-
-            Presente insieme a `Deprecation`, indica la rotta `/v1` corrispondente.
+            Presente insieme a `Deprecation`, indica la rotta `/v4` corrispondente.
           schema:
             type: string
       content:
@@ -335,20 +335,20 @@ components:
         text/csv:
           schema:
             $ref: '#/components/schemas/ComuniCSV'
-    ComuniV2:
+    ComuniV5:
       description: L'operazione ha avuto successo.
       content:
         application/json:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/ComuneV2'
+              $ref: '#/components/schemas/ComuneV5'
         application/xml:
           schema:
-            $ref: '#/components/schemas/ComuniXMLV2'
+            $ref: '#/components/schemas/ComuniXMLV5'
         text/csv:
           schema:
-            $ref: '#/components/schemas/ComuniCSVV2'
+            $ref: '#/components/schemas/ComuniCSVV5'
     Province:
       description: L'operazione ha avuto successo.
       content:
@@ -594,7 +594,7 @@ components:
           type: string
           description: >-
             CAP del comune. I pochi comuni che ne hanno più di uno espongono qui
-            quello della sede comunale; per averli tutti usa `/v2`.
+            quello della sede comunale; per averli tutti usa `/v5`.
           example: '39100'
           pattern: \d{5}
         prefisso:
@@ -652,7 +652,7 @@ components:
               type: number
               description: Longitudine
               example: 11.35478
-    ComuneV2:
+    ComuneV5:
       allOf:
         - $ref: '#/components/schemas/Comune'
         - type: object
@@ -698,7 +698,7 @@ components:
             name: comune
           items:
             $ref: '#/components/schemas/Comune'
-    ComuniXMLV2:
+    ComuniXMLV5:
       allOf:
         - $ref: '#/components/schemas/ComuniXML'
         - type: object
@@ -710,7 +710,7 @@ components:
               xml:
                 name: comune
               items:
-                $ref: '#/components/schemas/ComuneV2'
+                $ref: '#/components/schemas/ComuneV5'
     ComuniCSV:
       type: string
       description: >-
@@ -719,10 +719,10 @@ components:
       example: |-
         codice,nome,nomeStraniero,codiceCatastale,cap,prefisso,provincia_nome,provincia_sigla,provincia_codice,provincia_regione,email,pec,telefono,fax,popolazione,coordinate_lat,coordinate_lng
         021008,Bolzano,Bozen,A952,39100,0471,Bolzano,BZ,021,Trentino Alto Adige,urp@comune.bolzano.it,bolzano@legalmail.it,+39 0471 997111,+39 0471 997 404,106901,46.498113,11.35478
-    ComuniCSVV2:
+    ComuniCSVV5:
       type: string
       description: >-
-        Come il CSV della v1. I comuni con più CAP li elencano nella stessa
+        Come il CSV della v4. I comuni con più CAP li elencano nella stessa
         colonna, separati da uno spazio.
       example: |-
         nome,cap,prefisso
