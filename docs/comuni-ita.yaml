@@ -5,12 +5,15 @@ info:
     Semplice API che permette di ottenere i comuni italiani in formato JSON, XML o CSV.
 
 
-    Ogni endpoint è servito su tre percorsi. Quelli storici (`/comuni`, `/province`,
-    `/regioni`) e quelli sotto `/v4` restituiscono la stessa identica risposta; sotto
-    `/v5` cambia solo il campo `cap` dei comuni, che diventa una lista. I percorsi
-    storici rispondono con l'header `Deprecation: true` e un `Link` alla rotta `/v4`
-    corrispondente: restano supportati, ma per il codice nuovo conviene indicare la
-    versione.
+    Dalla 5.0.0 gli endpoint sono versionati, ed è la `/v5` la strada da prendere per
+    il codice nuovo: è quella documentata qui sotto per prima. L'unica differenza
+    rispetto alla `/v4` è il campo `cap` dei comuni, che diventa una lista.
+
+
+    Le rotte storiche senza prefisso continuano a funzionare come sempre e servono la
+    `/v4`; rispondono con gli header `Deprecation: true` e `Link`, che rimanda alla
+    rotta `/v4` corrispondente. Le tre forme sono `/comuni`, `/v4/comuni` e
+    `/v5/comuni`, e così per province e regioni.
 
 
     *Logo ispired by: [Castle by Jasfart from the Noun
@@ -74,89 +77,6 @@ paths:
                     example: v5
         5XX:
           $ref: '#/components/responses/ServerError'
-  /comuni:
-    parameters:
-      - $ref: '#/components/parameters/format'
-      - $ref: '#/components/parameters/page'
-      - $ref: '#/components/parameters/pagesize'
-      - $ref: '#/components/parameters/sort'
-      - $ref: '#/components/parameters/fields'
-      - $ref: '#/components/parameters/q_comune'
-      - $ref: '#/components/parameters/codice_comune'
-      - $ref: '#/components/parameters/codiceCatastale_comune'
-      - $ref: '#/components/parameters/cap_comune'
-      - $ref: '#/components/parameters/prefisso_comune'
-      - $ref: '#/components/parameters/provincia_comune'
-      - $ref: '#/components/parameters/regione_comune'
-    get:
-      summary: Ottieni la lista di tutti i comuni italiani.
-      description: >-
-        Disponibile anche su `/v4/comuni`, con la stessa risposta.
-      operationId: comuni
-      tags:
-        - comuni
-      responses:
-        '200':
-          $ref: '#/components/responses/ComuniV4'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        5XX:
-          $ref: '#/components/responses/ServerError'
-  /comuni/{regione}:
-    parameters:
-      - $ref: '#/components/parameters/regione'
-      - $ref: '#/components/parameters/format'
-      - $ref: '#/components/parameters/page'
-      - $ref: '#/components/parameters/pagesize'
-      - $ref: '#/components/parameters/sort'
-      - $ref: '#/components/parameters/fields'
-      - $ref: '#/components/parameters/q_comune'
-      - $ref: '#/components/parameters/codice_comune'
-      - $ref: '#/components/parameters/codiceCatastale_comune'
-      - $ref: '#/components/parameters/cap_comune'
-      - $ref: '#/components/parameters/prefisso_comune'
-      - $ref: '#/components/parameters/provincia_comune'
-    get:
-      summary: Ottieni la lista di tutti i comuni della regione indicata.
-      description: >-
-        Disponibile anche su `/v4/comuni/{regione}`, con la stessa risposta.
-      operationId: comuni-regione
-      tags:
-        - comuni
-      responses:
-        '200':
-          $ref: '#/components/responses/ComuniV4'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        5XX:
-          $ref: '#/components/responses/ServerError'
-  /comuni/provincia/{provincia}:
-    parameters:
-      - $ref: '#/components/parameters/provincia'
-      - $ref: '#/components/parameters/format'
-      - $ref: '#/components/parameters/page'
-      - $ref: '#/components/parameters/pagesize'
-      - $ref: '#/components/parameters/sort'
-      - $ref: '#/components/parameters/fields'
-      - $ref: '#/components/parameters/q_comune'
-      - $ref: '#/components/parameters/codice_comune'
-      - $ref: '#/components/parameters/codiceCatastale_comune'
-      - $ref: '#/components/parameters/cap_comune'
-      - $ref: '#/components/parameters/prefisso_comune'
-    get:
-      summary: Ottieni la lista di tutti i comuni della provincia indicata.
-      description: >-
-        Disponibile anche su `/v4/comuni/provincia/{provincia}`, con la stessa risposta.
-      operationId: comuni-provincia
-      tags:
-        - comuni
-      responses:
-        '200':
-          $ref: '#/components/responses/ComuniV4'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        5XX:
-          $ref: '#/components/responses/ServerError'
   /v5/comuni:
     parameters:
       - $ref: '#/components/parameters/format'
@@ -172,7 +92,7 @@ paths:
       - $ref: '#/components/parameters/provincia_comune'
       - $ref: '#/components/parameters/regione_comune'
     get:
-      summary: Ottieni la lista di tutti i comuni italiani, con tutti i loro CAP.
+      summary: Ottieni la lista di tutti i comuni italiani.
       description: >-
         Come `/comuni`, ma il campo `cap` è una lista.
       operationId: comuni-v5
@@ -200,7 +120,7 @@ paths:
       - $ref: '#/components/parameters/prefisso_comune'
       - $ref: '#/components/parameters/provincia_comune'
     get:
-      summary: Ottieni la lista di tutti i comuni della regione indicata, con tutti i loro CAP.
+      summary: Ottieni la lista di tutti i comuni della regione indicata.
       description: >-
         Come `/comuni/{regione}`, ma il campo `cap` è una lista.
       operationId: comuni-regione-v5
@@ -227,7 +147,7 @@ paths:
       - $ref: '#/components/parameters/cap_comune'
       - $ref: '#/components/parameters/prefisso_comune'
     get:
-      summary: Ottieni la lista di tutti i comuni della provincia indicata, con tutti i loro CAP.
+      summary: Ottieni la lista di tutti i comuni della provincia indicata.
       description: >-
         Come `/comuni/provincia/{provincia}`, ma il campo `cap` è una lista.
       operationId: comuni-provincia-v5
@@ -236,6 +156,171 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ComuniV5'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /v5/province:
+    parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/codice_provincia'
+      - $ref: '#/components/parameters/sigla_provincia'
+      - $ref: '#/components/parameters/regione_provincia'
+    get:
+      summary: Ottieni la lista di tutte le province italiane.
+      description: >-
+        Identica sulle rotte `/v4/...` e su quelle storiche senza prefisso:
+        province e regioni non cambiano fra le versioni.
+      operationId: province-v5
+      tags:
+        - province
+      responses:
+        '200':
+          $ref: '#/components/responses/Province'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /v5/province/{regione}:
+    parameters:
+      - $ref: '#/components/parameters/regione'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/codice_provincia'
+      - $ref: '#/components/parameters/sigla_provincia'
+    get:
+      summary: Ottieni la lista di tutte le province della regione indicata.
+      description: >-
+        Identica sulle rotte `/v4/...` e su quelle storiche senza prefisso:
+        province e regioni non cambiano fra le versioni.
+      operationId: province-regione-v5
+      tags:
+        - province
+      responses:
+        '200':
+          $ref: '#/components/responses/Province'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /v5/regioni:
+    parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+    get:
+      summary: Ottieni la lista di tutte le regioni italiane.
+      description: >-
+        Identica sulle rotte `/v4/...` e su quelle storiche senza prefisso:
+        province e regioni non cambiano fra le versioni.
+      operationId: regioni-v5
+      tags:
+        - regioni
+      responses:
+        '200':
+          $ref: '#/components/responses/Regioni'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /comuni:
+    parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+      - $ref: '#/components/parameters/prefisso_comune'
+      - $ref: '#/components/parameters/provincia_comune'
+      - $ref: '#/components/parameters/regione_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni italiani, con un CAP solo.
+      description: >-
+        Rotta storica: serve la v4, dove `cap` è una stringa sola. Risponde con
+        gli header `Deprecation: true` e `Link`, che rimanda alla rotta `/v4`
+        corrispondente: identica in tutto, ma senza quegli header. Continua a
+        funzionare, per il codice nuovo conviene la `/v5`.
+      deprecated: true
+      operationId: comuni
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniV4'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /comuni/{regione}:
+    parameters:
+      - $ref: '#/components/parameters/regione'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+      - $ref: '#/components/parameters/prefisso_comune'
+      - $ref: '#/components/parameters/provincia_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni della regione indicata, con un CAP solo.
+      description: >-
+        Rotta storica: serve la v4, dove `cap` è una stringa sola. Risponde con
+        gli header `Deprecation: true` e `Link`, che rimanda alla rotta `/v4`
+        corrispondente: identica in tutto, ma senza quegli header. Continua a
+        funzionare, per il codice nuovo conviene la `/v5`.
+      deprecated: true
+      operationId: comuni-regione
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniV4'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /comuni/provincia/{provincia}:
+    parameters:
+      - $ref: '#/components/parameters/provincia'
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_comune'
+      - $ref: '#/components/parameters/codice_comune'
+      - $ref: '#/components/parameters/codiceCatastale_comune'
+      - $ref: '#/components/parameters/cap_comune'
+      - $ref: '#/components/parameters/prefisso_comune'
+    get:
+      summary: Ottieni la lista di tutti i comuni della provincia indicata, con un CAP solo.
+      description: >-
+        Rotta storica: serve la v4, dove `cap` è una stringa sola. Risponde con
+        gli header `Deprecation: true` e `Link`, che rimanda alla rotta `/v4`
+        corrispondente: identica in tutto, ma senza quegli header. Continua a
+        funzionare, per il codice nuovo conviene la `/v5`.
+      deprecated: true
+      operationId: comuni-provincia
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniV4'
         '400':
           $ref: '#/components/responses/BadRequest'
         5XX:
@@ -253,7 +338,10 @@ paths:
     get:
       summary: Ottieni la lista di tutte le province italiane.
       description: >-
-        Identico su `/v4/province` e `/v5/province`: le province non cambiano fra le versioni.
+        Rotta storica. Province e regioni sono identiche in tutte le versioni,
+        quindi la risposta è la stessa della `/v5`; cambiano solo gli header
+        `Deprecation` e `Link`, che rimandano alla rotta `/v4` corrispondente.
+      deprecated: true
       operationId: province
       tags:
         - province
@@ -277,7 +365,10 @@ paths:
     get:
       summary: Ottieni la lista di tutte le province della regione indicata.
       description: >-
-        Identico su `/v4/province/{regione}` e `/v5/province/{regione}`.
+        Rotta storica. Province e regioni sono identiche in tutte le versioni,
+        quindi la risposta è la stessa della `/v5`; cambiano solo gli header
+        `Deprecation` e `Link`, che rimandano alla rotta `/v4` corrispondente.
+      deprecated: true
       operationId: province-regione
       tags:
         - province
@@ -296,51 +387,21 @@ paths:
     get:
       summary: Ottieni la lista di tutte le regioni italiane.
       description: >-
-        Identico su `/v4/regioni` e `/v5/regioni`.
+        Rotta storica. Province e regioni sono identiche in tutte le versioni,
+        quindi la risposta è la stessa della `/v5`; cambiano solo gli header
+        `Deprecation` e `Link`, che rimandano alla rotta `/v4` corrispondente.
+      deprecated: true
       operationId: regioni
       tags:
         - regioni
       responses:
         '200':
-          description: L'operazione ha avuto successo.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-                  example: Trentino Alto Adige
-            application/xml:
-              schema:
-                type: object
-                xml:
-                  name: regioni
-                properties:
-                  page:
-                    xml:
-                      attribute: true
-                    type: integer
-                  pagesize:
-                    xml:
-                      attribute: true
-                    type: integer
-                  total:
-                    xml:
-                      attribute: true
-                    type: integer
-                  regioni:
-                    type: array
-                    xml:
-                      name: regione
-                    items:
-                      type: string
-            text/csv:
-              schema:
-                type: string
+          $ref: '#/components/responses/Regioni'
         '400':
           $ref: '#/components/responses/BadRequest'
         5XX:
           $ref: '#/components/responses/ServerError'
+
 components:
   responses:
     ComuniV4:
@@ -382,6 +443,42 @@ components:
         text/csv:
           schema:
             $ref: '#/components/schemas/ComuniCSVV5'
+    Regioni:
+      description: L'operazione ha avuto successo.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+              example: Trentino Alto Adige
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: regioni
+            properties:
+              page:
+                xml:
+                  attribute: true
+                type: integer
+              pagesize:
+                xml:
+                  attribute: true
+                type: integer
+              total:
+                xml:
+                  attribute: true
+                type: integer
+              regioni:
+                type: array
+                xml:
+                  name: regione
+                items:
+                  type: string
+        text/csv:
+          schema:
+            type: string
     Province:
       description: L'operazione ha avuto successo.
       content:
@@ -498,16 +595,10 @@ components:
         type: string
         pattern: \d{5}
       description: >-
-        CAP esatto del comune.
-
-
-        Un comune corrisponde se il CAP è fra i suoi, anche quando non è quello
-        che compare nella risposta: Milano si trova con ciascuno dei suoi 38 CAP
-        e Roma con ognuno dei suoi. La ricerca copre anche i CAP storici, che
-        l'API conosce ma non espone.
-
-
-        Lo stesso CAP può appartenere a più comuni.
+        CAP esatto del comune. La ricerca viene fatta fra tutti i CAP di un
+        comune, quelli storici compresi, quindi un comune corrisponde anche a un
+        CAP che non compare nella sua risposta. Lo stesso CAP può appartenere a
+        più comuni.
       example: '20143'
     prefisso_comune:
       in: query
