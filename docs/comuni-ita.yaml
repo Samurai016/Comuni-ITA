@@ -34,6 +34,8 @@ servers:
 # L'API è pubblica e non richiede autenticazione
 security: []
 tags:
+  - name: servizio
+    description: Endpoint di servizio
   - name: comuni
     description: Endpoint che restituiscono comuni
   - name: province
@@ -41,6 +43,37 @@ tags:
   - name: regioni
     description: Endpoint che restituiscono regioni
 paths:
+  /:
+    get:
+      summary: Verifica che l'API risponda e scopri le versioni disponibili.
+      operationId: root
+      tags:
+        - servizio
+      responses:
+        '200':
+          description: L'API è in esecuzione.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Comuni-ITA API is running!
+                  datasetVersion:
+                    type: string
+                    description: Versione del dataset caricato, `N/A` se non dichiarata.
+                    example: N/A
+                  versions:
+                    type: array
+                    items:
+                      type: string
+                    example: ['v4', 'v5']
+                  latestVersion:
+                    type: string
+                    example: v5
+        5XX:
+          $ref: '#/components/responses/ServerError'
   /comuni:
     parameters:
       - $ref: '#/components/parameters/format'

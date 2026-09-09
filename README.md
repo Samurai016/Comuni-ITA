@@ -58,6 +58,13 @@ Ogni endpoint è servito su tre percorsi, che restituiscono gli stessi comuni ma
 
 Nessun software esistente va toccato: chi interroga `/comuni` continua a ricevere quello che ha sempre ricevuto. Le rotte senza prefisso restano supportate, l'header `Deprecation` segnala solo che la strada consigliata per il codice nuovo è quella versionata.
 
+### Cosa cambia per chi usa già l'API
+
+La forma delle risposte sulle rotte storiche è identica a prima: stessi campi, stesso ordine, `cap` ancora una stringa. Due cose però cambiano nei valori, e vale la pena saperlo prima di aggiornare.
+
+- **Il filtro `?cap=` trova più comuni.** Cerca fra tutti i CAP di un comune, quelli storici compresi, quindi qualche query restituisce risultati in più rispetto a prima. Su 4740 CAP interrogabili il risultato è identico per 3983, mentre 722 che prima non trovavano nulla ora rispondono. In 11 casi cambia il *primo* risultato: se usi `?cap=` per risolvere un CAP in un comune e prendi il primo elemento, controlla quei casi.
+- **Quattro comuni cambiano il CAP esposto**: Milano `20123` → `20121`, Bologna `40124` → `40121`, Napoli `80145` → `80133`, Ozzano dell'Emilia `8604` → `40064` (il primo non era un CAP, aveva quattro cifre). I primi tre ora espongono il CAP della sede comunale. Cercarli con il vecchio CAP continua a funzionare.
+
 ### CAP multipli
 
 Un comune può avere più di un CAP: Milano ne ha 38, Napoli 25, Bologna 19, Trento 3, Castegnero Nanto 2. La v4 può esporne uno solo, e per ognuno di questi comuni espone quello della sede comunale; la v5 li espone tutti, con la sede in testa.
