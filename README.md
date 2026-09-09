@@ -10,9 +10,9 @@
 
 ## ⚡TL;DR
 
-* [https://comuni-ita.nicolorebaioli.dev/comuni](https://comuni-ita.nicolorebaioli.dev/comuni) - Lista dei comuni italiani.
-* [https://comuni-ita.nicolorebaioli.dev/province](https://comuni-ita.nicolorebaioli.dev/province) - Lista delle province italiane.
-* [https://comuni-ita.nicolorebaioli.dev/regioni](https://comuni-ita.nicolorebaioli.dev/regioni) - Lista delle regioni italiane.
+* [https://comuni-ita.nicolorebaioli.dev/v5/comuni](https://comuni-ita.nicolorebaioli.dev/v5/comuni) - Lista dei comuni italiani.
+* [https://comuni-ita.nicolorebaioli.dev/v5/province](https://comuni-ita.nicolorebaioli.dev/v5/province) - Lista delle province italiane.
+* [https://comuni-ita.nicolorebaioli.dev/v5/regioni](https://comuni-ita.nicolorebaioli.dev/v5/regioni) - Lista delle regioni italiane.
 
 Per ulteriori dettagli su filtri, sorting, paginazione e altri endpoint, prosegui la lettura.
 
@@ -21,12 +21,12 @@ Per ulteriori dettagli su filtri, sorting, paginazione e altri endpoint, prosegu
 - [✨Panoramica](#-panoramica)
 - [🔀 Versioni](#-versioni)
 - [📚 Endpoint API](#-endpoint-api)
-  - [GET /comuni](#-comuni)
-  - [GET /comuni/:regione](#-comuniregione)
-  - [GET /comuni/provincia/:provincia](#-comuniprovincaprovincia)
-  - [GET /province](#-province)
-  - [GET /province/:regione](#-provinceregione)
-  - [GET /regioni](#-regioni)
+  - [GET /v5/comuni](#-comuni)
+  - [GET /v5/comuni/:regione](#-comuniregione)
+  - [GET /v5/comuni/provincia/:provincia](#-comuniprovincaprovincia)
+  - [GET /v5/province](#-province)
+  - [GET /v5/province/:regione](#-provinceregione)
+  - [GET /v5/regioni](#-regioni)
 - [📊 Parametri di Query](#-parametri-di-query)
 - [🚀 Deploy](#-deploy)
 
@@ -61,7 +61,7 @@ Di seguito sono elencate le versioni attualmente disponibili:
 
 ## 📚 Endpoint API
 
-### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni`](https://comuni-ita.nicolorebaioli.dev/comuni)
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/v5/comuni`](https://comuni-ita.nicolorebaioli.dev/v5/comuni)
 
 Recupera informazioni dettagliate sui comuni italiani.
 
@@ -80,22 +80,22 @@ Recupera informazioni dettagliate sui comuni italiani.
 Query per ottenere i primi 10 comuni italiani, ordinati alfabeticamente per nome e mostrando solo il nome, il codice e il CAP.
 
 ```http
-GET /comuni?regione=lombardia&sort=nome&fields=nome,codice,cap&pagesize=10
+GET /v5/comuni?regione=lombardia&sort=nome&fields=nome,codice,cap&pagesize=10
 ```
 
 Query per ottenere tutti i comuni con CAP 20121 (restituisce Milano, di cui 20121 è uno dei 38 CAP).
 
 ```http
-GET /comuni?cap=20121
+GET /v5/comuni?cap=20121
 ```
 
 Query per ottenere tutti i comuni che contengono "milano" nel nome.
 
 ```http
-GET /comuni?q=milano
+GET /v5/comuni?q=milano
 ```
 
-### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni/:regione`](https://comuni-ita.nicolorebaioli.dev/comuni/lombardia)
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/v5/comuni/:regione`](https://comuni-ita.nicolorebaioli.dev/v5/comuni/lombardia)
 
 Recupera informazioni dettagliate sui comuni di una regione specifica.
 
@@ -113,18 +113,18 @@ Recupera informazioni dettagliate sui comuni di una regione specifica.
 Query per ottenere tutti i comuni lombardi che contengono "milano" nel nome.
 
 ```http
-GET /comuni/lombardia?q=milano
+GET /v5/comuni/lombardia?q=milano
 ```
 
 Query per ottenere tutti i comuni della Valle d'Aosta.
 
 ```http
-GET /comuni/valle d'aosta
-GET /comuni/valle-d'aosta
-GET /comuni/valle-d-aosta
+GET /v5/comuni/valle d'aosta
+GET /v5/comuni/valle-d'aosta
+GET /v5/comuni/valle-d-aosta
 ```
 
-### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/comuni/provincia/:provincia`](https://comuni-ita.nicolorebaioli.dev/comuni/provincia/milano)
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/v5/comuni/provincia/:provincia`](https://comuni-ita.nicolorebaioli.dev/v5/comuni/provincia/milano)
 
 Recupera informazioni dettagliate sui comuni di una provincia specifica.
 
@@ -141,16 +141,16 @@ Recupera informazioni dettagliate sui comuni di una provincia specifica.
 Query per ottenere tutti i comuni della provincia di Milano.
 
 ```http
-GET /comuni/provincia/milano
+GET /v5/comuni/provincia/milano
 ```
 
 Query per ottenere tutti i comuni della provincia di Milano che contengono "milano" nel nome.
 
 ```http
-GET /comuni/provincia/milano?q=milano
+GET /v5/comuni/provincia/milano?q=milano
 ```
 
-### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/province`](https://comuni-ita.nicolorebaioli.dev/province)
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/v5/province`](https://comuni-ita.nicolorebaioli.dev/v5/province)
 
 Recupera informazioni dettagliate sulle province italiane.
 
@@ -164,16 +164,16 @@ Recupera informazioni dettagliate sulle province italiane.
 Query per ottenere tutte le province italiane.
 
 ```http
-GET /province
+GET /v5/province
 ```
 
 Query per ottenere tutte le province italiane che contengono "reggio" nel nome.
 
 ```http
-GET /province?q=reggio
+GET /v5/province?q=reggio
 ```
 
-### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/province/:regione`](https://comuni-ita.nicolorebaioli.dev/province/lombardia)
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/v5/province/:regione`](https://comuni-ita.nicolorebaioli.dev/v5/province/lombardia)
 
 Recupera informazioni dettagliate sulle province italiane di una regione specifica.
 
@@ -186,10 +186,10 @@ Recupera informazioni dettagliate sulle province italiane di una regione specifi
 Query per ottenere tutte le province italiane della regione di Lombardia.
 
 ```http
-GET /province/lombardia
+GET /v5/province/lombardia
 ```
 
-### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/regioni`](https://comuni-ita.nicolorebaioli.dev/regioni)
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/v5/regioni`](https://comuni-ita.nicolorebaioli.dev/v5/regioni)
 
 Recupera informazioni dettagliate sulle regioni italiane.
 
@@ -198,7 +198,7 @@ Recupera informazioni dettagliate sulle regioni italiane.
 Query per ottenere tutte le regioni italiane.
 
 ```http
-GET /regioni
+GET /v5/regioni
 ```
 
 ## 📊 Parametri di Query
