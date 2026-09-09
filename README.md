@@ -48,35 +48,16 @@ La documentazione è disponibile anche all'indirizzo [https://comuni-ita.readme.
 
 ## 🔀 Versioni
 
-Ogni endpoint è servito su tre percorsi, che restituiscono gli stessi comuni ma non sempre nella stessa forma:
+A partire dalla versione v5.0.0 l'API è dotata di endpoint versionati.  
+Ogni futura modifica non distruttiva alla struttura delle risposte verrà servita da un'endpoint versionati della stessa.  
+**Gli endpoint storici non versionati continueranno a funzionare come di consueto**.  
+Di seguito sono elencate le versioni attualmente disponibili:  
 
 | Percorso | Versione | Note |
 | --- | --- | --- |
 | `/comuni`, `/province`, `/regioni` | v4 | Le rotte storiche, invariate. Rispondono con l'header `Deprecation: true` e un `Link` alla rotta versionata corrispondente. |
-| `/v4/comuni`, `/v4/province`, `/v4/regioni` | v4 | Identiche alle rotte storiche, ma esplicite. |
-| `/v5/comuni`, `/v5/province`, `/v5/regioni` | v5 | `cap` è una lista. |
-
-Nessun software esistente va toccato: chi interroga `/comuni` continua a ricevere quello che ha sempre ricevuto. Le rotte senza prefisso restano supportate, l'header `Deprecation` segnala solo che la strada consigliata per il codice nuovo è quella versionata.
-
-### Cosa cambia per chi usa già l'API
-
-La forma delle risposte sulle rotte storiche è identica a prima: stessi campi, stesso ordine, `cap` ancora una stringa. Due cose però cambiano nei valori, e vale la pena saperlo prima di aggiornare.
-
-- **Il filtro `?cap=` trova più comuni.** Cerca fra tutti i CAP di un comune, quelli storici compresi, quindi qualche query restituisce risultati in più rispetto a prima. Su 4740 CAP interrogabili il risultato è identico per 3983, mentre 722 che prima non trovavano nulla ora rispondono. In 11 casi cambia il *primo* risultato: se usi `?cap=` per risolvere un CAP in un comune e prendi il primo elemento, controlla quei casi.
-- **Quattro comuni cambiano il CAP esposto**: Milano `20123` → `20121`, Bologna `40124` → `40121`, Napoli `80145` → `80133`, Ozzano dell'Emilia `8604` → `40064` (il primo non era un CAP, aveva quattro cifre). I primi tre ora espongono il CAP della sede comunale. Cercarli con il vecchio CAP continua a funzionare.
-
-### CAP multipli
-
-Un comune può avere più di un CAP: Milano ne ha 38, Napoli 25, Bologna 19, Trento 3, Castegnero Nanto 2. La v4 può esporne uno solo, e per ognuno di questi comuni espone quello della sede comunale; la v5 li espone tutti, con la sede in testa.
-
-```jsonc
-// GET /comuni?codice=022205     →  "cap": "38122"
-// GET /v5/comuni?codice=022205  →  "cap": ["38122", "38121", "38123"]
-```
-
-Negli altri formati la lista segue la convenzione del formato: nel CSV i CAP stanno in una sola colonna separati da uno spazio (`38122 38121 38123`), nell'XML diventano un elemento `<cap>` ripetuto.
-
-I CAP pubblicati arrivano solo da fonti istituzionali o da Wikidata; l'elenco dei comuni a CAP multipli è curato a mano, perché nessuna fonte aperta lo pubblica in modo affidabile. Il filtro `?cap=` invece funziona anche sui CAP che l'API non espone (quelli storici, o quelli dei comuni multi-CAP non ancora censiti): sono buoni per **trovare** un comune, non abbastanza per descriverlo.
+| `/v4/comuni`, `/v4/province`, `/v4/regioni` | v4 | Identiche alle rotte storiche. |
+| `/v5/comuni`, `/v5/province`, `/v5/regioni` | v5 | Supporto multi-cap: il campo `cap` è una lista. |
 
 ## 📚 Endpoint API
 
@@ -91,7 +72,7 @@ Recupera informazioni dettagliate sui comuni italiani.
 - `prefisso`: Filtra per prefisso telefonico esatto.
 - `provincia`: Filtra per nome della provincia (corrispondenza esatta, case-insensitive).
 - `regione`: Filtra per nome della regione (corrispondenza esatta, case-insensitive).
-- `cap`: Filtra per codice postale (CAP). Corrisponde un comune se il CAP è **fra i suoi**, anche quando non è quello esposto nella risposta.
+- `cap`: Filtra per codice postale (CAP). La ricerca viene fatta tra tutti i CAP presenti in un comune.
 - `q`: Ricerca parziale per nome (es. "milano").
 
 #### Esempi
@@ -124,7 +105,7 @@ Recupera informazioni dettagliate sui comuni di una regione specifica.
 - `codiceCatastale`: Filtra per codice catastale esatto.
 - `prefisso`: Filtra per prefisso telefonico esatto.
 - `provincia`: Filtra per nome della provincia (corrispondenza esatta, case-insensitive).
-- `cap`: Filtra per codice postale (CAP). Corrisponde un comune se il CAP è **fra i suoi**, anche quando non è quello esposto nella risposta.
+- `cap`: Filtra per codice postale (CAP). La ricerca viene fatta tra tutti i CAP presenti in un comune.
 - `q`: Ricerca parziale per nome (es. "milano").
 
 #### Esempi
@@ -152,7 +133,7 @@ Recupera informazioni dettagliate sui comuni di una provincia specifica.
 - `codice`: Filtra per codice ISTAT esatto.
 - `codiceCatastale`: Filtra per codice catastale esatto.
 - `prefisso`: Filtra per prefisso telefonico esatto.
-- `cap`: Filtra per codice postale (CAP). Corrisponde un comune se il CAP è **fra i suoi**, anche quando non è quello esposto nella risposta.
+- `cap`: Filtra per codice postale (CAP). La ricerca viene fatta tra tutti i CAP presenti in un comune.
 - `q`: Ricerca parziale per nome (es. "milano").
 
 #### Esempi
