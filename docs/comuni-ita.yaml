@@ -125,9 +125,10 @@ paths:
       - $ref: '#/components/parameters/soppresso'
     get:
       summary: Ottieni la lista dei comuni italiani cessati.
-      description: >-
-        I comuni che non esistono più con il nome, il codice o la provincia con
-        cui sono descritti.
+      # Blocco literal e non folded: `>` unirebbe i bullet in un'unica riga e
+      # l'elenco non verrebbe reso come tale.
+      description: |-
+        I comuni che non esistono più con il nome, il codice o la provincia con cui sono descritti.
 
         Uno stesso comune può comparire più volte nella lista in caso di modifiche successive.
         Il campo `comuneAttuale` riporta infine uno di questi 2 possibili valori:
