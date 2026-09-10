@@ -38,7 +38,9 @@ Per ulteriori dettagli su filtri, sorting, paginazione e altri endpoint, prosegu
 
 I dati sono ottenuti e aggiornati da un sistema semiautomatico che preleva i dati direttamente dagli archivi ISTAT e integra le informazioni mancanti interrogando Wikidata.
 
-I comuni cessati arrivano invece dall'[archivio storico dei comuni di ANPR](https://www.anagrafenazionale.interno.it/area-tecnica/archivio-storico-dei-comuni/), pubblicato dal Ministero dell'Interno, che raccoglie tutte le variazioni registrate da ISTAT per ogni comune italiano dalla sua istituzione. Il dataset si rigenera con [`scripts/build-comuni-cessati.ts`](scripts/build-comuni-cessati.ts).
+I comuni cessati arrivano invece dall'[archivio storico dei comuni di ANPR](https://www.anagrafenazionale.interno.it/area-tecnica/archivio-storico-dei-comuni/), pubblicato dal Ministero dell'Interno, che raccoglie tutte le variazioni registrate da ISTAT per ogni comune italiano dalla sua istituzione.
+
+Come per gli altri dataset, il prelievo e l'elaborazione stanno in [Comuni-ITA-updater](https://github.com/Samurai016/Comuni-ITA-updater): questa repo si limita a servire i file in [`data/`](data).
 
 L'API è disponibile gratuitamente e senza limitazioni all'indirizzo **[https://comuni-ita.nicolorebaioli.dev/](https://comuni-ita.nicolorebaioli.dev/)** oppure può essere facilmente eseguita in locale o distribuita su qualsiasi piattaforma Node.js o Docker.
 
