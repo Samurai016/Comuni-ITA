@@ -159,16 +159,14 @@ GET /v5/comuni/provincia/milano?q=milano
 
 ### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/v5/comuni/cessati`](https://comuni-ita.nicolorebaioli.dev/v5/comuni/cessati)
 
-Recupera i comuni che non esistono più con il nome, il codice o la provincia con cui sono qui descritti. Serve a riconoscere un luogo di nascita che sui documenti c'è ancora ma sul territorio no.
+Recupera i comuni che non esistono più con il nome, il codice o la provincia con cui sono descritti.
 
-Un record non è un comune, è un'**identità**: il comune rinominato, passato a un'altra provincia o confluito in uno nuovo ne lascia uno dietro di sé, e lo stesso comune può quindi comparire più volte. A dire quale delle due cose è successa è `comuneAttuale`:
-
+Uno stesso comune può comparire più volte nella lista in caso di modifiche successive.   
+Il campo `comuneAttuale` riporta infine uno di questi 2 possibili valori:
 - **valorizzato**: il comune esiste ancora, sotto altro nome o altra provincia (`Abano` → `Abano Terme`);
 - **`null`**: il comune è stato soppresso e nessun comune di oggi ne porta il codice catastale (`Castegnero`, confluito in `Castegnero Nanto` nel 2026).
 
 Il campo su cui appoggiarsi per il riconoscimento è il **codice catastale**: è lo stesso per tutte le identità di uno stesso comune, mentre il codice ISTAT viene riassegnato negli anni a comuni diversi.
-
-> La rotta esiste solo in `/v5`: la `/v4` resta la versione di sempre.
 
 #### Filtri
 
