@@ -1,4 +1,4 @@
-import { Type } from "@sinclair/typebox";
+import { TSchema, Type } from "@sinclair/typebox";
 
 export interface Provincia {
   codice: string;
@@ -101,3 +101,73 @@ export function presentComune(comune: Comune, version: ApiVersion) {
   presented.cap = version === "v5" ? comune.cap : (comune.cap[0] ?? null);
   return presented;
 }
+
+/**
+ * A comune as it was known during one stretch of its history, closed by the
+ * date it stopped being known that way.
+ *
+ * The archive records an identity, not a place: a comune that was renamed, that
+ * moved to another province or that merged into a new one leaves a record
+ * behind, and the same comune can therefore appear more than once. `id` is the
+ * ANPR identifier of the record and the only field unique to it — `codice` is
+ * handed down to unrelated comuni over the years, and `codiceCatastale` is
+ * shared by every identity of the same comune.
+ *
+ * `comuneAttuale` says which of the two happened: when it is set the comune is
+ * still there under another name or another province, and when it is `null` the
+ * comune was suppressed and nothing carries its cadastral code today.
+ */
+export interface ComuneCessato {
+  /** Identificativo ANPR del record, stabile fra un aggiornamento e l'altro. */
+  id: number;
+  codice: string;
+  nome: string;
+  nomeStraniero: string | null;
+  /** `null` for the comuni, all of them long gone, that never got one. */
+  codiceCatastale: string | null;
+  dataIstituzione: string;
+  dataCessazione: string;
+  provincia: {
+    codice: string;
+    /** `null` when the province is no longer one the API describes. */
+    nome: string | null;
+    sigla: string;
+    /** `null` for the territories ceded after the war. */
+    regione: string | null;
+  };
+  /** The comune this one lives on as, or `null` when it was suppressed. */
+  comuneAttuale: {
+    codice: string;
+    nome: string;
+    codiceCatastale: string;
+  } | null;
+}
+
+const Nullable = <T extends TSchema>(schema: T) => Type.Union([schema, Type.Null()]);
+
+export const ComuneCessatoSchema = Type.Object({
+  id: Type.Optional(Type.Integer()),
+  codice: Type.Optional(Type.String()),
+  nome: Type.Optional(Type.String()),
+  nomeStraniero: Type.Optional(Nullable(Type.String())),
+  codiceCatastale: Type.Optional(Nullable(Type.String())),
+  dataIstituzione: Type.Optional(Type.String({ format: "date" })),
+  dataCessazione: Type.Optional(Type.String({ format: "date" })),
+  provincia: Type.Optional(
+    Type.Object({
+      codice: Type.String(),
+      nome: Nullable(Type.String()),
+      sigla: Type.String(),
+      regione: Nullable(Type.String()),
+    }),
+  ),
+  comuneAttuale: Type.Optional(
+    Nullable(
+      Type.Object({
+        codice: Type.String(),
+        nome: Type.String(),
+        codiceCatastale: Type.String(),
+      }),
+    ),
+  ),
+});

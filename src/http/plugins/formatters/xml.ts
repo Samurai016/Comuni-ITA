@@ -14,6 +14,13 @@ function toXML(data: any, rootName = "root", childName = "item", rootAttributes?
         .join(" ");
   }
 
+  // Un valore assente diventa un elemento vuoto: `<nomeStraniero/>`. Scritto
+  // come contenuto diventerebbe la stringa "null", che a chi legge l'XML è
+  // indistinguibile da un nome.
+  if (data === null || data === undefined) {
+    return `<${rootName}${attributes}/>`;
+  }
+
   // Array
   if (Array.isArray(data)) {
     xml += `<${rootName}${attributes}>`;

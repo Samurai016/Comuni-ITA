@@ -1,10 +1,12 @@
-import { Comune, Provincia } from "../domain/types";
+import { Comune, ComuneCessato, Provincia } from "../domain/types";
 import * as comuniData from "../../data/comuni.json";
+import * as comuniCessatiData from "../../data/comuni-cessati.json";
 import * as provinceData from "../../data/province.json";
 import * as regioniData from "../../data/regioni.json";
 
 interface Dataset {
   comuni: Comune[];
+  comuniCessati: ComuneCessato[];
   province: Provincia[];
   regioni: string[];
   // Indexes for efficient lookup
@@ -14,6 +16,11 @@ interface Dataset {
   /** Every CAP a comune can be found by, its `capAlternativi` included. */
   comuniByCap: Map<string, Comune[]>;
 
+  // A cessato is an identity, not a comune: the same code, cadastral or ISTAT,
+  // can name several of them over the years, so both indexes hold a list.
+  comuniCessatiByCodice: Map<string, ComuneCessato[]>;
+  comuniCessatiByCodiceCatastale: Map<string, ComuneCessato[]>;
+
   provinceByCodice: Map<string, Provincia>;
   provinceBySigla: Map<string, Provincia>;
   provinceByRegione: Map<string, Provincia[]>;
@@ -21,16 +28,35 @@ interface Dataset {
 
 export const dataset: Dataset = {
   comuni: [],
+  comuniCessati: [],
   province: [],
   regioni: [],
   comuniByCodice: new Map(),
   comuniByProvincia: new Map(),
   comuniByRegione: new Map(),
   comuniByCap: new Map(),
+  comuniCessatiByCodice: new Map(),
+  comuniCessatiByCodiceCatastale: new Map(),
   provinceByCodice: new Map(),
   provinceBySigla: new Map(),
   provinceByRegione: new Map(),
 };
+
+/**
+ * Appends a value to the list an index keeps for a key, starting the list when
+ * the key is a new one.
+ * @param index The index to append to.
+ * @param key The key the value is indexed by.
+ * @param value The value to append.
+ */
+function push<T>(index: Map<string, T[]>, key: string, value: T) {
+  const values = index.get(key);
+  if (values) {
+    values.push(value);
+  } else {
+    index.set(key, [value]);
+  }
+}
 
 export function loadAndIndexData() {
   console.log("Loading and indexing data...");
@@ -78,5 +104,16 @@ export function loadAndIndexData() {
     }
   });
 
-  console.log(`Data loaded: ${dataset.comuni.length} comuni, ${dataset.province.length} province, ${dataset.regioni.length} regioni`);
+  // Load comuni cessati
+  dataset.comuniCessati = (comuniCessatiData as any).default as ComuneCessato[];
+  dataset.comuniCessati.forEach((cessato) => {
+    push(dataset.comuniCessatiByCodice, cessato.codice, cessato);
+    if (cessato.codiceCatastale) {
+      push(dataset.comuniCessatiByCodiceCatastale, cessato.codiceCatastale, cessato);
+    }
+  });
+
+  console.log(
+    `Data loaded: ${dataset.comuni.length} comuni, ${dataset.comuniCessati.length} comuni cessati, ${dataset.province.length} province, ${dataset.regioni.length} regioni`,
+  );
 }

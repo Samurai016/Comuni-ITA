@@ -16,9 +16,13 @@ info:
     `/v5/comuni`, e così per province e regioni.
 
 
+    Dalla 5.1.0 la `/v5` serve anche i comuni cessati, su `/v5/comuni/cessati`. La
+    `/v4` non li ha: è la versione di sempre e resta tale.
+
+
     *Logo ispired by: [Castle by Jasfart from the Noun
     Project](https://thenounproject.com/omataloon/)*
-  version: 5.0.0
+  version: 5.1.0
   x-logo:
     url: ./logo.png
     altText: Comuni ITA Logo
@@ -101,6 +105,49 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ComuniV5'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        5XX:
+          $ref: '#/components/responses/ServerError'
+  /v5/comuni/cessati:
+    parameters:
+      - $ref: '#/components/parameters/format'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pagesize'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/q_cessato'
+      - $ref: '#/components/parameters/codice_cessato'
+      - $ref: '#/components/parameters/codiceCatastale_cessato'
+      - $ref: '#/components/parameters/provincia_cessato'
+      - $ref: '#/components/parameters/regione_cessato'
+      - $ref: '#/components/parameters/cessatoDal'
+      - $ref: '#/components/parameters/cessatoAl'
+      - $ref: '#/components/parameters/soppresso'
+    get:
+      summary: Ottieni la lista dei comuni italiani cessati.
+      description: >-
+        I comuni che non esistono più con il nome, il codice o la provincia con
+        cui sono qui descritti: serve a riconoscere un luogo di nascita che sulle
+        carte c'è ancora ma sul territorio no.
+
+
+        Un record non è un comune, è un'identità: il comune che è stato
+        rinominato, che è passato a un'altra provincia o che è confluito in uno
+        nuovo ne lascia uno dietro di sé, e lo stesso comune può quindi comparire
+        più volte. A dire quale delle due cose è successa è `comuneAttuale`:
+        quando c'è, il comune esiste ancora sotto altro nome o altra provincia;
+        quando è `null`, il comune è stato soppresso e nessun comune di oggi ne
+        porta il codice catastale.
+
+
+        La rotta esiste solo in `/v5`: la `/v4` resta quella di sempre.
+      operationId: comuni-cessati-v5
+      tags:
+        - comuni
+      responses:
+        '200':
+          $ref: '#/components/responses/ComuniCessati'
         '400':
           $ref: '#/components/responses/BadRequest'
         5XX:
@@ -443,6 +490,20 @@ components:
         text/csv:
           schema:
             $ref: '#/components/schemas/ComuniCSVV5'
+    ComuniCessati:
+      description: L'operazione ha avuto successo.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ComuneCessato'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ComuniCessatiXML'
+        text/csv:
+          schema:
+            $ref: '#/components/schemas/ComuniCessatiCSV'
     Regioni:
       description: L'operazione ha avuto successo.
       content:
@@ -623,6 +684,82 @@ components:
       description: >-
         Nome esatto della regione, case insensitive.
       example: trentino alto adige
+    q_cessato:
+      in: query
+      name: q
+      schema:
+        type: string
+      description: >-
+        Nome del comune cessato da cercare, anche parziale e senza badare a
+        maiuscole e accenti. Cerca sia nel nome italiano sia in quello straniero.
+      example: castegnero
+    codice_cessato:
+      in: query
+      name: codice
+      schema:
+        type: string
+      description: >-
+        Codice ISTAT esatto. Lo stesso codice è stato assegnato negli anni a
+        comuni diversi, quindi può restituire più di un comune cessato.
+      example: '024027'
+    codiceCatastale_cessato:
+      in: query
+      name: codiceCatastale
+      schema:
+        type: string
+        pattern: '[A-Z]\d{3}'
+      description: >-
+        Codice catastale esatto. È il campo con cui si riconosce un luogo di
+        nascita, ed è condiviso da tutte le identità dello stesso comune: `C056`
+        restituisce Castegnero. I comuni cessati che un codice catastale non
+        l'hanno mai avuto non rispondono a nessun valore.
+      example: C056
+    provincia_cessato:
+      in: query
+      name: provincia
+      schema:
+        type: string
+      description: >-
+        Nome o sigla esatti della provincia, case insensitive. La sigla serve per
+        le province che non esistono più, di cui l'API non conosce il nome:
+        `PL` restituisce i comuni della provincia di Pola.
+      example: vicenza
+    regione_cessato:
+      in: query
+      name: regione
+      schema:
+        type: string
+      description: >-
+        Nome esatto della regione, case insensitive. I comuni dei territori
+        ceduti dopo la guerra non hanno una regione e non rispondono a nessun
+        valore.
+      example: veneto
+    cessatoDal:
+      in: query
+      name: cessatoDal
+      schema:
+        type: string
+        format: date
+      description: Tiene solo i comuni cessati a partire da questa data, inclusa.
+      example: '2026-01-01'
+    cessatoAl:
+      in: query
+      name: cessatoAl
+      schema:
+        type: string
+        format: date
+      description: Tiene solo i comuni cessati fino a questa data, inclusa.
+      example: '2026-12-31'
+    soppresso:
+      in: query
+      name: soppresso
+      schema:
+        type: boolean
+      description: >-
+        `true` tiene solo i comuni soppressi, quelli con `comuneAttuale` a
+        `null`; `false` solo quelli che un comune di oggi lo hanno. Se omesso, la
+        risposta contiene gli uni e gli altri.
+      example: true
     codice_provincia:
       in: query
       name: codice
@@ -790,6 +927,152 @@ components:
                 type: string
                 pattern: \d{5}
               example: ['38122', '38121', '38123']
+    ComuneCessato:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: >-
+            Identificativo ANPR del record, stabile fra un aggiornamento e
+            l'altro. È l'unico campo che identifica una singola identità: né il
+            codice ISTAT né quello catastale lo fanno.
+          example: 2228
+        codice:
+          type: string
+          description: >-
+            Codice ISTAT che il comune aveva quando è cessato. Lo stesso codice
+            è stato riassegnato negli anni a comuni diversi.
+          example: '024027'
+        nome:
+          type: string
+          description: Nome del comune nel periodo descritto dal record.
+          example: Castegnero
+        nomeStraniero:
+          type: string
+          nullable: true
+          description: Nome nella seconda lingua ufficiale, `null` se non ne ha uno.
+          example: null
+        codiceCatastale:
+          type: string
+          nullable: true
+          description: >-
+            Codice catastale del comune, lo stesso per tutte le sue identità.
+            `null` per i comuni, tutti cessati da molto, che non l'hanno mai
+            avuto.
+          example: C056
+          pattern: '[A-Z]\d{3}'
+        dataIstituzione:
+          type: string
+          format: date
+          description: Data da cui il comune è stato quello descritto dal record.
+          example: '1866-11-19'
+        dataCessazione:
+          type: string
+          format: date
+          description: Data fino a cui il comune è stato quello descritto dal record.
+          example: '2026-02-20'
+        provincia:
+          $ref: '#/components/schemas/ProvinciaStorica'
+        comuneAttuale:
+          type: object
+          nullable: true
+          description: >-
+            Il comune di oggi che porta lo stesso codice catastale, cioè lo
+            stesso comune sotto altro nome o altra provincia. `null` quando il
+            comune è stato soppresso: la fonte non dice in quale comune sia
+            confluito.
+          properties:
+            codice:
+              type: string
+              description: Codice ISTAT del comune attuale.
+              example: '028001'
+            nome:
+              type: string
+              description: Nome del comune attuale.
+              example: Abano Terme
+            codiceCatastale:
+              type: string
+              description: Codice catastale del comune attuale.
+              example: A001
+              pattern: '[A-Z]\d{3}'
+    ProvinciaStorica:
+      type: object
+      description: >-
+        La provincia del comune quando è cessato. È quella di allora, non quella
+        di oggi, e può non esistere più.
+      properties:
+        codice:
+          type: string
+          description: Codice ISTAT della provincia di allora.
+          example: '024'
+        nome:
+          type: string
+          nullable: true
+          description: >-
+            Nome della provincia, `null` quando non è più una di quelle che l'API
+            descrive: è il caso dei territori ceduti dopo la guerra, di cui resta
+            solo la sigla.
+          example: Vicenza
+        sigla:
+          type: string
+          description: Sigla della provincia di allora.
+          example: VI
+          pattern: '[A-Z]{2}'
+        regione:
+          type: string
+          nullable: true
+          description: >-
+            Regione della provincia, `null` per i territori ceduti dopo la
+            guerra.
+          example: Veneto
+    ComuniCessatiXML:
+      type: object
+      xml:
+        name: comuni
+      description: >-
+        Come l'XML dei comuni. Un campo assente è un elemento vuoto,
+        `<comuneAttuale/>`.
+      properties:
+        page:
+          xml:
+            attribute: true
+          type: integer
+          description: Il numero della pagina fornita.
+          minimum: 1
+          example: 1
+        pagesize:
+          xml:
+            attribute: true
+          type: integer
+          description: La dimensione di ogni pagina.
+          minimum: 1
+          example: 10
+        total:
+          xml:
+            attribute: true
+          type: integer
+          description: Il numero totale di entries disponibili.
+          minimum: 0
+          example: 11470
+        comuni:
+          type: array
+          xml:
+            name: comune
+          items:
+            $ref: '#/components/schemas/ComuneCessato'
+    ComuniCessatiCSV:
+      type: string
+      description: >-
+        Lista CSV delimitata da virgola, con l'header nella prima riga. I campi
+        innestati diventano colonne nel formato `campo_attributo`.
+
+
+        Quando la risposta contiene anche comuni soppressi compare in più una
+        colonna `comuneAttuale`, sempre vuota: sono le righe senza comune attuale
+        a produrla, che di sotto-colonne da riempire non ne hanno.
+      example: |-
+        id,codice,nome,nomeStraniero,codiceCatastale,dataIstituzione,dataCessazione,provincia_codice,provincia_nome,provincia_sigla,provincia_regione,comuneAttuale_codice,comuneAttuale_nome,comuneAttuale_codiceCatastale
+        12560,028001,Abano,,A001,1866-11-19,1924-11-13,028,Padova,PD,Veneto,028001,Abano Terme,A001
     ComuniXML:
       type: object
       xml:

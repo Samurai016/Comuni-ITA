@@ -23,6 +23,7 @@ const fastify = Fastify({
 import { regioniRoutes } from "./routes/regioni";
 import { provinceRoutes } from "./routes/province";
 import { comuniRoutes } from "./routes/comuni";
+import { comuniCessatiRoutes } from "./routes/comuni-cessati";
 import { responseFormatter } from "./plugins/response-formatter";
 
 // Register plugins
@@ -34,8 +35,8 @@ fastify.register(responseFormatter);
 /**
  * Registers every route of a version on its own prefix.
  *
- * `regioni` and `province` are the same in both versions; only the comuni
- * change, and only in the shape of `cap`.
+ * `regioni` and `province` are the same in both versions; the comuni change in
+ * the shape of `cap`, and the comuni cessati are served by v5 alone.
  * @param version The version to serve.
  * @param prefix The prefix to serve it on.
  */
@@ -45,6 +46,10 @@ function registerVersion(version: ApiVersion, prefix: string) {
       instance.register(regioniRoutes);
       instance.register(provinceRoutes);
       instance.register(comuniRoutes, { version });
+      // I comuni cessati sono una novità della v5: la v4 resta quella di sempre.
+      if (version === "v5") {
+        instance.register(comuniCessatiRoutes);
+      }
     },
     { prefix },
   );

@@ -13,6 +13,7 @@
 * [https://comuni-ita.nicolorebaioli.dev/v5/comuni](https://comuni-ita.nicolorebaioli.dev/v5/comuni) - Lista dei comuni italiani.
 * [https://comuni-ita.nicolorebaioli.dev/v5/province](https://comuni-ita.nicolorebaioli.dev/v5/province) - Lista delle province italiane.
 * [https://comuni-ita.nicolorebaioli.dev/v5/regioni](https://comuni-ita.nicolorebaioli.dev/v5/regioni) - Lista delle regioni italiane.
+* [https://comuni-ita.nicolorebaioli.dev/v5/comuni/cessati](https://comuni-ita.nicolorebaioli.dev/v5/comuni/cessati) - Lista dei comuni italiani cessati.
 
 Per ulteriori dettagli su filtri, sorting, paginazione e altri endpoint, prosegui la lettura.
 
@@ -24,6 +25,7 @@ Per ulteriori dettagli su filtri, sorting, paginazione e altri endpoint, prosegu
   - [GET /v5/comuni](#-comuni)
   - [GET /v5/comuni/:regione](#-comuniregione)
   - [GET /v5/comuni/provincia/:provincia](#-comuniprovincaprovincia)
+  - [GET /v5/comuni/cessati](#-comunicessati)
   - [GET /v5/province](#-province)
   - [GET /v5/province/:regione](#-provinceregione)
   - [GET /v5/regioni](#-regioni)
@@ -35,6 +37,8 @@ Per ulteriori dettagli su filtri, sorting, paginazione e altri endpoint, prosegu
 `comuni-ita` è un'API Node.js leggera e ad alte prestazioni costruita con [Fastify](https://www.fastify.io/). Fornisce accesso istantaneo a un dataset completo di comuni, province e regioni italiane.
 
 I dati sono ottenuti e aggiornati da un sistema semiautomatico che preleva i dati direttamente dagli archivi ISTAT e integra le informazioni mancanti interrogando Wikidata.
+
+I comuni cessati arrivano invece dall'[archivio storico dei comuni di ANPR](https://www.anagrafenazionale.interno.it/area-tecnica/archivio-storico-dei-comuni/), pubblicato dal Ministero dell'Interno, che raccoglie tutte le variazioni registrate da ISTAT per ogni comune italiano dalla sua istituzione. Il dataset si rigenera con [`scripts/build-comuni-cessati.ts`](scripts/build-comuni-cessati.ts).
 
 L'API è disponibile gratuitamente e senza limitazioni all'indirizzo **[https://comuni-ita.nicolorebaioli.dev/](https://comuni-ita.nicolorebaioli.dev/)** oppure può essere facilmente eseguita in locale o distribuita su qualsiasi piattaforma Node.js o Docker.
 
@@ -58,6 +62,7 @@ Di seguito sono elencate le versioni attualmente disponibili:
 | `/comuni`, `/province`, `/regioni` | v4 | Le rotte storiche, invariate. Rispondono con l'header `Deprecation: true` e un `Link` alla rotta versionata corrispondente. |
 | `/v4/comuni`, `/v4/province`, `/v4/regioni` | v4 | Identiche alle rotte storiche. |
 | `/v5/comuni`, `/v5/province`, `/v5/regioni` | v5 | Supporto multi-cap: il campo `cap` è una lista. |
+| `/v5/comuni/cessati` | v5 | I comuni cessati. Dalla 5.1.0, e solo in v5. |
 
 ## 📚 Endpoint API
 
@@ -149,6 +154,55 @@ Query per ottenere tutti i comuni della provincia di Milano che contengono "mila
 ```http
 GET /v5/comuni/provincia/milano?q=milano
 ```
+
+### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/v5/comuni/cessati`](https://comuni-ita.nicolorebaioli.dev/v5/comuni/cessati)
+
+Recupera i comuni che non esistono più con il nome, il codice o la provincia con cui sono qui descritti. Serve a riconoscere un luogo di nascita che sui documenti c'è ancora ma sul territorio no.
+
+Un record non è un comune, è un'**identità**: il comune rinominato, passato a un'altra provincia o confluito in uno nuovo ne lascia uno dietro di sé, e lo stesso comune può quindi comparire più volte. A dire quale delle due cose è successa è `comuneAttuale`:
+
+- **valorizzato**: il comune esiste ancora, sotto altro nome o altra provincia (`Abano` → `Abano Terme`);
+- **`null`**: il comune è stato soppresso e nessun comune di oggi ne porta il codice catastale (`Castegnero`, confluito in `Castegnero Nanto` nel 2026).
+
+Il campo su cui appoggiarsi per il riconoscimento è il **codice catastale**: è lo stesso per tutte le identità di uno stesso comune, mentre il codice ISTAT viene riassegnato negli anni a comuni diversi.
+
+> La rotta esiste solo in `/v5`: la `/v4` resta la versione di sempre.
+
+#### Filtri
+
+- `codice`: Filtra per codice ISTAT esatto.
+- `codiceCatastale`: Filtra per codice catastale esatto.
+- `provincia`: Filtra per nome **o sigla** della provincia di allora (corrispondenza esatta, case-insensitive). La sigla serve per le province che non esistono più, di cui l'API non conosce il nome.
+- `regione`: Filtra per nome della regione (corrispondenza esatta, case-insensitive).
+- `cessatoDal` / `cessatoAl`: Filtra per data di cessazione, estremi inclusi (`YYYY-MM-DD`).
+- `soppresso`: `true` tiene solo i comuni soppressi, `false` solo quelli riconducibili a un comune attuale.
+- `q`: Ricerca parziale per nome.
+
+#### Esempi
+
+Query per sapere che comune è oggi quello in cui una persona è nata, partendo dal codice catastale sul suo codice fiscale.
+
+```http
+GET /v5/comuni/cessati?codiceCatastale=C056
+```
+
+Query per ottenere i comuni cessati nel 2026.
+
+```http
+GET /v5/comuni/cessati?cessatoDal=2026-01-01&cessatoAl=2026-12-31
+```
+
+Query per ottenere i soli comuni veneti davvero soppressi, senza le rinomine.
+
+```http
+GET /v5/comuni/cessati?regione=veneto&soppresso=true
+```
+
+#### Limiti
+
+- La fonte non dice **in quale comune** sia confluito un comune soppresso: `comuneAttuale` resta `null` anche quando il territorio è finito in un comune di oggi.
+- I comuni dei territori ceduti dopo la guerra (Fiume, Pola, Zara, Venezia Giulia) non hanno né nome di provincia né regione: ne resta la sigla.
+- Qualche comune cessato molto presto non ha mai avuto un codice catastale: per quelli `codiceCatastale` è `null`.
 
 ### [![GET](https://img.shields.io/static/v1?label=%20&message=GET&color=187bdf&style=flat-square) `/v5/province`](https://comuni-ita.nicolorebaioli.dev/v5/province)
 
