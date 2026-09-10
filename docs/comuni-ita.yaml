@@ -16,8 +16,7 @@ info:
     `/v5/comuni`, e così per province e regioni.
 
 
-    Dalla 5.1.0 la `/v5` serve anche i comuni cessati, su `/v5/comuni/cessati`. La
-    `/v4` non li ha: è la versione di sempre e resta tale.
+    Dalla 5.1.0 la `/v5` serve anche i comuni cessati, su `/v5/comuni/cessati`.
 
 
     *Logo ispired by: [Castle by Jasfart from the Noun
@@ -128,20 +127,12 @@ paths:
       summary: Ottieni la lista dei comuni italiani cessati.
       description: >-
         I comuni che non esistono più con il nome, il codice o la provincia con
-        cui sono qui descritti: serve a riconoscere un luogo di nascita che sulle
-        carte c'è ancora ma sul territorio no.
+        cui sono descritti.
 
-
-        Un record non è un comune, è un'identità: il comune che è stato
-        rinominato, che è passato a un'altra provincia o che è confluito in uno
-        nuovo ne lascia uno dietro di sé, e lo stesso comune può quindi comparire
-        più volte. A dire quale delle due cose è successa è `comuneAttuale`:
-        quando c'è, il comune esiste ancora sotto altro nome o altra provincia;
-        quando è `null`, il comune è stato soppresso e nessun comune di oggi ne
-        porta il codice catastale.
-
-
-        La rotta esiste solo in `/v5`: la `/v4` resta quella di sempre.
+        Uno stesso comune può comparire più volte nella lista in caso di modifiche successive.
+        Il campo `comuneAttuale` riporta infine uno di questi 2 possibili valori:
+        * valorizzato: il comune esiste ancora, sotto altro nome o altra provincia (Abano → Abano Terme);
+        * `null`: il comune è stato soppresso e nessun comune di oggi ne porta il codice catastale (Castegnero, confluito in Castegnero Nanto nel 2026).
       operationId: comuni-cessati-v5
       tags:
         - comuni
@@ -297,7 +288,7 @@ paths:
         Rotta storica: serve la v4, dove `cap` è una stringa sola. Risponde con
         gli header `Deprecation: true` e `Link`, che rimanda alla rotta `/v4`
         corrispondente: identica in tutto, ma senza quegli header. Continua a
-        funzionare, per il codice nuovo conviene la `/v5`.
+        funzionare, per il codice nuovo meglio usare l'endpoint `/v5`.
       deprecated: true
       operationId: comuni
       tags:
@@ -329,7 +320,7 @@ paths:
         Rotta storica: serve la v4, dove `cap` è una stringa sola. Risponde con
         gli header `Deprecation: true` e `Link`, che rimanda alla rotta `/v4`
         corrispondente: identica in tutto, ma senza quegli header. Continua a
-        funzionare, per il codice nuovo conviene la `/v5`.
+        funzionare, per il codice nuovo meglio usare l'endpoint `/v5`.
       deprecated: true
       operationId: comuni-regione
       tags:
@@ -360,7 +351,7 @@ paths:
         Rotta storica: serve la v4, dove `cap` è una stringa sola. Risponde con
         gli header `Deprecation: true` e `Link`, che rimanda alla rotta `/v4`
         corrispondente: identica in tutto, ma senza quegli header. Continua a
-        funzionare, per il codice nuovo conviene la `/v5`.
+        funzionare, per il codice nuovo meglio usare l'endpoint `/v5`.
       deprecated: true
       operationId: comuni-provincia
       tags:
@@ -709,9 +700,7 @@ components:
         type: string
         pattern: '[A-Z]\d{3}'
       description: >-
-        Codice catastale esatto. È il campo con cui si riconosce un luogo di
-        nascita, ed è condiviso da tutte le identità dello stesso comune: `C056`
-        restituisce Castegnero. I comuni cessati che un codice catastale non
+        Codice catastale esatto. È condiviso da tutte le identità dello stesso comune. I comuni cessati che un codice catastale non
         l'hanno mai avuto non rispondono a nessun valore.
       example: C056
     provincia_cessato:
@@ -766,7 +755,7 @@ components:
       schema:
         type: string
       description: >-
-        Codice ISTAT esatto della provincia. `021` restituisce Bolzano, `21` non
+        Codice ISTAT esatto della provincia. es. `021` restituisce Bolzano, `21` non
         restituisce nulla.
       example: '021'
     sigla_provincia:
@@ -934,8 +923,7 @@ components:
           type: integer
           description: >-
             Identificativo ANPR del record, stabile fra un aggiornamento e
-            l'altro. È l'unico campo che identifica una singola identità: né il
-            codice ISTAT né quello catastale lo fanno.
+            l'altro. È l'unico campo che identifica una singola identità.
           example: 2228
         codice:
           type: string
@@ -979,8 +967,7 @@ components:
           description: >-
             Il comune di oggi che porta lo stesso codice catastale, cioè lo
             stesso comune sotto altro nome o altra provincia. `null` quando il
-            comune è stato soppresso: la fonte non dice in quale comune sia
-            confluito.
+            comune è stato soppresso.
           properties:
             codice:
               type: string
